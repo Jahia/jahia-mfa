@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -10,11 +10,15 @@
         <version>8.0.0.0</version>
     </parent>
     <groupId>org.jahia.modules</groupId>
-    <artifactId>jahia-2fa</artifactId>
-    <name>Jahia 2FA</name>
+    <artifactId>jahia-Mfa</artifactId>
+    <name>Jahia MFA</name>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <description>This is the custom module (Jahia 2FA) for running on a Jahia server.</description>
+    <properties>
+        <jahia-depends>default</jahia-depends>
+        <jahia-module-signature>MC0CFHG3vSxlr5BH1ZKA6OmDMph96BG5AhUAj55RAtqhrLjrk3YwLQX/mIpX/oI=</jahia-module-signature>
+    </properties>
 
     <scm>
         <connection>scm:dummy:uri</connection>
@@ -35,7 +39,7 @@
             </snapshots>
         </repository>
     </repositories>
-
+        
     <build>
         <plugins>
             <plugin>

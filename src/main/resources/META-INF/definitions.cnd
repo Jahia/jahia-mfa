@@ -1,2 +1,9 @@
 <jnt = 'http://www.jahia.org/jahia/nt/1.0'>
 <jmix = 'http://www.jahia.org/jahia/mix/1.0'>
+
+[jnt:MFA] > nt:base, jmix:nodenameInfo, jmix:unversionedBasemetadata, jmix:publication, jmix:observable, jmix:autoPublish
+ - activated (boolean) indexed=no
+ - provider (string) indexed=no
+
+[jmix:MFAUser] mixin
++ MFA (jnt:MFA)
