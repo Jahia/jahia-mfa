@@ -9,11 +9,11 @@
         <groupId>org.jahia.modules</groupId>
         <version>8.0.0.0</version>
     </parent>
-    <groupId>org.jahia.mfa</groupId>
-    <artifactId>jahia-mfa</artifactId>
-    <name>Jahia MFA</name>
+    <groupId>org.jahia.modules</groupId>
+    <artifactId>jahia-mfa-core</artifactId>
+    <name>Jahia MFA Core</name>
     <version>1.0.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <packaging>bundle</packaging>
     <description>This is the custom module (Jahia 2FA) for running on a Jahia server.</description>
     <properties>
         <jahia-depends>default</jahia-depends>
@@ -40,8 +40,18 @@
         </repository>
     </repositories>
         
-	<modules>
-	        <module>jahia-mfa-core</module>
-	        <module>jahia-mfa-otp-provider</module>
-	    </modules>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Jahia-Depends>default</Jahia-Depends>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
