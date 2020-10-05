@@ -17,7 +17,7 @@
     <description>This is the custom module (Jahia 2FA) for running on a Jahia server.</description>
     <properties>
         <jahia-depends>default</jahia-depends>
-        <jahia-module-signature>MC0CFHG3vSxlr5BH1ZKA6OmDMph96BG5AhUAj55RAtqhrLjrk3YwLQX/mIpX/oI=</jahia-module-signature>
+        <jahia-module-signature>MCwCFAOgwc31R/4eu/5ldv+haSLaqgldAhRr7L3zyibsIpc3860gXlrvt4AxMg==</jahia-module-signature>
     </properties>
 
     <scm>
