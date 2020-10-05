@@ -89,7 +89,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Jahia-Depends>default</Jahia-Depends>
+                        <Jahia-Depends>default,jahia-mfa-core</Jahia-Depends>
                     </instructions>
                 </configuration>
             </plugin>
