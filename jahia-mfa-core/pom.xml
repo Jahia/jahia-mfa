@@ -16,9 +16,10 @@
     <packaging>bundle</packaging>
     <description>This is the custom module (Jahia 2FA) for running on a Jahia server.</description>
     <properties>
-        <jahia-depends>default</jahia-depends>
-        <jahia-module-signature>MCwCFAOgwc31R/4eu/5ldv+haSLaqgldAhRr7L3zyibsIpc3860gXlrvt4AxMg==</jahia-module-signature>
         <export-package>org.jahia.modules.mfa.provider,org.jahia.modules.mfa.service</export-package>
+        <jahia-depends>default</jahia-depends>
+        <jahia-deploy-on-site>system</jahia-deploy-on-site>
+        <jahia-module-signature>MCwCFAOgwc31R/4eu/5ldv+haSLaqgldAhRr7L3zyibsIpc3860gXlrvt4AxMg==</jahia-module-signature>
     </properties>
 
     <scm>

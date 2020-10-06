@@ -16,9 +16,10 @@
     <packaging>bundle</packaging>
     <description>This is the custom module (Jahia MFA OTP Provider) for running on a Jahia server.</description>
     <properties>
-        <jahia-module-signature>MC0CFQCGEYFWVKocV4UXiBpabgo9VauJ/QIUSldapWlv0LLhoh38E/TjzoAa0+I=</jahia-module-signature>
-        <jahia-depends>default,jahia-mfa-core</jahia-depends>
         <import-package>org.jahia.modules.mfa.provider,org.jahia.modules.mfa.service</import-package>
+        <jahia-depends>default,jahia-mfa-core</jahia-depends>
+        <jahia-deploy-on-site>system</jahia-deploy-on-site>
+        <jahia-module-signature>MC0CFQCGEYFWVKocV4UXiBpabgo9VauJ/QIUSldapWlv0LLhoh38E/TjzoAa0+I=</jahia-module-signature>
     </properties>
 
 
