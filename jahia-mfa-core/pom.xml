@@ -7,7 +7,7 @@
     <parent>
         <artifactId>jahia-modules</artifactId>
         <groupId>org.jahia.modules</groupId>
-        <version>8.0.0.0</version>
+        <version>8.0.1.0</version>
     </parent>
     <groupId>org.jahia.modules</groupId>
     <artifactId>jahia-mfa-core</artifactId>
@@ -16,7 +16,7 @@
     <packaging>bundle</packaging>
     <description>This is the custom module (Jahia 2FA) for running on a Jahia server.</description>
     <properties>
-        <export-package>org.jahia.modules.mfa.provider,org.jahia.modules.mfa.service</export-package>
+        <export-package>org.jahia.modules.mfa.provider,org.jahia.modules.mfa.service,org.jahia.modules.mfa.valve</export-package>
         <jahia-depends>default</jahia-depends>
         <jahia-deploy-on-site>system</jahia-deploy-on-site>
         <jahia-module-signature>MCwCFAOgwc31R/4eu/5ldv+haSLaqgldAhRr7L3zyibsIpc3860gXlrvt4AxMg==</jahia-module-signature>
