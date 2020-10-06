@@ -1,24 +1,50 @@
 package org.jahia.modules.mfa.valve;
 
+import java.util.Map;
 import javax.jcr.RepositoryException;
+import javax.security.auth.login.Configuration;
 import javax.servlet.http.HttpServletRequest;
 import org.jahia.bin.Login;
 import org.jahia.modules.mfa.MFAConstants;
 import org.jahia.params.valves.AuthValveContext;
-import org.jahia.params.valves.AutoRegisteredBaseAuthValve;
+import org.jahia.params.valves.BaseAuthValve;
 import org.jahia.params.valves.LoginEngineAuthValveImpl;
+import org.jahia.pipelines.Pipeline;
 import org.jahia.pipelines.PipelineException;
+import org.jahia.pipelines.valves.Valve;
 import org.jahia.pipelines.valves.ValveContext;
 import org.jahia.services.content.JCRNodeWrapper;
 import org.jahia.services.content.decorator.JCRUserNode;
 import org.jahia.services.usermanager.JahiaUser;
 import org.jahia.services.usermanager.JahiaUserManagerService;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ServiceScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class AuthenticationValve extends AutoRegisteredBaseAuthValve {
+@Component(service = Valve.class, scope = ServiceScope.SINGLETON, immediate = true)
+public final class AuthenticationValve extends BaseAuthValve {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationValve.class);
+    private Pipeline authPipeline;
+    private String mafEntry;
+
+    @Reference(service = Pipeline.class, target = "(type=authentication)")
+    public void setAuthPipeline(Pipeline authPipeline) {
+        this.authPipeline = authPipeline;
+    }
+
+    @Activate
+    public void activate(Map<String, ?> props) {
+        setId(MFAConstants.AUTH_VALVE_ID);
+        mafEntry = (String) props.get("mafEntry");
+        removeValve(authPipeline);
+        if (Configuration.getConfiguration().getAppConfigurationEntry(mafEntry) != null) {
+            addValve(authPipeline, 0, null, null);
+        }
+    }
 
     @Override
     public void invoke(Object context, ValveContext valveContext) throws PipelineException {
