@@ -1,8 +1,8 @@
 package org.jahia.modules.mfa.valve;
 
-import java.util.Map;
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
+import org.jahia.api.usermanager.JahiaUserManagerService;
 import org.jahia.bin.Login;
 import org.jahia.modules.mfa.MFAConstants;
 import org.jahia.params.valves.AuthValveContext;
@@ -14,7 +14,6 @@ import org.jahia.pipelines.valves.ValveContext;
 import org.jahia.services.content.JCRNodeWrapper;
 import org.jahia.services.content.decorator.JCRUserNode;
 import org.jahia.services.usermanager.JahiaUser;
-import org.jahia.services.usermanager.JahiaUserManagerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,15 +21,24 @@ public final class AuthenticationValve extends BaseAuthValve {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationValve.class);
     private Pipeline authPipeline;
+    private JahiaUserManagerService jahiaUserManagerService;
 
     public void setAuthPipeline(Pipeline authPipeline) {
         this.authPipeline = authPipeline;
     }
 
-    public void activate(Map<String, ?> props) {
+    public void setJahiaUserManagerService(JahiaUserManagerService jahiaUserManagerService) {
+        this.jahiaUserManagerService = jahiaUserManagerService;
+    }
+
+    public void start() {
         setId(MFAConstants.AUTH_VALVE_ID);
         removeValve(authPipeline);
         addValve(authPipeline, 0, null, null);
+    }
+
+    public void stop() {
+        removeValve(authPipeline);
     }
 
     public void invoke(Object context, ValveContext valveContext) throws PipelineException {
@@ -56,8 +64,7 @@ public final class AuthenticationValve extends BaseAuthValve {
                 final String password = passwordAndToken.substring(0, passwordAndToken.length() - MFAConstants.TOKEN_SIZE - 1);
                 final String token = passwordAndToken.substring(password.length() - 1, passwordAndToken.length() - 1);
                 // Check if the user has site access ( even though it is not a user of this site )
-                final JahiaUserManagerService userManagerService = JahiaUserManagerService.getInstance();
-                user = userManagerService.lookupUser(username, site);
+                user = jahiaUserManagerService.lookupUser(username, site);
                 if (user != null) {
                     if (user.verifyPassword(password) && verifyToken(user, token)) {
                         if (!user.isAccountLocked()) {

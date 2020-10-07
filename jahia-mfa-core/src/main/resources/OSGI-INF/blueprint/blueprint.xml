@@ -3,10 +3,15 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
-<!--    <bean id="jahiaMFAAuthenticationValve" class="org.jahia.modules.mfa.valve.AuthenticationValve">
-        <property name="positionAfter" value="SessionAuthValve"/>
-    </bean>-->
+    <reference id="authPipeline" interface="org.jahia.pipelines.Pipeline" filter="(type=authentication)" availability="mandatory"/>
+    <reference id="JahiaUserManagerService" interface="org.jahia.api.usermanager.JahiaUserManagerService" availability="mandatory"/>
     
+    <bean id="jahiaMFAAuthenticationValve" class="org.jahia.modules.mfa.valve.AuthenticationValve" init-method="start" destroy-method="stop">
+        <property name="authPipeline" ref="authPipeline"/>
+        <property name="jahiaUserManagerService" ref="JahiaUserManagerService"/>
+    </bean>
+    
+        
     <bean id="jahiaMFAServiceImpl" class="org.jahia.modules.mfa.impl.JahiaMFAServiceImpl"/>
 
     <service id="JahiaMFAServiceOsgi" ref="jahiaMFAServiceImpl"
