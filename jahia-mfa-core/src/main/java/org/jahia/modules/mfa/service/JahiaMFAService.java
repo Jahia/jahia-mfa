@@ -14,4 +14,6 @@ public interface JahiaMFAService {
     void activateMFA(JCRUserNode userNode, String provider);
 
     void deactivateMFA(JCRUserNode userNode, String provider);
+    
+    boolean hasMFA(JCRUserNode userNode);
 }

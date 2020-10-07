@@ -41,9 +41,9 @@ public final class JahiaMFAServiceImpl implements JahiaMFAService {
             JCRTemplate.getInstance().doExecuteWithSystemSession(new JCRCallback<Object>() {
                 @Override
                 public Object doInJCR(JCRSessionWrapper jcrsession) throws RepositoryException {
-                    final JCRNodeWrapper defautUserNode = jcrsession.getNode(userNode.getPath());
-                    defautUserNode.addMixin(MFAConstants.MIXIN_MFA_USER);
-                    final JCRNodeWrapper mfaNode = defautUserNode.addNode(MFAConstants.NODE_NAME_MFA, MFAConstants.NODE_TYPE_MFA);
+                    final JCRNodeWrapper defaultUserNode = jcrsession.getNode(userNode.getPath());
+                    defaultUserNode.addMixin(MFAConstants.MIXIN_MFA_USER);
+                    final JCRNodeWrapper mfaNode = defaultUserNode.addNode(MFAConstants.NODE_NAME_MFA, MFAConstants.NODE_TYPE_MFA);
                     mfaNode.setProperty(MFAConstants.PROP_ACTIVATED, Boolean.TRUE);
                     mfaNode.setProperty(MFAConstants.PROP_PROVIDER, provider);
                     jcrsession.save();
@@ -51,12 +51,33 @@ public final class JahiaMFAServiceImpl implements JahiaMFAService {
                 }
             });
         } catch (RepositoryException ex) {
-            LOGGER.error(String.format("Impossible to actiate MFA for user %s and provider %s", userNode.getUserKey(), provider), ex);
+            LOGGER.error(String.format("Impossible to activate MFA for user %s and provider %s", userNode.getUserKey(), provider), ex);
         }
     }
 
     @Override
     public void deactivateMFA(JCRUserNode userNode, String providey) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean hasMFA(JCRUserNode userNode) {
+        try {
+            return JCRTemplate.getInstance().doExecuteWithSystemSession(new JCRCallback<Boolean>() {
+                @Override
+                public Boolean doInJCR(JCRSessionWrapper jcrsession) throws RepositoryException {
+                    final JCRNodeWrapper defaultUserNode = jcrsession.getNode(userNode.getPath());
+                    if (defaultUserNode.hasNode(MFAConstants.NODE_NAME_MFA)) {
+                        final JCRNodeWrapper mfaNode = defaultUserNode.getNode(MFAConstants.NODE_NAME_MFA);
+                        return mfaNode.hasProperty(MFAConstants.PROP_ACTIVATED) && mfaNode.getProperty(MFAConstants.PROP_ACTIVATED).getBoolean();
+                    } else {
+                        return false;
+                    }
+                }
+            });
+        } catch (RepositoryException ex) {
+            LOGGER.error(String.format("Impossible to get MFA status for user %s", userNode.getUserKey()), ex);
+            return false;
+        }
     }
 }
