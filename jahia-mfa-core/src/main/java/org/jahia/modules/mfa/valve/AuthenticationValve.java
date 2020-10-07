@@ -1,13 +1,19 @@
 package org.jahia.modules.mfa.valve;
+import org.jahia.pipelines.valves.Valve;
+import org.jahia.pipelines.valves.ValveContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ServiceScope;
 
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
-import org.jahia.api.usermanager.JahiaUserManagerService;
 import org.jahia.bin.Login;
 import org.jahia.modules.mfa.MFAConstants;
 import org.jahia.modules.mfa.service.JahiaMFAService;
 import org.jahia.params.valves.AuthValveContext;
 import org.jahia.params.valves.BaseAuthValve;
+import org.jahia.params.valves.LoginUrlProvider;
 import org.jahia.params.valves.LoginEngineAuthValveImpl;
 import org.jahia.pipelines.Pipeline;
 import org.jahia.pipelines.PipelineException;
@@ -15,16 +21,19 @@ import org.jahia.pipelines.valves.ValveContext;
 import org.jahia.services.content.JCRNodeWrapper;
 import org.jahia.services.content.decorator.JCRUserNode;
 import org.jahia.services.usermanager.JahiaUser;
+import org.jahia.services.usermanager.JahiaUserManagerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class AuthenticationValve extends BaseAuthValve {
+@Component(service = Valve.class, scope = ServiceScope.SINGLETON,  immediate = true)
+public final class AuthenticationValve extends BaseAuthValve implements LoginUrlProvider {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationValve.class);
     private Pipeline authPipeline;
     private JahiaUserManagerService jahiaUserManagerService;
     private JahiaMFAService jahiaMFAService;
 
+    @Reference(service = Pipeline.class, target="(type=authentication)")
     public void setAuthPipeline(Pipeline authPipeline) {
         this.authPipeline = authPipeline;
     }
@@ -37,14 +46,11 @@ public final class AuthenticationValve extends BaseAuthValve {
         this.jahiaMFAService = jahiaMFAService;
     }
 
-    public void start() {
+    @Activate
+    public void activate() {
         setId(MFAConstants.AUTH_VALVE_ID);
         removeValve(authPipeline);
         addValve(authPipeline, 0, null, null);
-    }
-
-    public void stop() {
-        removeValve(authPipeline);
     }
 
     public void invoke(Object context, ValveContext valveContext) throws PipelineException {
@@ -137,4 +143,14 @@ public final class AuthenticationValve extends BaseAuthValve {
 
         return false;
     }
+
+    @Override public String getLoginUrl(HttpServletRequest request) {
+    return request.getServerName()+":8080/modules/jahia-mfa-core/jsp/login.jsp";
+    }
+
+    @Override public boolean hasCustomLoginUrl() {
+        return true;
+    }
+
+
 }
