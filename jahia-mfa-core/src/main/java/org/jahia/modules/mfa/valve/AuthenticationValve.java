@@ -101,7 +101,7 @@ public final class AuthenticationValve extends BaseAuthValve {
             if (user.hasNode(MFAConstants.NODE_NAME_MFA)) {
                 final JCRNodeWrapper node = user.getNode(MFAConstants.NODE_NAME_MFA);
                 if (node.hasProperty(MFAConstants.PROP_ACTIVATED) && node.getProperty(MFAConstants.PROP_ACTIVATED).getBoolean() && node.hasProperty(MFAConstants.PROP_PROVIDER)) {
-                    //code to call the related provider and return true/false
+                    // TODO : code to call the related provider and return true/false
                 }
             }
         } catch (RepositoryException ex) {
