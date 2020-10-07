@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.jahia.api.usermanager.JahiaUserManagerService;
 import org.jahia.bin.Login;
 import org.jahia.modules.mfa.MFAConstants;
+import org.jahia.modules.mfa.service.JahiaMFAService;
 import org.jahia.params.valves.AuthValveContext;
 import org.jahia.params.valves.BaseAuthValve;
 import org.jahia.params.valves.LoginEngineAuthValveImpl;
@@ -22,6 +23,7 @@ public final class AuthenticationValve extends BaseAuthValve {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationValve.class);
     private Pipeline authPipeline;
     private JahiaUserManagerService jahiaUserManagerService;
+    private JahiaMFAService jahiaMFAService;
 
     public void setAuthPipeline(Pipeline authPipeline) {
         this.authPipeline = authPipeline;
@@ -29,6 +31,10 @@ public final class AuthenticationValve extends BaseAuthValve {
 
     public void setJahiaUserManagerService(JahiaUserManagerService jahiaUserManagerService) {
         this.jahiaUserManagerService = jahiaUserManagerService;
+    }
+
+    public void setJahiaMFAService(JahiaMFAService jahiaMFAService) {
+        this.jahiaMFAService = jahiaMFAService;
     }
 
     public void start() {
@@ -61,29 +67,30 @@ public final class AuthenticationValve extends BaseAuthValve {
             final String site = httpServletRequest.getParameter("site");
 
             if (username != null && passwordAndToken != null && passwordAndToken.length() > MFAConstants.TOKEN_SIZE) {
-                final String password = passwordAndToken.substring(0, passwordAndToken.length() - MFAConstants.TOKEN_SIZE - 1);
-                final String token = passwordAndToken.substring(password.length() - 1, passwordAndToken.length() - 1);
                 // Check if the user has site access ( even though it is not a user of this site )
                 user = jahiaUserManagerService.lookupUser(username, site);
-                if (user != null) {
+                if (user == null) {
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("Login failed. Unknown username {}", username.replaceAll("[\r\n]", ""));
+                    }
+                    httpServletRequest.setAttribute(LoginEngineAuthValveImpl.VALVE_RESULT, LoginEngineAuthValveImpl.UNKNOWN_USER);
+                } else if (jahiaMFAService.hasMFA(user)) {
+                    final String password = passwordAndToken.substring(0, passwordAndToken.length() - MFAConstants.TOKEN_SIZE);
+                    final String token = passwordAndToken.substring(password.length() + 1, passwordAndToken.length());
                     if (user.verifyPassword(password) && verifyToken(user, token)) {
                         if (!user.isAccountLocked()) {
                             ok = true;
                         } else {
                             LOGGER.warn("Login failed: account for user {} is locked.", user.getName());
                             httpServletRequest.setAttribute(LoginEngineAuthValveImpl.VALVE_RESULT, LoginEngineAuthValveImpl.ACCOUNT_LOCKED);
+                            return;
                         }
                     } else {
                         LOGGER.warn("Login failed: password and token verification failed for user {}", user.getName());
                         httpServletRequest.setAttribute(LoginEngineAuthValveImpl.VALVE_RESULT, LoginEngineAuthValveImpl.BAD_PASSWORD);
+                        return;
                     }
-                } else if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Login failed. Unknown username {}", username.replaceAll("[\r\n]", ""));
-                    httpServletRequest.setAttribute(LoginEngineAuthValveImpl.VALVE_RESULT, LoginEngineAuthValveImpl.UNKNOWN_USER);
                 }
-            } else {
-                valveContext.invokeNext(context);
-                return;
             }
         }
 
@@ -100,6 +107,7 @@ public final class AuthenticationValve extends BaseAuthValve {
             authContext.getSessionFactory().setCurrentUser(jahiaUser);
         } else {
             valveContext.invokeNext(context);
+            return;
         }
     }
 
@@ -109,6 +117,7 @@ public final class AuthenticationValve extends BaseAuthValve {
                 final JCRNodeWrapper node = user.getNode(MFAConstants.NODE_NAME_MFA);
                 if (node.hasProperty(MFAConstants.PROP_ACTIVATED) && node.getProperty(MFAConstants.PROP_ACTIVATED).getBoolean() && node.hasProperty(MFAConstants.PROP_PROVIDER)) {
                     // TODO : code to call the related provider and return true/false
+                    return true;
                 }
             }
         } catch (RepositoryException ex) {
