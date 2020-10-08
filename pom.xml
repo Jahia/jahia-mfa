@@ -1,43 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+ 
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>jahia-modules</artifactId>
-        <groupId>org.jahia.modules</groupId>
-        <version>8.0.1.0</version>
+        <artifactId>jahia-packages-parent</artifactId>
+        <groupId>org.jahia.packages</groupId>
+        <version>8.0.0.0</version>
     </parent>
-    <groupId>org.jahia.mfa</groupId>
+    
+    <groupId>org.jahia.modules</groupId>
     <artifactId>jahia-mfa</artifactId>
-    <name>Jahia MFA</name>
     <version>1.0.0-SNAPSHOT</version>
+    
+    <name>Jahia MFA</name>
+    
     <packaging>pom</packaging>
-    <description>This is the custom module (Jahia 2FA) for running on a Jahia server.</description>
+    <description>
+        Parent project to package all out-of-the-box MFA components.
+    </description>
+
+    <properties>
+        <jahia.package.assembly.file>src/main/assembly/default.xml</jahia.package.assembly.file>
+        <jahia.package.sources.assembly.file>src/main/assembly/default.xml</jahia.package.sources.assembly.file>
+        <jahia.final.package.name>Jahia MFA - EnterpriseDistribution</jahia.final.package.name>
+        <jahia.manifest.package.id>org.jahia.mfa</jahia.manifest.package.id>
+        <jahia-key>org.jahia.mfa</jahia-key>
+        <jahia.manifest.description>jahia-mfa-core, jahia-mfa-otp-provider</jahia.manifest.description>
+        <jahia-module-signature>MCwCFElxrxbny/rMX7y3PXSLOCiITNUBAhQeYlOrHWNy9xv46mXeWh1BfCYq2Q==</jahia-module-signature>
+        <jahia.manifest.license>org.jahia.core</jahia.manifest.license>
+    </properties>
 
     <scm>
         <connection>https://github.com/Jahia/jahia-mfa</connection>
         <developerConnection>https://github.com/Jahia/jahia-mfa</developerConnection>
     </scm>
-
-    <repositories>
-        <repository>
-            <id>jahia-public</id>
-            <name>Jahia Public Repository</name>
-            <url>https://devtools.jahia.com/nexus/content/groups/public</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
         
-	<modules>
-	        <module>jahia-mfa-core</module>
-	        <module>jahia-mfa-otp-provider</module>
-	    </modules>
+    <modules>
+        <module>jahia-mfa-core</module>
+        <module>jahia-mfa-otp-provider</module>
+    </modules>
+    
+    <dependencies>
+        <dependency>
+            <groupId>org.jahia.modules</groupId>
+            <artifactId>jahia-mfa-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jahia.modules</groupId>
+            <artifactId>jahia-mfa-otp-provider</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>packaging-dependencies</id>
+                        <configuration>
+                            <attach>true</attach>
+                            <archive>
+                                <manifestEntries>
+                                    <Jahia-Required-Version>8.0.0.0</Jahia-Required-Version>
+                                </manifestEntries>
+                            </archive>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
