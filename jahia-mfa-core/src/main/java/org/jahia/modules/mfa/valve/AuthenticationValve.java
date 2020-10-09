@@ -79,7 +79,7 @@ public final class AuthenticationValve extends BaseAuthValve implements LoginUrl
                     if (passwordAndToken.length() > MFAConstants.TOKEN_SIZE) {
                         final String password = passwordAndToken.substring(0, passwordAndToken.length() - MFAConstants.TOKEN_SIZE);
                         final String token = passwordAndToken.substring(password.length(), passwordAndToken.length());
-                        if (user.verifyPassword(password) && verifyToken(user, token)) {
+                        if (user.verifyPassword(password) && verifyToken(user, token, password)) {
                             if (!user.isAccountLocked()) {
                                 ok = true;
                             } else {
@@ -121,12 +121,12 @@ public final class AuthenticationValve extends BaseAuthValve implements LoginUrl
         }
     }
 
-    private boolean verifyToken(JCRUserNode user, String token) {
+    private boolean verifyToken(JCRUserNode user, String token, String password) {
         try {
             if (user.hasNode(MFAConstants.NODE_NAME_MFA)) {
                 final JCRNodeWrapper node = user.getNode(MFAConstants.NODE_NAME_MFA);
                 if (node.hasProperty(MFAConstants.PROP_ACTIVATED) && node.getProperty(MFAConstants.PROP_ACTIVATED).getBoolean() && node.hasProperty(MFAConstants.PROP_PROVIDER)) {
-                    return jahiaMFAService.verifyToken(user, node.getPropertyAsString(MFAConstants.PROP_PROVIDER), token);
+                    return jahiaMFAService.verifyToken(user, node.getPropertyAsString(MFAConstants.PROP_PROVIDER), token, password);
                 }
             }
         } catch (RepositoryException ex) {

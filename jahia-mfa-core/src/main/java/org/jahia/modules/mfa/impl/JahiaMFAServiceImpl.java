@@ -30,12 +30,12 @@ public final class JahiaMFAServiceImpl implements JahiaMFAService {
     }
 
     @Override
-    public boolean verifyToken(JCRUserNode userNode, String provider, String token) {
-        return providers.get(provider).verifyToken(userNode, token);
+    public boolean verifyToken(JCRUserNode userNode, String provider, String token, String password) {
+        return providers.get(provider).verifyToken(userNode, token, password);
     }
 
     @Override
-    public void activateMFA(JCRUserNode userNode, String provider) {
+    public void activateMFA(JCRUserNode userNode, String provider, String password) {
         try {
             JCRTemplate.getInstance().doExecuteWithSystemSession(new JCRCallback<Object>() {
                 @Override
@@ -52,7 +52,7 @@ public final class JahiaMFAServiceImpl implements JahiaMFAService {
                     mfaNode.setProperty(MFAConstants.PROP_ACTIVATED, Boolean.TRUE);
                     mfaNode.setProperty(MFAConstants.PROP_PROVIDER, provider);
                     jcrsession.save();
-                    providers.get(provider).activateMFA(userNode);
+                    providers.get(provider).activateMFA(userNode, password);
                     return null;
                 }
             });
