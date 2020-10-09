@@ -1,6 +1,6 @@
 package org.jahia.modules.mfa;
 
-public class MFAConstants {
+public final class MFAConstants {
 
     public static final String AUTH_VALVE_ID = "mfaAuthValve";
     public static final String MIXIN_MFA_USER = "jmix:MFAUser";
