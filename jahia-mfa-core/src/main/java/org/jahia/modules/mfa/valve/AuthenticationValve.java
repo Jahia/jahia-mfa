@@ -126,12 +126,11 @@ public final class AuthenticationValve extends BaseAuthValve implements LoginUrl
             if (user.hasNode(MFAConstants.NODE_NAME_MFA)) {
                 final JCRNodeWrapper node = user.getNode(MFAConstants.NODE_NAME_MFA);
                 if (node.hasProperty(MFAConstants.PROP_ACTIVATED) && node.getProperty(MFAConstants.PROP_ACTIVATED).getBoolean() && node.hasProperty(MFAConstants.PROP_PROVIDER)) {
-                    // TODO : code to call the related provider and return true/false
-                    return true;
+                    return jahiaMFAService.verifyToken(user, node.getPropertyAsString(MFAConstants.PROP_PROVIDER), token);
                 }
             }
         } catch (RepositoryException ex) {
-            LOGGER.warn("Unable to read tokens for user: " + user.getName(), ex);
+            LOGGER.warn("Unable to read MFA configuration for user: " + user.getName(), ex);
             return false;
         }
         return false;
