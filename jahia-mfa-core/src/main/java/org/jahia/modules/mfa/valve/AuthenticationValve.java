@@ -41,7 +41,7 @@ public final class AuthenticationValve extends BaseAuthValve implements LoginUrl
     public void start() {
         setId(MFAConstants.AUTH_VALVE_ID);
         removeValve(authPipeline);
-        addValve(authPipeline, -1, "SessionAuthValve", null);
+        addValve(authPipeline, -1, null, "LoginEngineAuthValve");
     }
 
     public void stop() {
@@ -67,7 +67,7 @@ public final class AuthenticationValve extends BaseAuthValve implements LoginUrl
             final String passwordAndToken = httpServletRequest.getParameter("password");
             final String site = httpServletRequest.getParameter("site");
 
-            if (username != null && passwordAndToken != null && passwordAndToken.length() > MFAConstants.TOKEN_SIZE) {
+            if (username != null && passwordAndToken != null) {
                 // Check if the user has site access ( even though it is not a user of this site )
                 user = jahiaUserManagerService.lookupUser(username, site);
                 if (user == null) {
@@ -76,14 +76,20 @@ public final class AuthenticationValve extends BaseAuthValve implements LoginUrl
                     }
                     httpServletRequest.setAttribute(LoginEngineAuthValveImpl.VALVE_RESULT, LoginEngineAuthValveImpl.UNKNOWN_USER);
                 } else if (jahiaMFAService.hasMFA(user)) {
-                    final String password = passwordAndToken.substring(0, passwordAndToken.length() - MFAConstants.TOKEN_SIZE);
-                    final String token = passwordAndToken.substring(password.length() + 1, passwordAndToken.length());
-                    if (user.verifyPassword(password) && verifyToken(user, token)) {
-                        if (!user.isAccountLocked()) {
-                            ok = true;
+                    if (passwordAndToken.length() > MFAConstants.TOKEN_SIZE) {
+                        final String password = passwordAndToken.substring(0, passwordAndToken.length() - MFAConstants.TOKEN_SIZE);
+                        final String token = passwordAndToken.substring(password.length() + 1, passwordAndToken.length());
+                        if (user.verifyPassword(password) && verifyToken(user, token)) {
+                            if (!user.isAccountLocked()) {
+                                ok = true;
+                            } else {
+                                LOGGER.warn("Login failed: account for user {} is locked.", user.getName());
+                                httpServletRequest.setAttribute(LoginEngineAuthValveImpl.VALVE_RESULT, LoginEngineAuthValveImpl.ACCOUNT_LOCKED);
+                                return;
+                            }
                         } else {
-                            LOGGER.warn("Login failed: account for user {} is locked.", user.getName());
-                            httpServletRequest.setAttribute(LoginEngineAuthValveImpl.VALVE_RESULT, LoginEngineAuthValveImpl.ACCOUNT_LOCKED);
+                            LOGGER.warn("Login failed: password and token verification failed for user {}", user.getName());
+                            httpServletRequest.setAttribute(LoginEngineAuthValveImpl.VALVE_RESULT, LoginEngineAuthValveImpl.BAD_PASSWORD);
                             return;
                         }
                     } else {
@@ -93,6 +99,9 @@ public final class AuthenticationValve extends BaseAuthValve implements LoginUrl
                     }
                 }
             }
+        } else {
+            valveContext.invokeNext(context);
+            return;
         }
 
         if (ok) {
