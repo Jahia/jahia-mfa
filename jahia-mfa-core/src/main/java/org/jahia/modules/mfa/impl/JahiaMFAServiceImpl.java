@@ -1,6 +1,5 @@
 package org.jahia.modules.mfa.impl;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import javax.jcr.RepositoryException;
@@ -43,10 +42,17 @@ public final class JahiaMFAServiceImpl implements JahiaMFAService {
                 public Object doInJCR(JCRSessionWrapper jcrsession) throws RepositoryException {
                     final JCRNodeWrapper defaultUserNode = jcrsession.getNode(userNode.getPath());
                     defaultUserNode.addMixin(MFAConstants.MIXIN_MFA_USER);
-                    final JCRNodeWrapper mfaNode = defaultUserNode.addNode(MFAConstants.NODE_NAME_MFA, MFAConstants.NODE_TYPE_MFA);
+                    final JCRNodeWrapper mfaNode;
+                    if (defaultUserNode.hasNode(MFAConstants.NODE_NAME_MFA)) {
+                        mfaNode = defaultUserNode.getNode(MFAConstants.NODE_NAME_MFA);
+                    } else {
+                        mfaNode = defaultUserNode.addNode(MFAConstants.NODE_NAME_MFA, MFAConstants.NODE_TYPE_MFA);
+                    }
+
                     mfaNode.setProperty(MFAConstants.PROP_ACTIVATED, Boolean.TRUE);
                     mfaNode.setProperty(MFAConstants.PROP_PROVIDER, provider);
                     jcrsession.save();
+                    providers.get(provider).activateMFA(userNode);
                     return null;
                 }
             });
@@ -56,8 +62,22 @@ public final class JahiaMFAServiceImpl implements JahiaMFAService {
     }
 
     @Override
-    public void deactivateMFA(JCRUserNode userNode, String providey) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void deactivateMFA(JCRUserNode userNode, String provider) {
+        try {
+            JCRTemplate.getInstance().doExecuteWithSystemSession(new JCRCallback<Object>() {
+                @Override
+                public Object doInJCR(JCRSessionWrapper jcrsession) throws RepositoryException {
+                    final JCRNodeWrapper defaultUserNode = jcrsession.getNode(userNode.getPath());
+                    final JCRNodeWrapper mfaNode = defaultUserNode.getNode(MFAConstants.NODE_NAME_MFA);
+                    mfaNode.setProperty(MFAConstants.PROP_ACTIVATED, Boolean.FALSE);
+                    jcrsession.save();
+                    providers.get(provider).deactivateMFA(userNode);
+                    return null;
+                }
+            });
+        } catch (RepositoryException ex) {
+            LOGGER.error(String.format("Impossible to activate MFA for user %s and provider %s", userNode.getUserKey(), provider), ex);
+        }
     }
 
     @Override
