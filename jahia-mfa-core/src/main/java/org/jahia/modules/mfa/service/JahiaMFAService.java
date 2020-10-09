@@ -9,11 +9,11 @@ public interface JahiaMFAService {
 
     void removeProvider(JahiaMFAProvider provider);
 
-    boolean verifyToken(JCRUserNode userNode, String provider, String token);
+    boolean verifyToken(JCRUserNode userNode, String provider, String token, String password);
 
-    void activateMFA(JCRUserNode userNode, String provider);
+    void activateMFA(JCRUserNode userNode, String provider, String password);
 
     void deactivateMFA(JCRUserNode userNode, String provider);
-    
+
     boolean hasMFA(JCRUserNode userNode);
 }
