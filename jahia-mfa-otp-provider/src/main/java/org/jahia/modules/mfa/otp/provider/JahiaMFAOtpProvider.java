@@ -7,6 +7,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import javax.jcr.RepositoryException;
 import org.apache.commons.codec.binary.Base32;
+import org.apache.commons.io.Charsets;
 import org.jahia.modules.mfa.MFAConstants;
 import org.jahia.modules.mfa.provider.JahiaMFAProvider;
 import org.jahia.services.content.JCRCallback;
@@ -23,6 +24,7 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(JahiaMFAOtpProvider.class);
     private static final String ALGORITHM = "AES";
     private static final String KEY = "jahia-mfa-otp-provider";
+    private static final int SECRET_KEY_BYTE_SIZE = 20;
 
     public JahiaMFAOtpProvider() {
         super(KEY);
@@ -62,10 +64,7 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
                     return true;
                 }
             });
-        } catch (RepositoryException ex) {
-            LOGGER.error(String.format("Impossible to activate MFA OTP for user %s", userNode.getUserKey()), ex);
-            return false;
-        } catch (IllegalStateException ex) {
+        } catch (RepositoryException | IllegalStateException ex) {
             LOGGER.error(String.format("Impossible to activate MFA OTP for user %s", userNode.getUserKey()), ex);
             return false;
         }
@@ -100,9 +99,8 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
             final Key key = generateKey(password);
             final Cipher cipher = Cipher.getInstance(ALGORITHM);
             cipher.init(Cipher.ENCRYPT_MODE, key);
-            final byte[] encValue = cipher.doFinal(secretKey.getBytes());
-            final String encryptedSecretKey = Base64.getEncoder().encodeToString(encValue);
-            return encryptedSecretKey;
+            final byte[] encValue = cipher.doFinal(secretKey.getBytes(Charsets.UTF_8));
+            return Base64.getEncoder().encodeToString(encValue);
         } catch (Exception ex) {
             throw new IllegalStateException("Impossible to encrypt secret key", ex);
         }
@@ -114,23 +112,20 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
             final Key key = generateKey(password);
             final Cipher cipher = Cipher.getInstance(ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, key);
-            final byte[] decordedValue = Base64.getDecoder().decode(encryptedSecretKey);
-            final byte[] decValue = cipher.doFinal(decordedValue);
-            final String secretKey = new String(decValue);
-            return secretKey;
+            final byte[] decValue = cipher.doFinal(Base64.getDecoder().decode(encryptedSecretKey));
+            return new String(decValue, Charsets.UTF_8);
         } catch (Exception ex) {
             throw new IllegalStateException("Impossible to decrypt secret key", ex);
         }
     }
 
     private static Key generateKey(String password) {
-        final Key key = new SecretKeySpec(password.getBytes(), ALGORITHM);
-        return key;
+        return new SecretKeySpec(password.getBytes(Charsets.UTF_8), ALGORITHM);
     }
 
     private static String generateSecretKey() {
         final SecureRandom random = new SecureRandom();
-        byte[] bytes = new byte[20];
+        byte[] bytes = new byte[SECRET_KEY_BYTE_SIZE];
         random.nextBytes(bytes);
         final Base32 base32 = new Base32();
         return base32.encodeToString(bytes);
