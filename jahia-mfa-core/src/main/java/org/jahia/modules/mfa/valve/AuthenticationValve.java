@@ -6,10 +6,7 @@ import org.jahia.api.usermanager.JahiaUserManagerService;
 import org.jahia.bin.Login;
 import org.jahia.modules.mfa.MFAConstants;
 import org.jahia.modules.mfa.service.JahiaMFAService;
-import org.jahia.params.valves.AuthValveContext;
-import org.jahia.params.valves.BaseAuthValve;
-import org.jahia.params.valves.LoginEngineAuthValveImpl;
-import org.jahia.params.valves.LoginUrlProvider;
+import org.jahia.params.valves.*;
 import org.jahia.pipelines.Pipeline;
 import org.jahia.pipelines.PipelineException;
 import org.jahia.pipelines.valves.ValveContext;
@@ -19,7 +16,7 @@ import org.jahia.services.usermanager.JahiaUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class AuthenticationValve extends BaseAuthValve implements LoginUrlProvider {
+public final class AuthenticationValve extends AutoRegisteredBaseAuthValve implements LoginUrlProvider {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationValve.class);
     private Pipeline authPipeline;
