@@ -6,4 +6,5 @@
  - provider (string) = 'jahia-mfa-otp-provider' indexed=no autocreated
 
 [jmix:MFAUser] mixin
+ extends = jnt:user
 + MFA (jnt:MFA)
