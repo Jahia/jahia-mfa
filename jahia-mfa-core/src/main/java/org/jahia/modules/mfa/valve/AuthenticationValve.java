@@ -78,7 +78,7 @@ public final class AuthenticationValve extends BaseAuthValve implements LoginUrl
                 } else if (jahiaMFAService.hasMFA(user)) {
                     if (passwordAndToken.length() > MFAConstants.TOKEN_SIZE) {
                         final String password = passwordAndToken.substring(0, passwordAndToken.length() - MFAConstants.TOKEN_SIZE);
-                        final String token = passwordAndToken.substring(password.length() + 1, passwordAndToken.length());
+                        final String token = passwordAndToken.substring(password.length(), passwordAndToken.length());
                         if (user.verifyPassword(password) && verifyToken(user, token)) {
                             if (!user.isAccountLocked()) {
                                 ok = true;
