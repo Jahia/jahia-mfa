@@ -41,7 +41,7 @@ public final class AuthenticationValve extends BaseAuthValve implements LoginUrl
     public void start() {
         setId(MFAConstants.AUTH_VALVE_ID);
         removeValve(authPipeline);
-        addValve(authPipeline, 0, null, null);
+        addValve(authPipeline, -1, "SessionAuthValve", null);
     }
 
     public void stop() {
