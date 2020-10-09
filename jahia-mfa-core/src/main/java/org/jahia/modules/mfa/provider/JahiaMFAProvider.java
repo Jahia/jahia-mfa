@@ -16,8 +16,6 @@ public abstract class JahiaMFAProvider {
         return key;
     }
 
-    public abstract boolean verifyToken(JCRUserNode userNode, String token);
-
     public final void setJahiaMFAService(JahiaMFAService jahiaMFAService) {
         this.jahiaMFAService = jahiaMFAService;
     }
@@ -31,7 +29,12 @@ public abstract class JahiaMFAProvider {
     }
 
     public final void unregister() {
-        jahiaMFAService.addProvider(this);
+        jahiaMFAService.removeProvider(this);
     }
 
+    public abstract boolean verifyToken(JCRUserNode userNode, String token);
+
+    public abstract boolean activateMFA(JCRUserNode userNode);
+
+    public abstract boolean deactivateMFA(JCRUserNode userNode);
 }
