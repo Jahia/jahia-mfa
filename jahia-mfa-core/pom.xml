@@ -50,7 +50,6 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <_dsannotations>*</_dsannotations>
                         <Jahia-Static-Resources>/css,/icons,/images,/img,/javascript,/jsp</Jahia-Static-Resources>
                     </instructions>
                 </configuration>
