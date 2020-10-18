@@ -15,6 +15,8 @@ import org.jahia.services.content.JCRNodeWrapper;
 import org.jahia.services.content.JCRSessionWrapper;
 import org.jahia.services.content.JCRTemplate;
 import org.jahia.services.content.decorator.JCRUserNode;
+import org.jahia.services.content.rules.AddedNodeFact;
+import org.jahia.services.usermanager.JahiaUserManagerService;
 import org.jboss.aerogear.security.otp.Totp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,24 +76,45 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
     @Override
     public boolean deactivateMFA(JCRUserNode userNode) {
         try {
-            return JCRTemplate.getInstance().doExecuteWithSystemSession(new JCRCallback<Boolean>() {
-                @Override
-                public Boolean doInJCR(JCRSessionWrapper jcrsession) throws RepositoryException {
-                    final JCRNodeWrapper defaultUserNode = jcrsession.getNode(userNode.getPath());
-                    final JCRNodeWrapper mfaNode = defaultUserNode.getNode(MFAConstants.NODE_NAME_MFA);
-                    if (mfaNode.hasProperty(Constants.PROP_SECRET_KEY)) {
-                        mfaNode.getProperty(Constants.PROP_SECRET_KEY).remove();
+            if (isActivated(userNode)) {
+                return JCRTemplate.getInstance().doExecuteWithSystemSession(new JCRCallback<Boolean>() {
+                    @Override
+                    public Boolean doInJCR(JCRSessionWrapper jcrsession) throws RepositoryException {
+                        final JCRNodeWrapper defaultUserNode = jcrsession.getNode(userNode.getPath());
+                        final JCRNodeWrapper mfaNode = defaultUserNode.getNode(MFAConstants.NODE_NAME_MFA);
+                        if (mfaNode.hasProperty(Constants.PROP_SECRET_KEY)) {
+                            mfaNode.getProperty(Constants.PROP_SECRET_KEY).remove();
+                        }
+                        if (mfaNode.isNodeType(Constants.MIXIN_MFA_OTP)) {
+                            mfaNode.removeMixin(Constants.MIXIN_MFA_OTP);
+                        }
+                        jcrsession.save();
+                        return true;
                     }
-                    if (mfaNode.isNodeType(Constants.MIXIN_MFA_OTP)) {
-                        mfaNode.removeMixin(Constants.MIXIN_MFA_OTP);
-                    }
-                    jcrsession.save();
-                    return true;
-                }
-            });
+                });
+            }
         } catch (RepositoryException ex) {
             LOGGER.error(String.format("Impossible to deactivate MFA OTP for user %s", userNode.getUserKey()), ex);
-            return false;
+        }
+        return false;
+    }
+
+    public boolean isActivated(JCRUserNode userNode) throws RepositoryException {
+        if (userNode.hasNode(MFAConstants.NODE_NAME_MFA)) {
+            final JCRNodeWrapper mfaNode = userNode.getNode(MFAConstants.NODE_NAME_MFA);
+            return mfaNode.isNodeType(Constants.MIXIN_MFA_OTP);
+        }
+        return false;
+    }
+
+    public void deactivateMFA(AddedNodeFact addedNodeFact) {
+        try {
+            final JCRUserNode userNode = JahiaUserManagerService.getInstance().lookupUserByPath(addedNodeFact.getPath());
+            if (isActivated(userNode)) {
+                getJahiaMFAService().deactivateMFA(userNode, KEY);
+            }
+        } catch (RepositoryException ex) {
+            LOGGER.error("Impossible to deactivate MFA OTP", ex);
         }
     }
 
@@ -123,7 +146,7 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
     private static Key generateSecretKey(String password) {
         return new SecretKeySpec(generateKey(password).getBytes(Charsets.UTF_8), ALGORITHM);
     }
-    
+
     private static String generateKey(String password) {
         String aesKey = "";
         while (aesKey.length() < KEY_SIZE) {

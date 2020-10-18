@@ -12,3 +12,12 @@ global User user
 global Service service
 global Logger logger
 global JCRContentUtils jcrUtils
+
+
+rule "Deactivate MFA OTP when password is updated"
+    when
+        A property j:password has been set on a node
+             - the node has the type jnt:user
+    then
+        Deactivate MFA OTP for user node
+end
