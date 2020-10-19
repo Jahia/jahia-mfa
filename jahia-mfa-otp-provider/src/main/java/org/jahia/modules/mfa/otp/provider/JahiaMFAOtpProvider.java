@@ -148,12 +148,12 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
     }
 
     private static String generateKey(String password) {
-        String aesKey = "";
+        final StringBuilder aesKey = new StringBuilder("");
         while (aesKey.length() < KEY_SIZE) {
-            aesKey = aesKey + password;
+            aesKey.append(password);
         }
-        aesKey = aesKey.substring(0, KEY_SIZE);
-        return aesKey;
+
+        return aesKey.substring(0, KEY_SIZE);
     }
 
     private static String generateTotpSecret() {
