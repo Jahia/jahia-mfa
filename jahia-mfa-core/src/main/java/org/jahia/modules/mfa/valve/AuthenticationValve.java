@@ -50,82 +50,54 @@ public final class AuthenticationValve extends BaseAuthValve implements LoginUrl
 
     public void invoke(Object context, ValveContext valveContext) throws PipelineException {
 
-        if (!isEnabled()) {
-            valveContext.invokeNext(context);
-            return;
-        }
-
         final AuthValveContext authContext = (AuthValveContext) context;
         final HttpServletRequest httpServletRequest = authContext.getRequest();
+        final String username = httpServletRequest.getParameter("username");
+        final String passwordAndToken = httpServletRequest.getParameter("password");
+        if (isEnabled() && isLoginRequested(httpServletRequest) && username != null && passwordAndToken != null) {
 
-        JCRUserNode user = null;
-        boolean ok = false;
+            JCRUserNode user = null;
 
-        if (isLoginRequested(httpServletRequest)) {
-
-            final String username = httpServletRequest.getParameter("username");
-            final String passwordAndToken = httpServletRequest.getParameter("password");
             final String site = httpServletRequest.getParameter("site");
 
-            if (username != null && passwordAndToken != null) {
-                // Check if the user has site access ( even though it is not a user of this site )
-                user = jahiaUserManagerService.lookupUser(username, site);
-                if (user == null) {
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("Login failed. Unknown username {}", username.replaceAll("[\r\n]", ""));
+            // Check if the user has site access ( even though it is not a user of this site )
+            user = jahiaUserManagerService.lookupUser(username, site);
+            if (user != null && jahiaMFAService.hasMFA(user)) {
+                if (passwordAndToken.length() > MFAConstants.TOKEN_SIZE && verifyCredentials(user, passwordAndToken)) {
+                    LOGGER.debug("User {} logged in.", user);
+
+                    JahiaUser jahiaUser = user.getJahiaUser();
+
+                    if (httpServletRequest.getSession(false) != null) {
+                        httpServletRequest.getSession().invalidate();
                     }
-                    httpServletRequest.setAttribute(LoginEngineAuthValveImpl.VALVE_RESULT, LoginEngineAuthValveImpl.UNKNOWN_USER);
-                } else if (jahiaMFAService.hasMFA(user)) {
-                    if (passwordAndToken.length() > MFAConstants.TOKEN_SIZE) {
-                        final String password = passwordAndToken.substring(0, passwordAndToken.length() - MFAConstants.TOKEN_SIZE);
-                        final String token = passwordAndToken.substring(password.length(), passwordAndToken.length());
-                        if (user.verifyPassword(password) && verifyToken(user, token, password)) {
-                            if (!user.isAccountLocked()) {
-                                ok = true;
-                            } else {
-                                LOGGER.warn("Login failed: account for user {} is locked.", user.getName());
-                                httpServletRequest.setAttribute(LoginEngineAuthValveImpl.VALVE_RESULT, LoginEngineAuthValveImpl.ACCOUNT_LOCKED);
-                                return;
-                            }
-                        } else {
-                            LOGGER.warn("Login failed: password and token verification failed for user {}", user.getName());
-                            httpServletRequest.setAttribute(LoginEngineAuthValveImpl.VALVE_RESULT, LoginEngineAuthValveImpl.BAD_PASSWORD);
-                            return;
-                        }
-                    } else {
-                        LOGGER.warn("Login failed: password and token verification failed for user {}", user.getName());
-                        httpServletRequest.setAttribute(LoginEngineAuthValveImpl.VALVE_RESULT, LoginEngineAuthValveImpl.BAD_PASSWORD);
-                        return;
-                    }
+
+                    httpServletRequest.setAttribute(LoginEngineAuthValveImpl.VALVE_RESULT, LoginEngineAuthValveImpl.OK);
+                    authContext.getSessionFactory().setCurrentUser(jahiaUser);
+                    return;
+                } else {
+                    LOGGER.warn("Login failed: password and token verification failed for user {}", user.getName());
+                    httpServletRequest.setAttribute(LoginEngineAuthValveImpl.VALVE_RESULT, LoginEngineAuthValveImpl.BAD_PASSWORD);
+                    return;
                 }
             }
-        } else {
-            valveContext.invokeNext(context);
-            return;
         }
 
-        if (ok) {
-            LOGGER.debug("User {} logged in.", user);
+        valveContext.invokeNext(context);
+    }
 
-            JahiaUser jahiaUser = user.getJahiaUser();
-
-            if (httpServletRequest.getSession(false) != null) {
-                httpServletRequest.getSession().invalidate();
-            }
-
-            httpServletRequest.setAttribute(LoginEngineAuthValveImpl.VALVE_RESULT, LoginEngineAuthValveImpl.OK);
-            authContext.getSessionFactory().setCurrentUser(jahiaUser);
-        } else {
-            valveContext.invokeNext(context);
-            return;
-        }
+    private boolean verifyCredentials(JCRUserNode user, String passwordAndToken) {
+        final String password = passwordAndToken.substring(0, passwordAndToken.length() - MFAConstants.TOKEN_SIZE);
+        final String token = passwordAndToken.substring(password.length(), passwordAndToken.length());
+        return user.verifyPassword(password) && verifyToken(user, token, password);
     }
 
     private boolean verifyToken(JCRUserNode user, String token, String password) {
         try {
             if (user.hasNode(MFAConstants.NODE_NAME_MFA)) {
                 final JCRNodeWrapper node = user.getNode(MFAConstants.NODE_NAME_MFA);
-                if (node.hasProperty(MFAConstants.PROP_ACTIVATED) && node.getProperty(MFAConstants.PROP_ACTIVATED).getBoolean() && node.hasProperty(MFAConstants.PROP_PROVIDER)) {
+                if (node.hasProperty(MFAConstants.PROP_ACTIVATED) && node.getProperty(MFAConstants.PROP_ACTIVATED).getBoolean() 
+                        && node.hasProperty(MFAConstants.PROP_PROVIDER)) {
                     return jahiaMFAService.verifyToken(user, node.getPropertyAsString(MFAConstants.PROP_PROVIDER), token, password);
                 }
             }

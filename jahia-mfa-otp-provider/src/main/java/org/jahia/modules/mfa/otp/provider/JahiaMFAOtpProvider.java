@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 public class JahiaMFAOtpProvider extends JahiaMFAProvider {
 
+    private static final JahiaMFAOtpProvider INSTANCE = new JahiaMFAOtpProvider();
     private static final Logger LOGGER = LoggerFactory.getLogger(JahiaMFAOtpProvider.class);
     private static final String ALGORITHM = "AES";
     private static final String KEY = "jahia-mfa-otp-provider";
@@ -31,6 +32,10 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
 
     public JahiaMFAOtpProvider() {
         super(KEY);
+    }
+
+    public static JahiaMFAOtpProvider getINSTANCE() {
+        return INSTANCE;
     }
 
     @Override
@@ -99,6 +104,13 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
         return false;
     }
 
+    /**
+     * Check if the user has the MFA OTP provider activated
+     *
+     * @param userNode the user to check
+     * @return true if the user has the mixin for the MFA OTP provider, false otherwise
+     * @throws RepositoryException but should never happen
+     */
     public boolean isActivated(JCRUserNode userNode) throws RepositoryException {
         if (userNode.hasNode(MFAConstants.NODE_NAME_MFA)) {
             final JCRNodeWrapper mfaNode = userNode.getNode(MFAConstants.NODE_NAME_MFA);
@@ -107,6 +119,11 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
         return false;
     }
 
+    /**
+     * Deactivate the provider when a password is set by the user
+     *
+     * @param addedNodeFact the user node where the password has been set
+     */
     public void deactivateMFA(AddedNodeFact addedNodeFact) {
         try {
             final JCRUserNode userNode = JahiaUserManagerService.getInstance().lookupUserByPath(addedNodeFact.getPath());
@@ -130,6 +147,13 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
         }
     }
 
+    /**
+     * Decrypt TOTP secret key of the user thanks to its password
+     *
+     * @param encryptedSecretKey the encrypted secret key used for TOTP
+     * @param password the password entered by the the user
+     * @return the decrypted secret key of the user
+     */
     public static String decryptTotpSecretKey(String encryptedSecretKey, String password) {
         try {
 

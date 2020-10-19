@@ -6,7 +6,7 @@
     <reference id="JahiaMFAServiceOsgi" interface="org.jahia.modules.mfa.service.JahiaMFAService" availability="mandatory"/>
     
     <bean id="JahiaMFAOtpProvider" class="org.jahia.modules.mfa.otp.provider.JahiaMFAOtpProvider" 
-          init-method="register" destroy-method="unregister">
+          factory-method="getInstance" init-method="register" destroy-method="unregister">
         <property name="jahiaMFAService" ref="JahiaMFAServiceOsgi"/>
     </bean>
     
