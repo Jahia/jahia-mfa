@@ -34,7 +34,7 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
         super(KEY);
     }
 
-    public static JahiaMFAOtpProvider getINSTANCE() {
+    public static JahiaMFAOtpProvider getInstance() {
         return INSTANCE;
     }
 
