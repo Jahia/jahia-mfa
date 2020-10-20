@@ -18,29 +18,29 @@
     <meta charset="UTF-8">
     <meta name="robots" content="noindex, nofollow"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico">
+    <link rel="shortcut icon" href="/favicon.ico">
 
     <!-- Import font (Nunito Sans) -->
-    <link href="${pageContext.request.contextPath}/css/loginFont.css" rel="stylesheet">
+    <link href="/css/loginFont.css" rel="stylesheet">
 
     <!-- jQuery -->
-    <script src="${pageContext.request.contextPath}/css/jquery.min.js"></script>
+    <script src="/css/jquery.min.js"></script>
 
     <!-- Main style -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/loginMain_dark.css">
+    <link rel="stylesheet" href="/css/loginMain_dark.css">
 </head>
 <body>
 
-<section class="login" style="background-image: url(${pageContext.request.contextPath}/css/images/Background_Login-01.png);">
+<section class="login" style="background-image: url(/css/images/Background_Login-01.png);">
     <div class="login-main">
         <div class="position-container">
 
             <div class="logo">
-                <img src="${pageContext.request.contextPath}/css/images/dx_logo.png" alt="jahia logo">
+                <img src="/css/images/dx_logo.png" alt="jahia logo">
             </div>
 
             <div class="login-form">
-                <ui:loginArea>
+                <ui:loginArea action="/cms/login">
 
                     <ui:isLoginError var="loginResult">
                         <div class="login-error">

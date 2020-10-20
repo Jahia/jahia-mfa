@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 3.2//EN"
+        "http://tuckey.org/res/dtds/urlrewrite3.2.dtd">
+
+<urlrewrite>
+    <rule enabled="true">
+        <name>Jahia MFA </name>
+        <note>Redirects to /modules</note>
+        <condition type="request-uri" operator="notequal">^/modules/mfa</condition>
+        <condition operator="notequal" type="parameter" name="redirect">false</condition>
+        <from>^/mfa</from>
+        <to last="true" type="passthrough">%{context-path}/modules/mfa</to>
+    </rule>
+</urlrewrite>

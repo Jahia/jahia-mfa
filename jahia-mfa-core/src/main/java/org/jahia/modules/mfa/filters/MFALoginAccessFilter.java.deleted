@@ -63,10 +63,10 @@ public class MFALoginAccessFilter  extends AbstractServletFilter {
             throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         if (request.getPathInfo() != null && MDA_REGEXP.matcher(request.getPathInfo()).matches()) {
+            request.getRequestDispatcher("/modules/jahia-mfa-core/errors/error_401.jsp").forward(request, servletResponse);
             return;
         }
-        filterChain.doFilter(servletRequest, servletResponse);
-
+        filterChain.doFilter(servletRequest,servletResponse);
     }
 
     @Override public void destroy() {

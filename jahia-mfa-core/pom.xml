@@ -21,12 +21,26 @@
         <jahia-depends>default</jahia-depends>
         <jahia-deploy-on-site>system</jahia-deploy-on-site>
         <jahia-module-signature>MCwCFAOgwc31R/4eu/5ldv+haSLaqgldAhRr7L3zyibsIpc3860gXlrvt4AxMg==</jahia-module-signature>
+        <import-package>org.jahia.taglibs.functions</import-package>
     </properties>
 
     <scm>
         <connection>scm:dummy:uri</connection>
         <developerConnection>scm:dummy:uri</developerConnection>
     </scm>
+
+        <dependencies>
+            <dependency>
+                <groupId>javax.servlet.jsp</groupId>
+                <artifactId>jsp-api</artifactId>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jahia.server</groupId>
+                <artifactId>jahia-taglib</artifactId>
+                <version>8.0.1.0</version>
+            </dependency>
+        </dependencies>
 
     <repositories>
         <repository>
@@ -52,6 +66,7 @@
                 <configuration>
                     <instructions>
                         <Jahia-Static-Resources>/css,/icons,/images,/img,/javascript,/jsp</Jahia-Static-Resources>
+                        <_dsannotations>*</_dsannotations>
                     </instructions>
                 </configuration>
             </plugin>

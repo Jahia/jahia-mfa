@@ -146,7 +146,7 @@ public final class AuthenticationValve extends AutoRegisteredBaseAuthValve imple
 
     @Override
     public String getLoginUrl(HttpServletRequest request) {
-        return request.getServerName() + ":8080/modules/jahia-mfa-core/errors/error_401.jsp";
+        return request.getServerName() + ":8080/mfa";
     }
 
     @Override
