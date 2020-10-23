@@ -1,6 +1,7 @@
 package org.jahia.modules.mfa.valve;
 
 import javax.jcr.RepositoryException;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import org.jahia.api.usermanager.JahiaUserManagerService;
 import org.jahia.bin.Login;
@@ -15,6 +16,11 @@ import org.jahia.services.content.decorator.JCRUserNode;
 import org.jahia.services.usermanager.JahiaUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+
+import static org.jahia.params.valves.LoginEngineAuthValveImpl.UNKNOWN_USER;
+import static org.jahia.params.valves.LoginEngineAuthValveImpl.VALVE_RESULT;
 
 public final class AuthenticationValve extends AutoRegisteredBaseAuthValve implements LoginUrlProvider {
 
@@ -48,44 +54,45 @@ public final class AuthenticationValve extends AutoRegisteredBaseAuthValve imple
     public void invoke(Object context, ValveContext valveContext) throws PipelineException {
 
         final AuthValveContext authContext = (AuthValveContext) context;
-        final HttpServletRequest httpServletRequest = authContext.getRequest();
-        final String username = httpServletRequest.getParameter("username");
-        final String passwordAndToken = httpServletRequest.getParameter("password");
-        if (isEnabled() && isLoginRequested(httpServletRequest) && username != null && passwordAndToken != null) {
+        final HttpServletRequest request = authContext.getRequest();
+        final String username = request.getParameter("username");
+        final String token = request.getParameter("token");
+        final String password = request.getParameter("password");
+        if (isEnabled() && isLoginRequested(request) && username != null && password != null && token!=null) {
 
             JCRUserNode user = null;
 
-            final String site = httpServletRequest.getParameter("site");
+            final String site = request.getParameter("site");
 
             // Check if the user has site access ( even though it is not a user of this site )
             user = jahiaUserManagerService.lookupUser(username, site);
             if (user != null && jahiaMFAService.hasMFA(user)) {
-                if (passwordAndToken.length() > MFAConstants.TOKEN_SIZE && verifyCredentials(user, passwordAndToken)) {
+                if (password.length() > MFAConstants.TOKEN_SIZE && verifyCredentials(user, password, token)) {
                     LOGGER.debug("User {} logged in.", user);
 
                     JahiaUser jahiaUser = user.getJahiaUser();
 
-                    if (httpServletRequest.getSession(false) != null) {
-                        httpServletRequest.getSession().invalidate();
+                    if (request.getSession(false) != null) {
+                        request.getSession().invalidate();
                     }
 
-                    httpServletRequest.setAttribute(LoginEngineAuthValveImpl.VALVE_RESULT, LoginEngineAuthValveImpl.OK);
+                    request.setAttribute(LoginEngineAuthValveImpl.VALVE_RESULT, LoginEngineAuthValveImpl.OK);
                     authContext.getSessionFactory().setCurrentUser(jahiaUser);
                     return;
                 } else {
                     LOGGER.warn("Login failed: password and token verification failed for user {}", user.getName());
-                    httpServletRequest.setAttribute(LoginEngineAuthValveImpl.VALVE_RESULT, LoginEngineAuthValveImpl.BAD_PASSWORD);
+                    request.setAttribute(LoginEngineAuthValveImpl.VALVE_RESULT, LoginEngineAuthValveImpl.BAD_PASSWORD);
                     return;
                 }
             }
         }
 
         valveContext.invokeNext(context);
+
+
     }
 
-    private boolean verifyCredentials(JCRUserNode user, String passwordAndToken) {
-        final String password = passwordAndToken.substring(0, passwordAndToken.length() - MFAConstants.TOKEN_SIZE);
-        final String token = passwordAndToken.substring(password.length(), passwordAndToken.length());
+    private boolean verifyCredentials(JCRUserNode user, String password, String token) {
         return user.verifyPassword(password) && verifyToken(user, token, password);
     }
 

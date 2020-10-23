@@ -84,10 +84,10 @@
                             <label class="inputlabel"><fmt:message key="label.password"/></label>
                         </div>
                         <div class="group">
-                        <input type="password" name="2fa" maxlength="250" autocomplete="off" required />
+                        <input type="password" name="token" maxlength="250" autocomplete="off" required />
                         <span class="highlight"></span>
                         <span class="bar"></span>
-                        <label class="inputlabel"><fmt:message key="label.2fa"/></label>
+                        <label class="inputlabel"><fmt:message key="label.code"/> OTP</label>
                     </div>
                     </c:if>
 
