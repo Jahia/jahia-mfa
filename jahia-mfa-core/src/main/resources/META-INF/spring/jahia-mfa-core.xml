@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+
+    <bean id="jahiaMFAServiceImpl" class="org.jahia.modules.mfa.impl.JahiaMFAServiceImpl" />
+
+    <bean id="jahiaMFAAuthenticationValve" class="org.jahia.modules.mfa.valve.AuthenticationValve">
+        <property name="position" value="2"/>
+        <property name="jahiaUserManagerService" ref="JahiaUserManagerService"/>
+        <property name="authPipeline" ref="authPipeline"/>
+        <property name="jahiaMFAService" ref="jahiaMFAServiceImpl"/>
+    </bean>
+
+    <bean id="MFALoginAccessFilter" class="org.jahia.modules.mfa.filters.MFALoginAccessFilter">
+        <property name="urlPatterns" value="/modules/*"/>
+    </bean>
+
+    <bean class="org.jahia.bin.filters.ServletFilter">
+        <property name="filterName" value="MFALoginAccessFilter"/>
+        <property name="filter" ref="MFALoginAccessFilter"/>
+        <property name="order" value="-4"/>
+        <property name="matchAllUrls" value="true"/>
+    </bean>
+</beans>
+
+
