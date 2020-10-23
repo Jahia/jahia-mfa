@@ -67,7 +67,6 @@ public class MFAServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setHeader("Cache-Control", "no-store");
         response.setHeader("Content-Type", "text/html;charset=UTF-8");
-        request.setAttribute("action","/cms/login");
         HttpServletRequestWrapper wrapper = new HttpServletRequestWrapper(request);
 
 

@@ -13,16 +13,6 @@
         <property name="jahiaMFAService" ref="jahiaMFAServiceImpl"/>
     </bean>
 
-    <bean id="MFALoginAccessFilter" class="org.jahia.modules.mfa.filters.MFALoginAccessFilter">
-        <property name="urlPatterns" value="/modules/*"/>
-    </bean>
-
-    <bean class="org.jahia.bin.filters.ServletFilter">
-        <property name="filterName" value="MFALoginAccessFilter"/>
-        <property name="filter" ref="MFALoginAccessFilter"/>
-        <property name="order" value="-4"/>
-        <property name="matchAllUrls" value="true"/>
-    </bean>
 </beans>
 
 
