@@ -22,10 +22,10 @@
 
     <!-- Import font (Nunito Sans) -->
     <link href="/css/loginFont.css" rel="stylesheet">
-
+    <link href="/modules/jahia-mfa-core/css/mfa.css" rel="stylesheet">
     <!-- jQuery -->
     <script src="/css/jquery.min.js"></script>
-
+    <script src="/modules/jahia-mfa-core/javascript/mfa.js"></script>
     <!-- Main style -->
     <link rel="stylesheet" href="/css/loginMain_dark.css">
 </head>
@@ -83,10 +83,14 @@
                             <span class="bar"></span>
                             <label class="inputlabel"><fmt:message key="label.password"/></label>
                         </div>
-                        <div class="group">
-                        <input type="password" name="token" maxlength="250" autocomplete="off" required />
-                        <span class="highlight"></span>
-                        <span class="bar"></span>
+                        <div class="group digit-group">
+                            <input type="text" id="digit-1" name="digit-1" data-next="digit-2" autocomplete="off" />
+                            <input type="text" id="digit-2" name="digit-2" data-next="digit-3" data-previous="digit-1" autocomplete="off"/>
+                            <input type="text" id="digit-3" name="digit-3" data-next="digit-4" data-previous="digit-2" autocomplete="off"/>
+                            <span class="splitter">&ndash;</span>
+                            <input type="text" id="digit-4" name="digit-4" data-next="digit-5" data-previous="digit-3" autocomplete="off"/>
+                            <input type="text" id="digit-5" name="digit-5" data-next="digit-6" data-previous="digit-4"autocomplete="off" />
+                            <input type="text" id="digit-6" name="digit-6" data-previous="digit-5" autocomplete="off"/>
                         <label class="inputlabel"><fmt:message key="label.code"/> OTP</label>
                     </div>
                     </c:if>

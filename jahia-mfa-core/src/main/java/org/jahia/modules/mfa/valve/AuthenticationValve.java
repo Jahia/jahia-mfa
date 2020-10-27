@@ -56,8 +56,19 @@ public final class AuthenticationValve extends AutoRegisteredBaseAuthValve imple
         final AuthValveContext authContext = (AuthValveContext) context;
         final HttpServletRequest request = authContext.getRequest();
         final String username = request.getParameter("username");
-        final String token = request.getParameter("token");
+        final String digit1 = request.getParameter("digit-1");
+        final String digit2 = request.getParameter("digit-2");
+        final String digit3 = request.getParameter("digit-3");
+        final String digit4 = request.getParameter("digit-4");
+        final String digit5 = request.getParameter("digit-5");
+        final String digit6 = request.getParameter("digit-6");
+        String token = null;
+
         final String password = request.getParameter("password");
+
+        if (digit1!=null && digit2!=null && digit3!=null && digit4!=null && digit5!=null && digit6!=null){
+            token = digit1+digit2+digit3+digit4+digit5+digit6;
+        }
         if (isEnabled() && isLoginRequested(request) && username != null && password != null && token!=null) {
 
             JCRUserNode user = null;

@@ -7,7 +7,7 @@
     <bean id="jahiaMFAServiceImpl" class="org.jahia.modules.mfa.impl.JahiaMFAServiceImpl" />
 
     <bean id="jahiaMFAAuthenticationValve" class="org.jahia.modules.mfa.valve.AuthenticationValve">
-        <property name="position" value="2"/>
+        <property name="position" value="1"/>
         <property name="jahiaUserManagerService" ref="JahiaUserManagerService"/>
         <property name="authPipeline" ref="authPipeline"/>
         <property name="jahiaMFAService" ref="jahiaMFAServiceImpl"/>

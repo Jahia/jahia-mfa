@@ -1,0 +1,23 @@
+.digit-group input {
+    width: 42px;
+    height: 50px;
+    border: none;
+    line-height: 50px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 200;
+    margin: 0 2px;
+    display: inline;
+}
+
+.digit-group .splitter {
+    padding: 0 0px;
+    font-size: 33px;
+    color: white;
+}
+
+
+ .prompt {
+    margin-bottom: 20px;
+    font-size: 20px;
+}
