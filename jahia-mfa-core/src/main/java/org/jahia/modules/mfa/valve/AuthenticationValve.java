@@ -66,7 +66,7 @@ public final class AuthenticationValve extends AutoRegisteredBaseAuthValve imple
 
         final String password = request.getParameter("password");
 
-        if (digit1!=null && digit2!=null && digit3!=null && digit4!=null && digit5!=null && digit6!=null){
+            if (digit1!=null && digit2!=null && digit3!=null && digit4!=null && digit5!=null && digit6!=null){
             token = digit1+digit2+digit3+digit4+digit5+digit6;
         }
         if (isEnabled() && isLoginRequested(request) && username != null && password != null && token!=null) {
