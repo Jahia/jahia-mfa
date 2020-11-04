@@ -33,7 +33,9 @@ public final class JahiaMFAServiceImpl implements JahiaMFAService {
     public boolean verifyToken(JCRUserNode userNode, String provider, String token, String password) {
         final JahiaMFAProvider jahiaMFAProvider = providers.get(provider);
         if (jahiaMFAProvider == null) {
-            LOGGER.error(String.format("Provider %s for user %s is not registered", provider, userNode.getUserKey()));
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error(String.format("Provider %s for user %s is not registered", provider, userNode.getUserKey()));
+            }
             return false;
         }
         return providers.get(provider).verifyToken(userNode, token, password);

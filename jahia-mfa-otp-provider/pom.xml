@@ -51,9 +51,9 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                <instructions>
-                    <_dsannotations>*</_dsannotations>
-                </instructions>
+                    <instructions>
+                        <_dsannotations>*</_dsannotations>
+                    </instructions>
                 </configuration>
             </plugin>
         </plugins>

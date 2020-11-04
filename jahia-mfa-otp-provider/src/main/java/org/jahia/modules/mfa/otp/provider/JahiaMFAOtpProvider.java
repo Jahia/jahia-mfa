@@ -1,9 +1,12 @@
 package org.jahia.modules.mfa.otp.provider;
 
+import java.security.InvalidKeyException;
 import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import javax.jcr.RepositoryException;
 import org.apache.commons.codec.binary.Base32;
@@ -27,6 +30,7 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(JahiaMFAOtpProvider.class);
     private static final String ALGORITHM = "AES";
     private static final String KEY = "jahia-mfa-otp-provider";
+    private static final String TRANSFORMATION = "AES/GCM/NoPadding";
     private static final int KEY_SIZE = 32;
     private static final int TOTP_KEY_BYTE_SIZE = 20;
 
@@ -137,9 +141,7 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
 
     private static String encryptTotpSecretKey(String secretKey, String password) {
         try {
-            final Key key = generateSecretKey(password);
-            final Cipher cipher = Cipher.getInstance(ALGORITHM);
-            cipher.init(Cipher.ENCRYPT_MODE, key);
+            final Cipher cipher = getCipher(true, password);
             final byte[] encValue = cipher.doFinal(secretKey.getBytes(Charsets.UTF_8));
             return Base64.getEncoder().encodeToString(encValue);
         } catch (Exception ex) {
@@ -156,14 +158,23 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
      */
     public static String decryptTotpSecretKey(String encryptedSecretKey, String password) {
         try {
-
-            final Key key = generateSecretKey(password);
-            final Cipher cipher = Cipher.getInstance(ALGORITHM);
-            cipher.init(Cipher.DECRYPT_MODE, key);
+            final Cipher cipher = getCipher(false, password);
             final byte[] decValue = cipher.doFinal(Base64.getDecoder().decode(encryptedSecretKey));
             return new String(decValue, Charsets.UTF_8);
         } catch (Exception ex) {
             throw new IllegalStateException("Impossible to decrypt secret key", ex);
+        }
+    }
+
+    private static Cipher getCipher(boolean encrypt, String password) {
+        try {
+            final Key key = generateSecretKey(password);
+            final Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+
+            cipher.init(encrypt ? Cipher.ENCRYPT_MODE : Cipher.DECRYPT_MODE, key);
+            return cipher;
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException ex) {
+            throw new IllegalStateException("Impossible to initialize cipher", ex);
         }
     }
 

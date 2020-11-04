@@ -1,13 +1,13 @@
 {
-  "label": {
-    "settings": {
-      "title": "Jahia 2FA setting"
-    },
-    "action": {
-      "title": "Jahia 2FA - How to extend the ui ?"
-    },
-    "appsAccordion": {
-      "title": "Jahia 2FA"
+    "label": {
+        "settings": {
+            "title": "Jahia 2FA setting"
+        },
+        "action": {
+            "title": "Jahia 2FA - How to extend the ui ?"
+        },
+        "appsAccordion": {
+            "title": "Jahia 2FA"
+        }
     }
-  }
 }

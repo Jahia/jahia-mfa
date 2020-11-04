@@ -23,42 +23,39 @@
  */
 package org.jahia.modules.mfa.servlet;
 
-
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-
+import java.io.IOException;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import org.osgi.service.component.annotations.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Short description of the class
  *
  * @author faissah
  */
-
 @Component(service = Servlet.class, property = "alias=/mfa")
 public class MFAServlet extends HttpServlet {
-    private Bundle bundle;
 
-    @Activate
-    public void onActivate(BundleContext bundleContext) {
-        bundle = bundleContext.getBundle();
-    }
+    private static final long serialVersionUID = 500248201001731L;
+    private static final Logger LOGGER = LoggerFactory.getLogger(MFAServlet.class);
+    public static final String CONTEXT = "mfa";
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setHeader("Cache-Control", "no-store");
-        response.setHeader("Content-Type", "text/html;charset=UTF-8");
-        HttpServletRequestWrapper wrapper = new HttpServletRequestWrapper(request);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            response.setHeader("Cache-Control", "no-store");
+            response.setHeader("Content-Type", "text/html;charset=UTF-8");
+            HttpServletRequestWrapper wrapper = new HttpServletRequestWrapper(request);
 
-
-        wrapper.getRequestDispatcher("/modules/jahia-mfa-core/login.jsp").include(wrapper, response);
+            wrapper.getRequestDispatcher("/modules/jahia-mfa-core/login.jsp").include(wrapper, response);
+        } catch (ServletException | IOException ex) {
+            LOGGER.error("Impossible to include resource", ex);
+        }
     }
 }
