@@ -1,5 +1,6 @@
 package org.jahia.modules.mfa.otp.provider;
 
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
@@ -7,6 +8,7 @@ import java.security.SecureRandom;
 import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.jcr.RepositoryException;
 import org.apache.commons.codec.binary.Base32;
@@ -32,6 +34,7 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
     private static final String KEY = "jahia-mfa-otp-provider";
     private static final String TRANSFORMATION = "AES/GCM/NoPadding";
     private static final int KEY_SIZE = 32;
+    private static final int TAG_LENGTH_BIT = 128;
     private static final int TOTP_KEY_BYTE_SIZE = 20;
 
     public JahiaMFAOtpProvider() {
@@ -52,7 +55,7 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
                     final JCRNodeWrapper defaultUserNode = jcrsession.getNode(userNode.getPath());
                     final JCRNodeWrapper mfaNode = defaultUserNode.getNode(MFAConstants.NODE_NAME_MFA);
                     final String encryptedSecretKey = mfaNode.getPropertyAsString(Constants.PROP_SECRET_KEY);
-                    final Totp totp = new Totp(decryptTotpSecretKey(encryptedSecretKey, password));
+                    final Totp totp = new Totp(decryptTotpSecretKey(encryptedSecretKey, password, defaultUserNode.getIdentifier()));
                     return isValidLong(token) && totp.verify(token);
                 }
             });
@@ -71,7 +74,7 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
                     final JCRNodeWrapper defaultUserNode = jcrsession.getNode(userNode.getPath());
                     final JCRNodeWrapper mfaNode = defaultUserNode.getNode(MFAConstants.NODE_NAME_MFA);
                     mfaNode.addMixin(Constants.MIXIN_MFA_OTP);
-                    mfaNode.setProperty(Constants.PROP_SECRET_KEY, encryptTotpSecretKey(generateTotpSecret(), password));
+                    mfaNode.setProperty(Constants.PROP_SECRET_KEY, encryptTotpSecretKey(generateTotpSecret(), password, defaultUserNode.getIdentifier()));
                     jcrsession.save();
                     return true;
                 }
@@ -139,9 +142,9 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
         }
     }
 
-    private static String encryptTotpSecretKey(String secretKey, String password) {
+    private static String encryptTotpSecretKey(String secretKey, String password, String uuid) {
         try {
-            final Cipher cipher = getCipher(true, password);
+            final Cipher cipher = getCipher(true, password, uuid);
             final byte[] encValue = cipher.doFinal(secretKey.getBytes(Charsets.UTF_8));
             return Base64.getEncoder().encodeToString(encValue);
         } catch (Exception ex) {
@@ -156,9 +159,9 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
      * @param password the password entered by the the user
      * @return the decrypted secret key of the user
      */
-    public static String decryptTotpSecretKey(String encryptedSecretKey, String password) {
+    public static String decryptTotpSecretKey(String encryptedSecretKey, String password, String uuid) {
         try {
-            final Cipher cipher = getCipher(false, password);
+            final Cipher cipher = getCipher(false, password, uuid);
             final byte[] decValue = cipher.doFinal(Base64.getDecoder().decode(encryptedSecretKey));
             return new String(decValue, Charsets.UTF_8);
         } catch (Exception ex) {
@@ -166,14 +169,15 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
         }
     }
 
-    private static Cipher getCipher(boolean encrypt, String password) {
+    private static Cipher getCipher(boolean encrypt, String password, String uuid) {
         try {
             final Key key = generateSecretKey(password);
             final Cipher cipher = Cipher.getInstance(TRANSFORMATION);
 
-            cipher.init(encrypt ? Cipher.ENCRYPT_MODE : Cipher.DECRYPT_MODE, key);
+            cipher.init(encrypt ? Cipher.ENCRYPT_MODE : Cipher.DECRYPT_MODE, key,
+                    new GCMParameterSpec(TAG_LENGTH_BIT, uuid.getBytes(Charsets.UTF_8)));
             return cipher;
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException ex) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException ex) {
             throw new IllegalStateException("Impossible to initialize cipher", ex);
         }
     }
