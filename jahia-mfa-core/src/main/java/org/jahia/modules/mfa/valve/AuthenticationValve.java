@@ -1,7 +1,6 @@
 package org.jahia.modules.mfa.valve;
 
 import javax.jcr.RepositoryException;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import org.jahia.api.usermanager.JahiaUserManagerService;
 import org.jahia.bin.Login;
@@ -17,10 +16,6 @@ import org.jahia.services.usermanager.JahiaUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-
-import static org.jahia.params.valves.LoginEngineAuthValveImpl.UNKNOWN_USER;
-import static org.jahia.params.valves.LoginEngineAuthValveImpl.VALVE_RESULT;
 
 public final class AuthenticationValve extends AutoRegisteredBaseAuthValve implements LoginUrlProvider {
 
