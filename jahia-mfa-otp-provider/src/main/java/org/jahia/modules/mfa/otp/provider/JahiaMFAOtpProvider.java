@@ -66,7 +66,7 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
     }
 
     @Override
-    public boolean activateMFA(JCRUserNode userNode, String password) {
+    public boolean prepareMFA(JCRUserNode userNode, String password) {
         try {
             return JCRTemplate.getInstance().doExecuteWithSystemSession(new JCRCallback<Boolean>() {
                 @Override
@@ -83,6 +83,11 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
             LOGGER.error(String.format("Impossible to activate MFA OTP for user %s", userNode.getUserKey()), ex);
             return false;
         }
+    }
+
+    @Override
+    public boolean activateMFA(JCRUserNode userNode) {
+        return true;
     }
 
     @Override

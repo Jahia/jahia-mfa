@@ -11,7 +11,9 @@ public interface JahiaMFAService {
 
     boolean verifyToken(JCRUserNode userNode, String provider, String token, String password);
 
-    void activateMFA(JCRUserNode userNode, String provider, String password);
+    void prepareMFA(JCRUserNode userNode, String provider, String password);
+
+    void activateMFA(JCRUserNode userNode, String provider);
 
     void deactivateMFA(JCRUserNode userNode, String provider);
 

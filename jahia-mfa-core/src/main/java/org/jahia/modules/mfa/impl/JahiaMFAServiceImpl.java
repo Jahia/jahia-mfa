@@ -42,7 +42,7 @@ public final class JahiaMFAServiceImpl implements JahiaMFAService {
     }
 
     @Override
-    public void activateMFA(JCRUserNode userNode, String provider, String password) {
+    public void prepareMFA(JCRUserNode userNode, String provider, String password) {
         try {
             JCRTemplate.getInstance().doExecuteWithSystemSession(new JCRCallback<Object>() {
                 @Override
@@ -56,10 +56,30 @@ public final class JahiaMFAServiceImpl implements JahiaMFAService {
                         mfaNode = defaultUserNode.addNode(MFAConstants.NODE_NAME_MFA, MFAConstants.NODE_TYPE_MFA);
                     }
 
-                    mfaNode.setProperty(MFAConstants.PROP_ACTIVATED, Boolean.TRUE);
+                    mfaNode.setProperty(MFAConstants.PROP_ACTIVATED, Boolean.FALSE);
                     mfaNode.setProperty(MFAConstants.PROP_PROVIDER, provider);
                     jcrsession.save();
-                    providers.get(provider).activateMFA(userNode, password);
+                    providers.get(provider).prepareMFA(userNode, password);
+                    return null;
+                }
+            });
+        } catch (RepositoryException ex) {
+            LOGGER.error(String.format("Impossible to prepare MFA for user %s and provider %s", userNode.getUserKey(), provider), ex);
+        }
+    }
+
+    @Override
+    public void activateMFA(JCRUserNode userNode, String provider) {
+        try {
+            JCRTemplate.getInstance().doExecuteWithSystemSession(new JCRCallback<Object>() {
+                @Override
+                public Object doInJCR(JCRSessionWrapper jcrsession) throws RepositoryException {
+                    final JCRNodeWrapper defaultUserNode = jcrsession.getNode(userNode.getPath());
+                    defaultUserNode.addMixin(MFAConstants.MIXIN_MFA_USER);
+                    final JCRNodeWrapper mfaNode = defaultUserNode.getNode(MFAConstants.NODE_NAME_MFA);
+                    mfaNode.setProperty(MFAConstants.PROP_ACTIVATED, Boolean.FALSE);
+                    jcrsession.save();
+                    providers.get(provider).activateMFA(userNode);
                     return null;
                 }
             });
@@ -107,4 +127,5 @@ public final class JahiaMFAServiceImpl implements JahiaMFAService {
             return false;
         }
     }
+
 }

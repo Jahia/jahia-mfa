@@ -32,9 +32,11 @@ public abstract class JahiaMFAProvider {
         jahiaMFAService.removeProvider(this);
     }
 
-    public abstract boolean verifyToken(JCRUserNode userNode, String token, String password);
-
-    public abstract boolean activateMFA(JCRUserNode userNode, String password);
+    public abstract boolean activateMFA(JCRUserNode userNode);
 
     public abstract boolean deactivateMFA(JCRUserNode userNode);
+
+    public abstract boolean prepareMFA(JCRUserNode userNode, String password);
+
+    public abstract boolean verifyToken(JCRUserNode userNode, String token, String password);
 }
