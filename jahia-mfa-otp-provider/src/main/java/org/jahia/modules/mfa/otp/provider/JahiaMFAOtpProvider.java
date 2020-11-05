@@ -162,6 +162,7 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
      *
      * @param encryptedSecretKey the encrypted secret key used for TOTP
      * @param password the password entered by the the user
+     * @param uuid unique identifier of the user node
      * @return the decrypted secret key of the user
      */
     public static String decryptTotpSecretKey(String encryptedSecretKey, String password, String uuid) {
