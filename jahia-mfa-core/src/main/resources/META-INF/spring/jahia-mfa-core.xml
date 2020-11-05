@@ -15,6 +15,30 @@
         <property name="jahiaMFAService" ref="jahiaMFAServiceImpl"/>
     </bean>
     
+    <bean id="activateMFAAction" class="org.jahia.modules.mfa.ActivateMFAAction">
+        <property name="name" value="activateMFAAction"/>
+        <property name="requireAuthenticatedUser" value="true"/> 
+    </bean>
+    
+    <bean id="deactivateMFAAction" class="org.jahia.modules.mfa.DeactivateMFAAction">
+        <property name="name" value="deactivateMFAAction"/>
+        <property name="requireAuthenticatedUser" value="true"/> 
+    </bean>
+    
+    <bean id="decryptOtpKeyAction" class="org.jahia.modules.mfa.DecryptOtpKeyAction">
+        <property name="name" value="decryptOtpKeyAction"/>
+        <property name="requireAuthenticatedUser" value="true"/> 
+    </bean>
+    
+    <bean id="prepareMFAAction" class="org.jahia.modules.mfa.PrepareMFAAction">
+        <property name="name" value="prepareMFAAction"/>
+        <property name="requireAuthenticatedUser" value="true"/> 
+    </bean>
+    
+    <bean id="verifyTokenAction" class="org.jahia.modules.mfa.VerifyTokenAction">
+        <property name="name" value="verifyTokenAction"/>
+        <property name="requireAuthenticatedUser" value="true"/> 
+    </bean>
 </beans>
 
 
