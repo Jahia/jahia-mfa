@@ -10,10 +10,11 @@ import org.jahia.services.render.RenderContext;
 import org.jahia.services.render.Resource;
 import org.jahia.services.render.URLResolver;
 
-public class ActivateMFAAction extends Action{
+public class ActivateMFAAction extends Action {
 
     @Override
-    public ActionResult doExecute(HttpServletRequest arg0, RenderContext arg1, Resource arg2, JCRSessionWrapper arg3, Map<String, List<String>> arg4, URLResolver arg5) throws Exception {
+    public ActionResult doExecute(HttpServletRequest req, RenderContext renderContext, Resource resource,
+            JCRSessionWrapper session, Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
