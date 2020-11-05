@@ -12,5 +12,9 @@
           factory-method="getInstance" init-method="register" destroy-method="unregister">
         <property name="jahiaMFAService" ref="JahiaMFAServiceOsgi"/>
     </bean>
-
+    
+    <bean id="decryptOtpKeyAction" class="org.jahia.modules.mfa.otp.provider.actions.DecryptOtpKeyAction">
+        <property name="name" value="decryptOtpKeyAction"/>
+        <property name="requireAuthenticatedUser" value="true"/> 
+    </bean>
 </beans>

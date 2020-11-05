@@ -1,4 +1,4 @@
-package org.jahia.modules.mfa.actions;
+package org.jahia.modules.mfa.otp.provider.actions;
 
 import java.util.List;
 import java.util.Map;

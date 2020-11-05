@@ -25,11 +25,6 @@
         <property name="requireAuthenticatedUser" value="true"/> 
     </bean>
     
-    <bean id="decryptOtpKeyAction" class="org.jahia.modules.mfa.actions.DecryptOtpKeyAction">
-        <property name="name" value="decryptOtpKeyAction"/>
-        <property name="requireAuthenticatedUser" value="true"/> 
-    </bean>
-    
     <bean id="prepareMFAAction" class="org.jahia.modules.mfa.actions.PrepareMFAAction">
         <property name="name" value="prepareMFAAction"/>
         <property name="requireAuthenticatedUser" value="true"/> 
