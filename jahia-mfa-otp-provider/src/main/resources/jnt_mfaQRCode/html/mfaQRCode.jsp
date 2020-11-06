@@ -22,6 +22,8 @@
     <div>
         <img id="qrimage"  src="data:image/jpg;base64,${book.base64Image}" width="200" height="200"/>
         <button id="QR_${currentNode.identifier}">Hi</button>
+        <input id="password" type="password" value="password here">
+
     </div>
     <c:url value="${url.base}${currentNode.path}.retrieveQRCode.do" var="retrieveQRCodeURL" />
     <script type="text/javascript">
@@ -30,7 +32,7 @@
                 url: "${retrieveQRCodeURL}",
                 type: 'POST',
                 dataType: 'json',
-                data : {password: 'password'},
+                data : {password: $( "#password" ).val()},
                 success: function(data) {
                     $("#qrimage").attr('src','data:image/jpg;base64,'+data.QRCODE);
 
@@ -38,5 +40,3 @@
             });
         })
     </script>
-
-    <>
