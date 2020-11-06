@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.jahia.api.Constants;
 import org.jahia.bin.Action;
 import org.jahia.bin.ActionResult;
 import org.jahia.modules.mfa.MFAConstants;
@@ -27,36 +26,14 @@ public class VerifyTokenAction extends Action {
             JCRSessionWrapper session, Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
         final JCRUserNode userNode = session.getUserNode();
         try {
+            final String password = Utils.retrieveParameterValue(parameters, MFAConstants.PARAM_PASSWORD);
+            final String provider = Utils.retrieveParameterValue(parameters, MFAConstants.PARAM_PROVIDER);
+            final String token = Utils.retrieveParameterValue(parameters, MFAConstants.PARAM_TOKEN);
 
-            String password = null;
-            if (parameters.containsKey(MFAConstants.PARAM_PASSWORD)) {
-                final List<String> passwordValues = parameters.get(MFAConstants.PARAM_PASSWORD);
-                if (!passwordValues.isEmpty()) {
-                    password = passwordValues.get(0);
-                }
-            }
-
-            String provider = null;
-            if (parameters.containsKey(MFAConstants.PARAM_PROVIDER)) {
-                final List<String> providerValues = parameters.get(MFAConstants.PARAM_PROVIDER);
-                if (!providerValues.isEmpty()) {
-                    provider = providerValues.get(0);
-                }
-            }
-
-            String token = null;
-            if (parameters.containsKey(MFAConstants.PARAM_TOKEN)) {
-                final List<String> tokenValues = parameters.get(MFAConstants.PARAM_TOKEN);
-                if (!tokenValues.isEmpty()) {
-                    token = tokenValues.get(0);
-                }
-            }
-
-            if (password != null && provider != null && token != null && userNode != null && !userNode.getJahiaUser().getUsername().equals(Constants.GUEST_USERNAME)) {
+            if (password != null && provider != null && token != null && Utils.isCorrectUser(userNode)) {
                 final JahiaMFAServiceImpl jahiaMFAServiceImpl = JahiaMFAServiceImpl.getInstance();
                 final boolean result = jahiaMFAServiceImpl.verifyToken(userNode, provider, token, password);
-                final ActionResult actionResult = new ActionResult(HttpServletResponse.SC_OK, null, new JSONObject().put("result", result));
-                return actionResult;
+                return new ActionResult(HttpServletResponse.SC_OK, null, new JSONObject().put("result", result));
             }
         } catch (Exception ex) {
             LOGGER.error(String.format("Impossible to verity token for user %s", userNode.getPath()), ex);

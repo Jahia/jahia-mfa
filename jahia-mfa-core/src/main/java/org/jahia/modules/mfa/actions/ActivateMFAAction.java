@@ -3,7 +3,6 @@ package org.jahia.modules.mfa.actions;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import org.jahia.api.Constants;
 import org.jahia.bin.Action;
 import org.jahia.bin.ActionResult;
 import org.jahia.modules.mfa.MFAConstants;
@@ -16,7 +15,7 @@ import org.jahia.services.render.URLResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ActivateMFAAction extends Action {
+public final class ActivateMFAAction extends Action {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ActivateMFAAction.class);
 
@@ -25,15 +24,9 @@ public class ActivateMFAAction extends Action {
             JCRSessionWrapper session, Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
         final JCRUserNode userNode = session.getUserNode();
         try {
-            String provider = null;
-            if (parameters.containsKey(MFAConstants.PARAM_PROVIDER)) {
-                final List<String> providerValues = parameters.get(MFAConstants.PARAM_PROVIDER);
-                if (!providerValues.isEmpty()) {
-                    provider = providerValues.get(0);
-                }
-            }
+            final String provider = Utils.retrieveParameterValue(parameters, MFAConstants.PARAM_PROVIDER);
 
-            if (provider != null && userNode != null && !userNode.getJahiaUser().getUsername().equals(Constants.GUEST_USERNAME)) {
+            if (provider != null && userNode != null && Utils.isCorrectUser(userNode)) {
                 final JahiaMFAServiceImpl jahiaMFAServiceImpl = JahiaMFAServiceImpl.getInstance();
                 jahiaMFAServiceImpl.activateMFA(userNode, provider);
                 return ActionResult.OK_JSON;
