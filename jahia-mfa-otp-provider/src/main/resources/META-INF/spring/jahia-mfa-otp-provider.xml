@@ -17,4 +17,9 @@
         <property name="name" value="decryptOtpKeyAction"/>
         <property name="requireAuthenticatedUser" value="true"/> 
     </bean>
+
+    <bean id="retrieveQRCode" class="org.jahia.modules.mfa.otp.actions.RetrieveQRCode" >
+        <property name="name" value="retrieveQRCode"/>
+        <property name="requireAuthenticatedUser" value="true"/>
+    </bean>
 </beans>
