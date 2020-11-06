@@ -17,6 +17,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/** Action to verify the sent token against the TOTP key of the user
+ */
 public class VerifyTokenAction extends Action {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VerifyTokenAction.class);

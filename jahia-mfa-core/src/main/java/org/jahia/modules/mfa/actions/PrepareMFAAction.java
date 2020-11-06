@@ -15,6 +15,8 @@ import org.jahia.services.render.URLResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/** Action to prepare MFA for a user (not yet activated)
+ */
 public final class PrepareMFAAction extends Action {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PrepareMFAAction.class);

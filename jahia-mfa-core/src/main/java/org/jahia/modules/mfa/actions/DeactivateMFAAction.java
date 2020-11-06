@@ -15,6 +15,8 @@ import org.jahia.services.render.URLResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/** Action to deactivate MFA for a user
+ */
 public final class DeactivateMFAAction extends Action {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DeactivateMFAAction.class);
