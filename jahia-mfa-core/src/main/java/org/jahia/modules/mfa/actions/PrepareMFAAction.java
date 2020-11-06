@@ -3,7 +3,6 @@ package org.jahia.modules.mfa.actions;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import org.jahia.api.Constants;
 import org.jahia.bin.Action;
 import org.jahia.bin.ActionResult;
 import org.jahia.modules.mfa.MFAConstants;
@@ -16,7 +15,9 @@ import org.jahia.services.render.URLResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PrepareMFAAction extends Action {
+/** Action to prepare MFA for a user (not yet activated)
+ */
+public final class PrepareMFAAction extends Action {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PrepareMFAAction.class);
 
@@ -25,24 +26,10 @@ public class PrepareMFAAction extends Action {
             JCRSessionWrapper session, Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
         final JCRUserNode userNode = session.getUserNode();
         try {
+            final String password = Utils.retrieveParameterValue(parameters, MFAConstants.PARAM_PASSWORD);
+            final String provider = Utils.retrieveParameterValue(parameters, MFAConstants.PARAM_PROVIDER);
 
-            String password = null;
-            if (parameters.containsKey(MFAConstants.PARAM_PASSWORD)) {
-                final List<String> passwordValues = parameters.get(MFAConstants.PARAM_PASSWORD);
-                if (!passwordValues.isEmpty()) {
-                    password = passwordValues.get(0);
-                }
-            }
-
-            String provider = null;
-            if (parameters.containsKey(MFAConstants.PARAM_PROVIDER)) {
-                final List<String> providerValues = parameters.get(MFAConstants.PARAM_PROVIDER);
-                if (!providerValues.isEmpty()) {
-                    provider = providerValues.get(0);
-                }
-            }
-
-            if (password != null && provider != null && userNode != null && !userNode.getJahiaUser().getUsername().equals(Constants.GUEST_USERNAME))  {
+            if (password != null && provider != null && Utils.isCorrectUser(userNode)) {
                 final JahiaMFAServiceImpl jahiaMFAServiceImpl = JahiaMFAServiceImpl.getInstance();
                 jahiaMFAServiceImpl.prepareMFA(userNode, provider, password);
                 return ActionResult.OK_JSON;

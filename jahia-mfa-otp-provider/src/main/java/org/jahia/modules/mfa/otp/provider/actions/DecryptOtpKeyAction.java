@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.jahia.api.Constants;
 import org.jahia.bin.Action;
 import org.jahia.bin.ActionResult;
 import org.jahia.modules.mfa.MFAConstants;
+import org.jahia.modules.mfa.actions.Utils;
 import org.jahia.modules.mfa.otp.provider.JahiaMFAOtpProvider;
 import org.jahia.services.content.JCRNodeWrapper;
 import org.jahia.services.content.JCRSessionWrapper;
@@ -19,6 +19,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/** Action to decrypt the TOTP key of a user thanks to its password
+ */
 public class DecryptOtpKeyAction extends Action {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DecryptOtpKeyAction.class);
@@ -28,21 +30,13 @@ public class DecryptOtpKeyAction extends Action {
             JCRSessionWrapper session, Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
         final JCRUserNode userNode = session.getUserNode();
         try {
+            final String password = Utils.retrieveParameterValue(parameters, MFAConstants.PARAM_PASSWORD);
 
-            String password = null;
-            if (parameters.containsKey(MFAConstants.PARAM_PASSWORD)) {
-                final List<String> passwordValues = parameters.get(MFAConstants.PARAM_PASSWORD);
-                if (!passwordValues.isEmpty()) {
-                    password = passwordValues.get(0);
-                }
-            }
-
-            if (password != null && userNode != null && !userNode.getJahiaUser().getUsername().equals(Constants.GUEST_USERNAME)) {
+            if (password != null && Utils.isCorrectUser(userNode)) {
                 final JCRNodeWrapper mfaNode = userNode.getNode(MFAConstants.NODE_NAME_MFA);
                 final String encryptedSecretKey = mfaNode.getPropertyAsString(org.jahia.modules.mfa.otp.provider.Constants.PROP_SECRET_KEY);
                 final String result = JahiaMFAOtpProvider.decryptTotpSecretKey(encryptedSecretKey, password, userNode.getIdentifier());
-                final ActionResult actionResult = new ActionResult(HttpServletResponse.SC_OK, null, new JSONObject().put("result", result));
-                return actionResult;
+                return new ActionResult(HttpServletResponse.SC_OK, null, new JSONObject().put("result", result));
             }
         } catch (Exception ex) {
             LOGGER.error(String.format("Impossible to decrypt OPT key for user %s", userNode.getPath()), ex);

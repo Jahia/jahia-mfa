@@ -147,16 +147,6 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
         }
     }
 
-    private static String encryptTotpSecretKey(String secretKey, String password, String uuid) {
-        try {
-            final Cipher cipher = getCipher(true, password, uuid);
-            final byte[] encValue = cipher.doFinal(secretKey.getBytes(Charsets.UTF_8));
-            return Base64.getEncoder().encodeToString(encValue);
-        } catch (Exception ex) {
-            throw new IllegalStateException("Impossible to encrypt secret key", ex);
-        }
-    }
-
     /**
      * Decrypt TOTP secret key of the user thanks to its password
      *
@@ -172,6 +162,16 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
             return new String(decValue, Charsets.UTF_8);
         } catch (Exception ex) {
             throw new IllegalStateException("Impossible to decrypt secret key", ex);
+        }
+    }
+
+    private static String encryptTotpSecretKey(String secretKey, String password, String uuid) {
+        try {
+            final Cipher cipher = getCipher(true, password, uuid);
+            final byte[] encValue = cipher.doFinal(secretKey.getBytes(Charsets.UTF_8));
+            return Base64.getEncoder().encodeToString(encValue);
+        } catch (Exception ex) {
+            throw new IllegalStateException("Impossible to encrypt secret key", ex);
         }
     }
 
