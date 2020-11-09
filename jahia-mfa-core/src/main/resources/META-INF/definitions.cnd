@@ -8,3 +8,9 @@
 [jmix:MFAUser] mixin
  extends = jnt:user
 + MFA (jnt:MFA)
+
+[jmix:MFAsite] mixin
+extends = jnt:virtualsite
+ itemtype = options
+ - enforceMFA (boolean)
+ - pageMFAactivation (weakreference, picker[type='page']) < 'jnt:page'

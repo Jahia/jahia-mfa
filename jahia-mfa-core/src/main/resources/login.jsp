@@ -7,6 +7,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="functions" uri="http://www.jahia.org/tags/functions"%>
+
 <utility:setBundle basename="JahiaInternalResources"/>
 <html>
     <% pageContext.setAttribute("isFullReadOnly", Boolean.valueOf(SettingsBean.getInstance().isFullReadOnlyMode())); %>
@@ -30,7 +32,6 @@
         <link rel="stylesheet" href="/css/loginMain_dark.css">
     </head>
     <body>
-
         <section class="login" style="background-image: url(/css/images/Background_Login-01.png);">
             <div class="login-main">
                 <div class="position-container">
@@ -57,10 +58,11 @@
                                     </c:choose>
                                 </div>
                                 <div class="group">
-                                    <input type="text" name="username" maxlength="250" value="${fn:escapeXml(param['username'])}" required />
+                                    <input type="text" name="username" verify="/${pageContext.request.locale.language}/sites/${functions:currentSiteKey(pageContext.request)}.verifyMFAEnforcementAction.do" maxlength="250" value="${fn:escapeXml(param['username'])}"
+                                           required />
                                     <span class="highlight"></span>
                                     <span class="bar"></span>
-                                    <label class="inputlabel">ASDASDADASD<fmt:message key="label.username"/></label>
+                                    <label class="inputlabel"><fmt:message key="label.username"/> </label>
                                 </div>
                                 <div class="group">
                                     <input type="password" name="password" maxlength="250" autocomplete="off" required />
@@ -72,7 +74,7 @@
 
                             <c:if test="${empty loginResult}">
                                 <div class="group">
-                                    <input type="text" name="username" maxlength="250" required />
+                                    <input type="text" name="username" verify="/${pageContext.request.locale.language}/sites/${functions:currentSiteKey(pageContext.request)}.verifyMFAEnforcementAction.do" maxlength="250" required />
                                     <span class="highlight"></span>
                                     <span class="bar"></span>
                                     <label class="inputlabel"><fmt:message key="label.username"/></label>
@@ -83,7 +85,7 @@
                                     <span class="bar"></span>
                                     <label class="inputlabel"><fmt:message key="label.password"/></label>
                                 </div>
-                                <div class="group digit-group">
+                                <div class="group digit-group" id="mfa-field" style="display: none">
                                     <input type="text" id="digit-1" name="digit-1" data-next="digit-2" autocomplete="off" />
                                     <input type="text" id="digit-2" name="digit-2" data-next="digit-3" data-previous="digit-1" autocomplete="off"/>
                                     <input type="text" id="digit-3" name="digit-3" data-next="digit-4" data-previous="digit-2" autocomplete="off"/>
@@ -91,7 +93,9 @@
                                     <input type="text" id="digit-4" name="digit-4" data-next="digit-5" data-previous="digit-3" autocomplete="off"/>
                                     <input type="text" id="digit-5" name="digit-5" data-next="digit-6" data-previous="digit-4"autocomplete="off" />
                                     <input type="text" id="digit-6" name="digit-6" data-previous="digit-5" autocomplete="off"/>
-                                    <label class="inputlabel"><fmt:message key="label.code"/> OTP</label>
+                                    <label
+                                            class="inputlabel"><fmt:message key="label.code"/>
+                                        OTP</label>
                                 </div>
                             </c:if>
 

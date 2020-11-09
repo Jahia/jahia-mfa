@@ -123,7 +123,7 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
      * @return true if the user has the mixin for the MFA OTP provider, false otherwise
      * @throws RepositoryException but should never happen
      */
-    public boolean isActivated(JCRUserNode userNode) throws RepositoryException {
+    public static boolean isActivated(JCRUserNode userNode) throws RepositoryException {
         if (userNode.hasNode(MFAConstants.NODE_NAME_MFA)) {
             final JCRNodeWrapper mfaNode = userNode.getNode(MFAConstants.NODE_NAME_MFA);
             return mfaNode.isNodeType(Constants.MIXIN_MFA_OTP);

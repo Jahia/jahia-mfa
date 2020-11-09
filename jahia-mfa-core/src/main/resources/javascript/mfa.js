@@ -24,4 +24,22 @@ $(document).ready(function () {
             }
         });
     });
+
+    $("input[type='text'][name='username']").focusout(function() {
+        var self = this;
+        $.ajax({
+            url: $(this).attr('verify'),
+            type: 'POST',
+            dataType: 'json',
+            data : {username: $(this).val()},
+            success: function(data) {
+                if(data.result){
+                    $("#mfa-field").show();
+                }else{
+                    $("#mfa-field").hide();
+                }z
+            }
+        });
+    });
+
 });
