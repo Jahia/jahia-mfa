@@ -82,7 +82,7 @@ public final class JahiaMFAServiceImpl implements JahiaMFAService {
                     final JCRNodeWrapper defaultUserNode = jcrsession.getNode(userNode.getPath());
                     defaultUserNode.addMixin(MFAConstants.MIXIN_MFA_USER);
                     final JCRNodeWrapper mfaNode = defaultUserNode.getNode(MFAConstants.NODE_NAME_MFA);
-                    mfaNode.setProperty(MFAConstants.PROP_ACTIVATED, Boolean.FALSE);
+                    mfaNode.setProperty(MFAConstants.PROP_ACTIVATED, Boolean.TRUE);
                     jcrsession.save();
                     providers.get(provider).activateMFA(userNode);
                     return null;
