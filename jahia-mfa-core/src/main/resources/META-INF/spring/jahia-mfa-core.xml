@@ -9,7 +9,7 @@
     <osgi:service id="JahiaMFAServiceOsgi" ref="jahiaMFAServiceImpl" interface="org.jahia.modules.mfa.service.JahiaMFAService"/>
 
     <bean id="jahiaMFAAuthenticationValve" class="org.jahia.modules.mfa.valve.AuthenticationValve">
-        <property name="positionAfter" value="SessionAuthValve"/>
+        <property name="position" value="1"/>
         <property name="jahiaUserManagerService" ref="JahiaUserManagerService"/>
         <property name="authPipeline" ref="authPipeline"/>
         <property name="jahiaMFAService" ref="jahiaMFAServiceImpl"/>
@@ -35,7 +35,7 @@
         <property name="requireAuthenticatedUser" value="true"/> 
     </bean>
 
-    <bean id="verifyMFAEnforcementAction" class="org.jahia.modules.mfa.actions.VerifyMFAEnforcementAction">
+    <bean id="VerifyMFAEnforcementAction" class="org.jahia.modules.mfa.actions.VerifyMFAEnforcementAction">
         <property name="name" value="verifyMFAEnforcementAction"/>
         <property name="requireAuthenticatedUser" value="false"/>
         <property name="jahiaUserManagerService" ref="JahiaUserManagerService"/>

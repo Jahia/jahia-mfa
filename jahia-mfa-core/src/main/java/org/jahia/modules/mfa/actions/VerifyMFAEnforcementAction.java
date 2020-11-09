@@ -57,6 +57,7 @@ import java.util.Map;
  * @author faissah
  */
 public class VerifyMFAEnforcementAction extends Action {
+    private static final Logger LOGGER = LoggerFactory.getLogger(VerifyMFAEnforcementAction.class);
     private org.jahia.api.usermanager.JahiaUserManagerService jahiaUserManagerService;
     private JahiaMFAService jahiaMFAService;
     private JahiaSitesService jahiaSitesService;
@@ -101,7 +102,7 @@ public class VerifyMFAEnforcementAction extends Action {
             }
 
         if (!StringUtils.isEmpty(username)) {
-
+        LOGGER.debug("VerifyMFAEnforcementAction for user "+username);
         JCRUserNode usernode = jahiaUserManagerService.lookupUser(username);
             if(usernode!=null && jahiaMFAService.hasMFA(usernode)){
                 userHasMFA = true;

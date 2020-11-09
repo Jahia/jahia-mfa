@@ -29,6 +29,7 @@ public final class DeactivateMFAAction extends Action {
             final String provider = Utils.retrieveParameterValue(parameters, MFAConstants.PARAM_PROVIDER);
 
             if (provider != null && userNode != null && Utils.isCorrectUser(userNode)) {
+                LOGGER.debug("ActivateMFAAction for user "+userNode.getName());
                 final JahiaMFAServiceImpl jahiaMFAServiceImpl = JahiaMFAServiceImpl.getInstance();
                 jahiaMFAServiceImpl.deactivateMFA(userNode, provider);
                 return ActionResult.OK_JSON;

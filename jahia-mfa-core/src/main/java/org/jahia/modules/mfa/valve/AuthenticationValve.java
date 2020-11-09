@@ -56,7 +56,7 @@ public final class AuthenticationValve extends AutoRegisteredBaseAuthValve imple
         final String username = request.getParameter("username");
         final String password = request.getParameter("password");
         final String token = extractTokenFromRequest(request);
-
+        LOGGER.debug("jahia-mfa-core authentication valve");
         if (isEnabled() && isLoginRequested(request) && username != null && password != null) {
 
             JCRUserNode user = null;
