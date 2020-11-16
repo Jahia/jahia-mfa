@@ -55,7 +55,7 @@ public class MFAGraphQLExtension {
                     try {
                         // ServiceRegistry.getIn
                         // final JahiaSitesService siteService = JahiaSitesService.getInstance();
-                        JCRSessionWrapper session = JCRSessionFactory.getInstance().getCurrentUserSession(null, null);
+                        JCRSessionWrapper session = JCRSessionFactory.getInstance().getCurrentSystemSession(null, null,null);
 
                         JCRSiteNode sitenode = (JCRSiteNode) session.getNode("/sites/" + siteKey);
                         if (sitenode.isNodeType(MFAConstants.MIXIN_MFA_SITE)){
