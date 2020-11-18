@@ -47,17 +47,12 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Short description of the class
- *
- * @author faissah
- */
 public class VerifyMFAEnforcementAction extends Action {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(VerifyMFAEnforcementAction.class);
     private org.jahia.api.usermanager.JahiaUserManagerService jahiaUserManagerService;
     private JahiaMFAService jahiaMFAService;
     private JahiaSitesService jahiaSitesService;
-    private static final Logger logger = LoggerFactory.getLogger(VerifyMFAEnforcementAction.class);
 
     public void setJahiaUserManagerService(org.jahia.api.usermanager.JahiaUserManagerService jahiaUserManagerService) {
         this.jahiaUserManagerService = jahiaUserManagerService;
@@ -71,7 +66,8 @@ public class VerifyMFAEnforcementAction extends Action {
         this.jahiaSitesService = jahiaSitesService;
     }
 
-    @Override public ActionResult doExecute(HttpServletRequest httpServletRequest, RenderContext renderContext, Resource resource,
+    @Override
+    public ActionResult doExecute(HttpServletRequest httpServletRequest, RenderContext renderContext, Resource resource,
             JCRSessionWrapper jcrSessionWrapper, Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
 
         boolean siteEnforceMFA = false;
@@ -80,32 +76,31 @@ public class VerifyMFAEnforcementAction extends Action {
         final String username = Utils.retrieveParameterValue(parameters, MFAConstants.PARAM_USERNAME);
         final String siteKey = ServerNameToSiteMapper.getSiteKeyByServerName(httpServletRequest);
 
-
-            if (!StringUtils.isEmpty(siteKey)) {
-                try {
-                   // final JahiaSitesService siteService = JahiaSitesService.getInstance();
-                    final JahiaSite site = jahiaSitesService.getSiteByKey(siteKey, JCRSessionFactory.getInstance().getCurrentSystemSession(null, null, null));
-                    JCRSiteNode sitenode = (JCRSiteNode) jcrSessionWrapper.getNode("/sites/" + site.getSiteKey());
-                    if (sitenode.isNodeType(MFAConstants.MIXIN_MFA_SITE)){
-                        if (sitenode.hasProperty(MFAConstants.PROP_ENFORCEMFA) &&
-                                sitenode.getPropertyAsString(MFAConstants.PROP_ENFORCEMFA).equals("true")){
-                            siteEnforceMFA = true;
-                        }
-                    }
-                } catch (RepositoryException ex) {
-                    logger.error(String.format("MFA Enforcement could not find site matching that servername"), ex);
+        if (!StringUtils.isEmpty(siteKey)) {
+            try {
+                // final JahiaSitesService siteService = JahiaSitesService.getInstance();
+                final JahiaSite site = jahiaSitesService.getSiteByKey(siteKey, JCRSessionFactory.getInstance().getCurrentSystemSession(null, null, null));
+                final JCRSiteNode sitenode = (JCRSiteNode) jcrSessionWrapper.getNode("/sites/" + site.getSiteKey());
+                if (sitenode.isNodeType(MFAConstants.MIXIN_MFA_SITE) && sitenode.hasProperty(MFAConstants.PROP_ENFORCEMFA)
+                        && sitenode.getPropertyAsString(MFAConstants.PROP_ENFORCEMFA).equals("true")) {
+                    siteEnforceMFA = true;
                 }
+            } catch (RepositoryException ex) {
+                LOGGER.error(String.format("MFA Enforcement could not find site matching that servername: %s", siteKey), ex);
             }
+        }
 
         if (!StringUtils.isEmpty(username)) {
-        LOGGER.debug("VerifyMFAEnforcementAction for user "+username);
-        JCRUserNode usernode = jahiaUserManagerService.lookupUser(username);
-            if(usernode!=null && jahiaMFAService.hasMFA(usernode)){
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(String.format("VerifyMFAEnforcementAction for user %s", username));
+            }
+            final JCRUserNode usernode = jahiaUserManagerService.lookupUser(username);
+            if (usernode != null && jahiaMFAService.hasMFA(usernode)) {
                 userHasMFA = true;
             }
 
         }
-        return new ActionResult(HttpServletResponse.SC_OK, null, new JSONObject().put("result", userHasMFA));
+        return new ActionResult(HttpServletResponse.SC_OK, null, new JSONObject().put("result", userHasMFA && siteEnforceMFA));
 
     }
 }
