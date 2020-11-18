@@ -1,31 +1,28 @@
 package org.jahia.modules.mfa.otp.actions;
 
-import org.jahia.bin.ActionResult;
-import org.jahia.modules.mfa.MFAConstants;
-import org.jahia.modules.mfa.otp.provider.Constants;
-import org.jahia.modules.mfa.otp.provider.JahiaMFAOtpProvider;
-import org.jahia.bin.Action;
-import org.jahia.services.content.JCRSessionWrapper;
-import org.jahia.services.content.decorator.JCRUserNode;
-import org.jahia.services.render.RenderContext;
-import org.jahia.services.render.Resource;
-import org.jahia.services.render.URLResolver;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
-
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.jahia.bin.Action;
+import org.jahia.bin.ActionResult;
+import org.jahia.modules.mfa.MFAConstants;
+import org.jahia.modules.mfa.otp.provider.Constants;
+import org.jahia.modules.mfa.otp.provider.JahiaMFAOtpProvider;
+import org.jahia.services.content.JCRSessionWrapper;
+import org.jahia.services.content.decorator.JCRUserNode;
+import org.jahia.services.render.RenderContext;
+import org.jahia.services.render.Resource;
+import org.jahia.services.render.URLResolver;
 import org.json.JSONObject;
 import org.slf4j.Logger;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
 
 public  class RetrieveQRCode extends Action{
     public static final String MIXIN_MFA_OTP = "jmix:MFAOTP";

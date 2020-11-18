@@ -23,13 +23,16 @@
  */
 package org.jahia.modules.mfa.actions;
 
+import java.util.List;
+import java.util.Map;
+import javax.jcr.RepositoryException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.jahia.bin.Action;
 import org.jahia.bin.ActionResult;
 import org.jahia.modules.mfa.MFAConstants;
-import org.jahia.modules.mfa.provider.JahiaMFAProvider;
 import org.jahia.modules.mfa.service.JahiaMFAService;
-import org.jahia.pipelines.Pipeline;
 import org.jahia.services.content.JCRSessionFactory;
 import org.jahia.services.content.JCRSessionWrapper;
 import org.jahia.services.content.decorator.JCRSiteNode;
@@ -40,16 +43,9 @@ import org.jahia.services.render.URLResolver;
 import org.jahia.services.seo.urlrewrite.ServerNameToSiteMapper;
 import org.jahia.services.sites.JahiaSite;
 import org.jahia.services.sites.JahiaSitesService;
-import org.jahia.services.usermanager.JahiaUserManagerService;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.jcr.RepositoryException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Short description of the class

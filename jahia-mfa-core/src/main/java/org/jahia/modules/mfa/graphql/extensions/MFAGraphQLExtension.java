@@ -1,8 +1,10 @@
 package org.jahia.modules.mfa.graphql.extensions;
 
+import graphql.annotations.annotationTypes.*;
+import java.util.Locale;
+import javax.jcr.RepositoryException;
 import org.apache.commons.lang.StringUtils;
 import org.jahia.modules.graphql.provider.dxm.DXGraphQLProvider;
-import org.jahia.modules.graphql.provider.dxm.admin.AdminQueryExtensions;
 import org.jahia.modules.mfa.MFAConstants;
 import org.jahia.modules.mfa.service.JahiaMFAService;
 import org.jahia.services.SpringContextSingleton;
@@ -10,17 +12,10 @@ import org.jahia.services.content.JCRSessionFactory;
 import org.jahia.services.content.JCRSessionWrapper;
 import org.jahia.services.content.decorator.JCRSiteNode;
 import org.jahia.services.content.decorator.JCRUserNode;
-import org.jahia.services.sites.JahiaSite;
-import org.jahia.services.sites.JahiaSitesService;
 import org.jahia.services.usermanager.JahiaUserManagerService;
 import org.jahia.utils.LanguageCodeConverters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.imageio.spi.ServiceRegistry;
-import javax.jcr.RepositoryException;
-import java.util.Locale;
-import graphql.annotations.annotationTypes.*;
 
 /**
  * Search entry point for v1
