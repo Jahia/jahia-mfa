@@ -34,7 +34,10 @@ public class MFAProviderGraphQLExtensionProvider implements DXGraphQLExtensionsP
     @Override
     public Collection<Class<?>> getExtensions() {
         return Arrays.asList(
-                MFAGraphQLExtension.class
+                verifyMFAEnforcementExtension.class,
+                verifyTokenExtension.class,
+                prepareMFAExtension.class,
+                activateMFAExtension.class
         );
     }
 }

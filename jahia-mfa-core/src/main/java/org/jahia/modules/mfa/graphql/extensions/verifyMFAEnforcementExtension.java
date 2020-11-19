@@ -5,6 +5,7 @@ import org.jahia.modules.graphql.provider.dxm.DXGraphQLProvider;
 import org.jahia.modules.graphql.provider.dxm.admin.AdminQueryExtensions;
 import org.jahia.modules.mfa.MFAConstants;
 import org.jahia.modules.mfa.service.JahiaMFAService;
+import org.jahia.registries.ServicesRegistry;
 import org.jahia.services.SpringContextSingleton;
 import org.jahia.services.content.JCRSessionFactory;
 import org.jahia.services.content.JCRSessionWrapper;
@@ -22,39 +23,26 @@ import javax.jcr.RepositoryException;
 import java.util.Locale;
 import graphql.annotations.annotationTypes.*;
 
-/**
- * Search entry point for v1
- */
-@GraphQLTypeExtension(DXGraphQLProvider.Query.class)
-public class MFAGraphQLExtension {
-    private static Logger logger = LoggerFactory.getLogger(MFAGraphQLExtension.class);
 
-    // Suppress 8 param warning
+@GraphQLTypeExtension(DXGraphQLProvider.Query.class)
+public class verifyMFAEnforcementExtension {
+    private static Logger logger = LoggerFactory.getLogger(verifyMFAEnforcementExtension.class);
+
     @GraphQLField
     @GraphQLName("verifyMFAEnforcement")
     @GraphQLDescription("verify MFA Enforcement")
     public static boolean verifyMFAEnforcement(
             @GraphQLName("username") @GraphQLDescription("username of current user") @GraphQLNonNull String username,
-            @GraphQLName("sitekey") @GraphQLDescription("site key") String siteKey
-    ) throws RepositoryException {
+            @GraphQLName("sitekey") @GraphQLDescription("site key")  @GraphQLNonNull String siteKey
+    ){
         boolean siteEnforceMFA = false;
         boolean userHasMFA = false;
-        logger.info("Running search");
+        logger.info("verifying MFA Enforcement");
         JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean("jahiaMFAServiceImpl");
         if (jahiaMFAService != null) {
-            String language = "en";
-            String workspace = "live";
-            Locale locale = LanguageCodeConverters.languageCodeToLocale(language);
-            //JCRSessionWrapper session = JCRSessionFactory.getInstance().getCurrentUserSession(workspace.getValue(), locale);
-            try {
-
-                //final String siteKey = ServerNameToSiteMapper.getSiteKeyByServerName(httpServletRequest);
-
-
                 if (!StringUtils.isEmpty(siteKey)) {
                     try {
-                        // ServiceRegistry.getIn
-                        // final JahiaSitesService siteService = JahiaSitesService.getInstance();
+                        // ServiceRegistry.getInstance
                         JCRSessionWrapper session = JCRSessionFactory.getInstance().getCurrentSystemSession(null, null,null);
 
                         JCRSiteNode sitenode = (JCRSiteNode) session.getNode("/sites/" + siteKey);
@@ -77,11 +65,6 @@ public class MFAGraphQLExtension {
                     }
 
                 }
-    } catch (Exception e) {
-                // ${TODO} Auto-generated catch block
-                e.printStackTrace();
-            }
-
         }
         return siteEnforceMFA && userHasMFA;
     }
