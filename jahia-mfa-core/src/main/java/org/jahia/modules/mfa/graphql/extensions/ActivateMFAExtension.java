@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  */
 @GraphQLTypeExtension(DXGraphQLProvider.Query.class)
 public class ActivateMFAExtension {
-    private static Logger LOGGER = LoggerFactory.getLogger(ActivateMFAExtension.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ActivateMFAExtension.class);
 
     // Suppress 8 param warning
     @GraphQLField
@@ -30,7 +30,7 @@ public class ActivateMFAExtension {
         final JCRUserNode userNode = Utils.getUserNode(JCRSessionFactory.getInstance().getCurrentUser());
         if (jahiaMFAService != null) {
             try {
-                if (provider != null && userNode != null && Utils.isCorrectUser(userNode)) {
+                if (provider != null && Utils.isCorrectUser(userNode)) {
                     LOGGER.debug("ActivateMFAAction for user "+userNode.getName());
                     if (activation){
                         LOGGER.info("activating MFA");

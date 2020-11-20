@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 @GraphQLTypeExtension(DXGraphQLProvider.Query.class)
 public class PrepareMFAExtension {
-    private static Logger LOGGER = LoggerFactory.getLogger(PrepareMFAExtension.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PrepareMFAExtension.class);
 
     @GraphQLField
     @GraphQLName("prepareMFA")

@@ -29,7 +29,7 @@ public final class ActivateMFAAction extends Action {
         try {
             final String provider = Utils.retrieveParameterValue(parameters, MFAConstants.PARAM_PROVIDER);
 
-            if (provider != null && userNode != null && Utils.isCorrectUser(userNode)) {
+            if (provider != null && Utils.isCorrectUser(userNode)) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug(String.format("ActivateMFAAction for user %s", userNode.getName()));
                 }

@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 @GraphQLTypeExtension(DXGraphQLProvider.Query.class)
 public class VerifyTokenExtension {
-    private static Logger logger = LoggerFactory.getLogger(VerifyTokenExtension.class);
+    private static final Logger logger = LoggerFactory.getLogger(VerifyTokenExtension.class);
 
     @GraphQLField
     @GraphQLName("verifyToken")
@@ -29,8 +29,7 @@ public class VerifyTokenExtension {
                 final JCRUserNode userNode = Utils.getUserNode(JCRSessionFactory.getInstance().getCurrentUser());
                 try {
                     if (password != null && provider != null && token != null && Utils.isCorrectUser(userNode)) {
-                        final boolean result = jahiaMFAService.verifyToken(userNode, provider, token, password);
-                        return result;
+                        return jahiaMFAService.verifyToken(userNode, provider, token, password);
                     }
                 } catch (Exception ex) {
                     logger.error(String.format("Impossible to verity token for user %s", userNode.getPath()), ex);

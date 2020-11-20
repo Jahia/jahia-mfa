@@ -18,7 +18,7 @@ public final class JahiaMFAServiceImpl implements JahiaMFAService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JahiaMFAServiceImpl.class);
     private static final JahiaMFAServiceImpl INSTANCE = new JahiaMFAServiceImpl();
-    private Map<String, JahiaMFAProvider> providers = new HashMap<>();
+    private final Map<String, JahiaMFAProvider> providers = new HashMap<>();
 
     public static JahiaMFAServiceImpl getInstance() {
         return INSTANCE;
