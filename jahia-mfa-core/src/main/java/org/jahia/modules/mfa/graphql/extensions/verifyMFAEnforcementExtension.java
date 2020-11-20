@@ -1,5 +1,7 @@
 package org.jahia.modules.mfa.graphql.extensions;
 
+import graphql.annotations.annotationTypes.*;
+import javax.jcr.RepositoryException;
 import org.apache.commons.lang.StringUtils;
 import org.jahia.modules.graphql.provider.dxm.DXGraphQLProvider;
 import org.jahia.modules.graphql.provider.dxm.admin.AdminQueryExtensions;
@@ -11,23 +13,15 @@ import org.jahia.services.content.JCRSessionFactory;
 import org.jahia.services.content.JCRSessionWrapper;
 import org.jahia.services.content.decorator.JCRSiteNode;
 import org.jahia.services.content.decorator.JCRUserNode;
-import org.jahia.services.sites.JahiaSite;
-import org.jahia.services.sites.JahiaSitesService;
 import org.jahia.services.usermanager.JahiaUserManagerService;
-import org.jahia.utils.LanguageCodeConverters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.imageio.spi.ServiceRegistry;
-import javax.jcr.RepositoryException;
-import java.util.Locale;
-import graphql.annotations.annotationTypes.*;
-
-
 @GraphQLTypeExtension(DXGraphQLProvider.Query.class)
 public class verifyMFAEnforcementExtension {
-    private static Logger logger = LoggerFactory.getLogger(verifyMFAEnforcementExtension.class);
+    private static final Logger logger = LoggerFactory.getLogger(verifyMFAEnforcementExtension.class);
 
+    // Suppress 8 param warning
     @GraphQLField
     @GraphQLName("verifyMFAEnforcement")
     @GraphQLDescription("verify MFA Enforcement")
@@ -37,21 +31,22 @@ public class verifyMFAEnforcementExtension {
     ){
         boolean siteEnforceMFA = false;
         boolean userHasMFA = false;
-        logger.info("verifying MFA Enforcement");
-        JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean("jahiaMFAServiceImpl");
+        if (logger.isInfoEnabled()) {
+            logger.info("verifying MFA Enforcement");
+        }
+
+        final JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean("jahiaMFAServiceImpl");
         if (jahiaMFAService != null) {
                 if (!StringUtils.isEmpty(siteKey)) {
                     try {
-                        // ServiceRegistry.getInstance
-                        JCRSessionWrapper session = JCRSessionFactory.getInstance().getCurrentSystemSession(null, null,null);
+                        final JCRSessionWrapper session = JCRSessionFactory.getInstance().getCurrentSystemSession(null, null,null);
 
-                        JCRSiteNode sitenode = (JCRSiteNode) session.getNode("/sites/" + siteKey);
-                        if (sitenode.isNodeType(MFAConstants.MIXIN_MFA_SITE)){
-                            if (sitenode.hasProperty(MFAConstants.PROP_ENFORCEMFA) &&
+                        final JCRSiteNode sitenode = (JCRSiteNode) session.getNode("/sites/" + siteKey);
+                        if (sitenode.isNodeType(MFAConstants.MIXIN_MFA_SITE) && sitenode.hasProperty(MFAConstants.PROP_ENFORCEMFA) &&
                                     sitenode.getPropertyAsString(MFAConstants.PROP_ENFORCEMFA).equals("true")){
                                 siteEnforceMFA = true;
                             }
-                        }
+
                     } catch (RepositoryException ex) {
                         logger.error(String.format("MFA Enforcement could not find site matching that servername"), ex);
                     }

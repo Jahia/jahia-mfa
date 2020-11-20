@@ -15,7 +15,8 @@ import org.jahia.services.render.URLResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** Action to activate MFA for a user after it has been prepared
+/**
+ * Action to activate MFA for a user after it has been prepared
  */
 public final class ActivateMFAAction extends Action {
 
@@ -29,7 +30,9 @@ public final class ActivateMFAAction extends Action {
             final String provider = Utils.retrieveParameterValue(parameters, MFAConstants.PARAM_PROVIDER);
 
             if (provider != null && userNode != null && Utils.isCorrectUser(userNode)) {
-                LOGGER.debug("ActivateMFAAction for user "+userNode.getName());
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug(String.format("ActivateMFAAction for user %s", userNode.getName()));
+                }
                 final JahiaMFAServiceImpl jahiaMFAServiceImpl = JahiaMFAServiceImpl.getInstance();
                 jahiaMFAServiceImpl.activateMFA(userNode, provider);
                 return ActionResult.OK_JSON;
