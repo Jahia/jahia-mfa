@@ -1,11 +1,9 @@
 package org.jahia.modules.mfa.graphql.extensions;
 
 import graphql.annotations.annotationTypes.*;
-import org.jahia.bin.ActionResult;
 import org.jahia.modules.graphql.provider.dxm.DXGraphQLProvider;
 import org.jahia.modules.mfa.MFAConstants;
 import org.jahia.modules.mfa.actions.Utils;
-import org.jahia.modules.mfa.impl.JahiaMFAServiceImpl;
 import org.jahia.modules.mfa.service.JahiaMFAService;
 import org.jahia.services.SpringContextSingleton;
 import org.jahia.services.content.JCRSessionFactory;
@@ -17,19 +15,19 @@ import org.slf4j.LoggerFactory;
  * Search entry point for v1
  */
 @GraphQLTypeExtension(DXGraphQLProvider.Query.class)
-public class activateMFAExtension {
-    private static Logger LOGGER = LoggerFactory.getLogger(activateMFAExtension.class);
+public class ActivateMFAExtension {
+    private static Logger LOGGER = LoggerFactory.getLogger(ActivateMFAExtension.class);
 
     // Suppress 8 param warning
     @GraphQLField
     @GraphQLName("activateMFA")
     @GraphQLDescription("Activate MFA")
-    public static boolean activateMFAExtension(
+    public static boolean ActivateMFAExtension(
             @GraphQLName(MFAConstants.PARAM_PROVIDER) @GraphQLDescription("MFA Provider") @GraphQLNonNull String provider,
-            @GraphQLName("activateMFA") @GraphQLDescription("Activate or Deactivate MFA") @GraphQLNonNull Boolean activation
+            @GraphQLName(MFAConstants.PARAM_ACTIVATE) @GraphQLDescription("Activate or Deactivate MFA") @GraphQLNonNull Boolean activation
     ){
         JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean("jahiaMFAServiceImpl");
-        final JCRUserNode userNode = (JCRUserNode) JCRSessionFactory.getInstance().getCurrentUser();
+        final JCRUserNode userNode = Utils.getUserNode(JCRSessionFactory.getInstance().getCurrentUser());
         if (jahiaMFAService != null) {
             try {
                 if (provider != null && userNode != null && Utils.isCorrectUser(userNode)) {

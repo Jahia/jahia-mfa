@@ -10,6 +10,8 @@ public final class MFAConstants {
     public static final String PARAM_USERNAME = "username";
     public static final String PARAM_PASSWORD = "password";
     public static final String PARAM_PROVIDER = "provider";
+    public static final String PARAM_ACTIVATE = "activate";
+    public static final String PARAM_SITEKEY = "sitekey";
     public static final String PARAM_TOKEN = "token";
 
     public static final String PROP_ACTIVATED = "activated";

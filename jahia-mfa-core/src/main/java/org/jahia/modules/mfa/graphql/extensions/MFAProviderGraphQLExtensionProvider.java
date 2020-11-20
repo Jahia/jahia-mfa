@@ -31,7 +31,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(service = DXGraphQLExtensionsProvider.class, immediate = true)
 public class MFAProviderGraphQLExtensionProvider implements DXGraphQLExtensionsProvider {
-    @Override
+   /* @Override
     public Collection<Class<?>> getExtensions() {
         return Arrays.asList(
                 verifyMFAEnforcementExtension.class,
@@ -39,5 +39,5 @@ public class MFAProviderGraphQLExtensionProvider implements DXGraphQLExtensionsP
                 prepareMFAExtension.class,
                 activateMFAExtension.class
         );
-    }
+    }*/
 }

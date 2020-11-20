@@ -4,10 +4,8 @@ import graphql.annotations.annotationTypes.*;
 import javax.jcr.RepositoryException;
 import org.apache.commons.lang.StringUtils;
 import org.jahia.modules.graphql.provider.dxm.DXGraphQLProvider;
-import org.jahia.modules.graphql.provider.dxm.admin.AdminQueryExtensions;
 import org.jahia.modules.mfa.MFAConstants;
 import org.jahia.modules.mfa.service.JahiaMFAService;
-import org.jahia.registries.ServicesRegistry;
 import org.jahia.services.SpringContextSingleton;
 import org.jahia.services.content.JCRSessionFactory;
 import org.jahia.services.content.JCRSessionWrapper;
@@ -18,16 +16,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @GraphQLTypeExtension(DXGraphQLProvider.Query.class)
-public class verifyMFAEnforcementExtension {
-    private static final Logger logger = LoggerFactory.getLogger(verifyMFAEnforcementExtension.class);
+public class VerifyMFAEnforcementExtension {
+    private static final Logger logger = LoggerFactory.getLogger(VerifyMFAEnforcementExtension.class);
 
     // Suppress 8 param warning
     @GraphQLField
     @GraphQLName("verifyMFAEnforcement")
     @GraphQLDescription("verify MFA Enforcement")
-    public static boolean verifyMFAEnforcement(
-            @GraphQLName("username") @GraphQLDescription("username of current user") @GraphQLNonNull String username,
-            @GraphQLName("sitekey") @GraphQLDescription("site key")  @GraphQLNonNull String siteKey
+    public static boolean VerifyMFAEnforcementExtension(
+            @GraphQLName(MFAConstants.PARAM_USERNAME) @GraphQLDescription("username of current user") @GraphQLNonNull String username,
+            @GraphQLName(MFAConstants.PARAM_SITEKEY) @GraphQLDescription("site key")  @GraphQLNonNull String siteKey
     ){
         boolean siteEnforceMFA = false;
         boolean userHasMFA = false;
