@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState,useEffect } from 'react';
 
 import ItemForm from "./ItemForm";
 import StateDrop from "./StateDrop";
@@ -15,7 +15,7 @@ const MFAManagement = ({ setForm, formData, navigation }) => {
     const [activateMFA, activateMFAResults  ] = useLazyQuery(activateMFAQuery, {
         variables:{
             activate: 'true',
-            provider: 'jahia-mfa-provider'
+            provider: 'jahia-mfa-otp-provider'
         },
         context: {
             headers: headers
@@ -25,9 +25,9 @@ const MFAManagement = ({ setForm, formData, navigation }) => {
     const [deactivateMFA, deactivateMFAResults  ] = useLazyQuery(activateMFAQuery, {
         variables:{
             activate: 'false',
-            provider: 'jahia-mfa-provider'
+            provider: 'jahia-mfa-otp-provider'
         },
-        context: {
+    context: {
             headers: headers
         }
     });
@@ -43,10 +43,8 @@ const MFAManagement = ({ setForm, formData, navigation }) => {
         }
     });
     const { previous, next } = navigation;
-
-
-    const verifyMFAEnforcementResponse  = useQuery(verifyMFAEnforcementQuery, {
-        variables:{
+    const verifyMFAEnforcementResponse = useQuery(verifyMFAEnforcementQuery, {
+        variables: {
             username: 'anne',
             sitekey: 'digitall'
         },
@@ -54,8 +52,13 @@ const MFAManagement = ({ setForm, formData, navigation }) => {
             headers: headers
         }
     });
-    console.log(verifyMFAEnforcementResponse.data);
 
+    if (verifyMFAEnforcementResponse)
+        console.log(verifyMFAEnforcementResponse.data);
+    if (deactivateMFA)
+        console.log(deactivateMFA.data);
+    if (activateMFA)
+        console.log(activateMFA.data);
 
     if (verifyMFAEnforcementResponse.loading)
     return <div>LOADING</div>;
