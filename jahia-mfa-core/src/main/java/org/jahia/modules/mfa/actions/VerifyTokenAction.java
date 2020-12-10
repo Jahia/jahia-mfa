@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.jahia.bin.Action;
 import org.jahia.bin.ActionResult;
 import org.jahia.modules.mfa.MFAConstants;
+import org.jahia.modules.mfa.graphql.extensions.Utils;
 import org.jahia.modules.mfa.impl.JahiaMFAServiceImpl;
 import org.jahia.services.content.JCRSessionWrapper;
 import org.jahia.services.content.decorator.JCRUserNode;
@@ -19,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 /** Action to verify the sent token against the TOTP key of the user
  */
+@Deprecated
 public class VerifyTokenAction extends Action {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VerifyTokenAction.class);

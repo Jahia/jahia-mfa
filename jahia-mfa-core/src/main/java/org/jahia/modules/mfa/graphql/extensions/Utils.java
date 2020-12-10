@@ -1,4 +1,4 @@
-package org.jahia.modules.mfa.actions;
+package org.jahia.modules.mfa.graphql.extensions;
 
 import java.util.List;
 import java.util.Map;

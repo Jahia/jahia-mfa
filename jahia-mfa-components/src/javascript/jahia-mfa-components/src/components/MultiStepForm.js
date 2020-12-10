@@ -7,6 +7,7 @@ import Review from "./Review";
 import Submit from "./Submit";
 import ActivateMFA from "./ActivateMFA";
 import DeactivateMFA from "./DeactivateMFA";
+import ViewQRCode from "./ViewQRCode";
 import "./styles.css";
 import {useQuery} from "@apollo/client";
 import {verifyMFAEnforcementQuery} from "../graphQL/MFAmanagement.gql";
@@ -17,6 +18,7 @@ const steps = [
   { id: "manageMFA" },
   {id: "activateMFA"},
   {id: "deactivateMFA"},
+  {id: "viewQRCode"},
   { id: "review" },
   { id: "submit" }
 ];
@@ -64,6 +66,8 @@ const MultiStepForm = () => {
       return <ActivateMFA {...props} />;
     case "deactivateMFA":
       return <DeactivateMFA {...props} />;
+    case "viewQRCode":
+      return <ViewQRCode {...props} />;
     case "review":
       return <Review {...props} />;
     case "submit":

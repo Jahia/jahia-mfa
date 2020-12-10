@@ -22,6 +22,7 @@ import org.jahia.services.render.Resource;
 import org.jahia.services.render.URLResolver;
 import org.json.JSONObject;
 
+@Deprecated
 public class RetrieveQRCode extends Action {
 
     private static final int QRCODE_SIZE = 200;

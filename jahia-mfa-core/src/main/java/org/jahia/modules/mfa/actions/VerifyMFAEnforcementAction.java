@@ -32,6 +32,7 @@ import org.apache.commons.lang.StringUtils;
 import org.jahia.bin.Action;
 import org.jahia.bin.ActionResult;
 import org.jahia.modules.mfa.MFAConstants;
+import org.jahia.modules.mfa.graphql.extensions.Utils;
 import org.jahia.modules.mfa.service.JahiaMFAService;
 import org.jahia.services.content.JCRSessionFactory;
 import org.jahia.services.content.JCRSessionWrapper;
@@ -46,7 +47,7 @@ import org.jahia.services.sites.JahiaSitesService;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+@Deprecated
 public class VerifyMFAEnforcementAction extends Action {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VerifyMFAEnforcementAction.class);

@@ -3,7 +3,6 @@ package org.jahia.modules.mfa.graphql.extensions;
 import graphql.annotations.annotationTypes.*;
 import org.jahia.modules.graphql.provider.dxm.DXGraphQLProvider;
 import org.jahia.modules.mfa.MFAConstants;
-import org.jahia.modules.mfa.actions.Utils;
 import org.jahia.modules.mfa.service.JahiaMFAService;
 import org.jahia.services.SpringContextSingleton;
 import org.jahia.services.content.JCRSessionFactory;
