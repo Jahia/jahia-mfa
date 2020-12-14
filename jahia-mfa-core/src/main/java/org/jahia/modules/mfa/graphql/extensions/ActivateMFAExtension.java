@@ -31,7 +31,7 @@ public class ActivateMFAExtension {
             try {
                 if (provider != null && Utils.isCorrectUser(userNode)) {
                     LOGGER.debug("ActivateMFAAction for user "+userNode.getName());
-                    if (activation){
+                    if (Boolean.TRUE.equals(activation)){
                         LOGGER.info("activating MFA");
                         jahiaMFAService.activateMFA(userNode, provider);
                     }else{
