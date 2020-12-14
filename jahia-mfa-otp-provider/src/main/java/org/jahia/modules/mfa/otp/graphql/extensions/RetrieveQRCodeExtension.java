@@ -6,14 +6,11 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import graphql.annotations.annotationTypes.*;
-import org.jahia.bin.ActionResult;
 import org.jahia.modules.graphql.provider.dxm.DXGraphQLProvider;
 import org.jahia.modules.mfa.MFAConstants;
 import org.jahia.modules.mfa.graphql.extensions.Utils;
 import org.jahia.modules.mfa.otp.provider.Constants;
 import org.jahia.modules.mfa.otp.provider.JahiaMFAOtpProvider;
-import org.jahia.modules.mfa.service.JahiaMFAService;
-import org.jahia.services.SpringContextSingleton;
 import org.jahia.services.content.JCRSessionFactory;
 import org.jahia.services.content.decorator.JCRUserNode;
 import org.json.JSONException;
@@ -22,11 +19,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.jcr.RepositoryException;
-import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
-import java.util.List;
 
 @GraphQLTypeExtension(DXGraphQLProvider.Query.class)
 public class RetrieveQRCodeExtension {

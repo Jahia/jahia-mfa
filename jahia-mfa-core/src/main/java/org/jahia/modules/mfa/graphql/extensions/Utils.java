@@ -50,8 +50,9 @@ public final class Utils {
      * @return JCRUserNode
      */
     public static JCRUserNode getUserNode(JahiaUser jahiaUser) {
-        if (jahiaUser == null)
+        if (jahiaUser == null) {
             return null;
+        }
         return JahiaUserManagerService.getInstance().lookupUserByPath(jahiaUser.getLocalPath());
     }
 }
