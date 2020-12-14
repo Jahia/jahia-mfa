@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jahia.bin.Action;
 import org.jahia.bin.ActionResult;
+import org.jahia.modules.mfa.graphql.extensions.Utils;
 import org.jahia.modules.mfa.MFAConstants;
 import org.jahia.modules.mfa.otp.provider.JahiaMFAOtpProvider;
 import org.jahia.services.content.JCRNodeWrapper;
