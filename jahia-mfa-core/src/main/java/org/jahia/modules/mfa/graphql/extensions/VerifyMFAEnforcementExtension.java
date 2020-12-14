@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 @GraphQLTypeExtension(DXGraphQLProvider.Query.class)
 public class VerifyMFAEnforcementExtension {
 
-    private static final Logger logger = LoggerFactory.getLogger(VerifyMFAEnforcementExtension.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(VerifyMFAEnforcementExtension.class);
 
     // Suppress 8 param warning
     @GraphQLField
@@ -30,8 +30,8 @@ public class VerifyMFAEnforcementExtension {
     ) {
         boolean siteEnforceMFA = false;
         boolean userHasMFA = false;
-        if (logger.isInfoEnabled()) {
-            logger.info("verifying MFA Enforcement");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("verifying MFA Enforcement");
         }
 
         final JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean("jahiaMFAServiceImpl");
@@ -47,12 +47,14 @@ public class VerifyMFAEnforcementExtension {
                     }
 
                 } catch (RepositoryException ex) {
-                    logger.error(String.format("MFA Enforcement could not find site matching that servername"), ex);
+                    LOGGER.error("MFA Enforcement could not find site matching that servername", ex);
                 }
             }
 
             if (!StringUtils.isEmpty(username)) {
-                logger.debug("VerifyMFAEnforcementAction for user " + username);
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug(String.format("VerifyMFAEnforcementAction for user %s", username));
+                }
                 JCRUserNode usernode = JahiaUserManagerService.getInstance().lookupUser(username);
                 if (usernode != null && jahiaMFAService.hasMFA(usernode)) {
                     userHasMFA = true;

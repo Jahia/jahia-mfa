@@ -31,12 +31,18 @@ public class ActivateMFAExtension {
         if (jahiaMFAService != null) {
             try {
                 if (provider != null && Utils.isCorrectUser(userNode)) {
-                    LOGGER.debug("ActivateMFAAction for user " + userNode.getName());
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug(String.format("ActivateMFAAction for user %s", userNode.getName()));
+                    }
                     if (Boolean.TRUE.equals(activation)) {
-                        LOGGER.info("activating MFA");
+                        if (LOGGER.isInfoEnabled()) {
+                            LOGGER.info("activating MFA");
+                        }
                         jahiaMFAService.activateMFA(userNode, provider);
                     } else {
-                        LOGGER.info("deactivating MFA");
+                        if (LOGGER.isInfoEnabled()) {
+                            LOGGER.info("deactivating MFA");
+                        }
                         jahiaMFAService.deactivateMFA(userNode, provider);
                     }
                     return true;

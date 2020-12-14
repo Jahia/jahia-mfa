@@ -22,13 +22,17 @@ public class PrepareMFAExtension {
             @GraphQLName(MFAConstants.PARAM_PASSWORD) @GraphQLDescription("password") @GraphQLNonNull String password,
             @GraphQLName(MFAConstants.PARAM_PROVIDER) @GraphQLDescription("provider") String provider
     ) {
-        LOGGER.info("preparing MFA Enforcement");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("preparing MFA Enforcement");
+        }
         JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean("jahiaMFAServiceImpl");
         if (jahiaMFAService != null) {
             final JCRUserNode userNode = Utils.getUserNode(JCRSessionFactory.getInstance().getCurrentUser());
             try {
                 if (password != null && provider != null && Utils.isCorrectUser(userNode)) {
-                    LOGGER.debug("ActivateMFAAction for user " + userNode.getName());
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug(String.format("ActivateMFAAction for user %s", userNode.getName()));
+                    }
                     jahiaMFAService.prepareMFA(userNode, provider, password);
                     return true;
                 }
