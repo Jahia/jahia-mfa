@@ -15,6 +15,9 @@ public class VerifyTokenExtension {
 
     private static final Logger logger = LoggerFactory.getLogger(VerifyTokenExtension.class);
 
+    private VerifyTokenExtension() {
+    }
+
     @GraphQLField
     @GraphQLName("verifyToken")
     @GraphQLDescription("verify Token")

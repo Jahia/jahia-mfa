@@ -20,6 +20,9 @@ public class VerifyMFAEnforcementExtension {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VerifyMFAEnforcementExtension.class);
 
+    private VerifyMFAEnforcementExtension() {
+    }
+
     // Suppress 8 param warning
     @GraphQLField
     @GraphQLName("verifyMFAEnforcement")

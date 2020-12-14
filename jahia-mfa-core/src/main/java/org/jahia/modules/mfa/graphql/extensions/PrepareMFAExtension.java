@@ -15,6 +15,9 @@ public class PrepareMFAExtension {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PrepareMFAExtension.class);
 
+    private PrepareMFAExtension() {
+    }
+
     @GraphQLField
     @GraphQLName("prepareMFA")
     @GraphQLDescription("Preparing MFA")

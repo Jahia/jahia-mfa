@@ -18,6 +18,9 @@ public class ActivateMFAExtension {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ActivateMFAExtension.class);
 
+    private ActivateMFAExtension() {
+    }
+
     // Suppress 8 param warning
     @GraphQLField
     @GraphQLName("activateMFA")
