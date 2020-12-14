@@ -24,11 +24,14 @@ import java.io.IOException;
 import java.util.Base64;
 
 @GraphQLTypeExtension(DXGraphQLProvider.Query.class)
-public class RetrieveQRCodeExtension {
+public final class RetrieveQRCodeExtension {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RetrieveQRCodeExtension.class);
     private static final int QRCODE_SIZE = 200;
 
+    private RetrieveQRCodeExtension(){
+    }
+    
     @GraphQLField
     @GraphQLName("retrieveQRCode")
     @GraphQLDescription("Retrieve OTP QR Code")
