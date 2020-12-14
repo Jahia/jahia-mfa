@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @GraphQLTypeExtension(DXGraphQLProvider.Query.class)
-public class VerifyTokenExtension {
+public final class VerifyTokenExtension {
 
     private static final Logger logger = LoggerFactory.getLogger(VerifyTokenExtension.class);
 

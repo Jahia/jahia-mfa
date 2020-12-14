@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @GraphQLTypeExtension(DXGraphQLProvider.Query.class)
-public class VerifyMFAEnforcementExtension {
+public final class VerifyMFAEnforcementExtension {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VerifyMFAEnforcementExtension.class);
 

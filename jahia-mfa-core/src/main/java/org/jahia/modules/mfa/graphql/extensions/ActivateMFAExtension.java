@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  * Search entry point for v1
  */
 @GraphQLTypeExtension(DXGraphQLProvider.Query.class)
-public class ActivateMFAExtension {
+public final class ActivateMFAExtension {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ActivateMFAExtension.class);
 
