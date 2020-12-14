@@ -23,7 +23,7 @@ public class VerifyMFAEnforcementExtension {
     @GraphQLField
     @GraphQLName("verifyMFAEnforcement")
     @GraphQLDescription("verify MFA Enforcement")
-    public static boolean VerifyMFAEnforcementExtension(
+    public static boolean verifyMFAEnforcementExtension(
             @GraphQLName(MFAConstants.PARAM_USERNAME) @GraphQLDescription("username of current user") @GraphQLNonNull String username,
             @GraphQLName(MFAConstants.PARAM_SITEKEY) @GraphQLDescription("site key")  @GraphQLNonNull String siteKey
     ){

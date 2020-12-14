@@ -21,7 +21,7 @@ public class ActivateMFAExtension {
     @GraphQLField
     @GraphQLName("activateMFA")
     @GraphQLDescription("Activate MFA")
-    public static boolean ActivateMFAExtension(
+    public static boolean activateMFAExtension(
             @GraphQLName(MFAConstants.PARAM_PROVIDER) @GraphQLDescription("MFA Provider") @GraphQLNonNull String provider,
             @GraphQLName(MFAConstants.PARAM_ACTIVATE) @GraphQLDescription("Activate or Deactivate MFA") @GraphQLNonNull Boolean activation
     ){

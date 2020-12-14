@@ -17,7 +17,7 @@ public class VerifyTokenExtension {
     @GraphQLField
     @GraphQLName("verifyToken")
     @GraphQLDescription("verify Token")
-    public static boolean VerifyTokenExtension(
+    public static boolean verifyTokenExtension(
             @GraphQLName(MFAConstants.PARAM_PASSWORD) @GraphQLDescription("password") @GraphQLNonNull String password,
             @GraphQLName(MFAConstants.PARAM_PROVIDER) @GraphQLDescription("site key") @GraphQLNonNull String provider,
             @GraphQLName(MFAConstants.PARAM_TOKEN) @GraphQLDescription("MFA Token") @GraphQLNonNull String token

@@ -31,7 +31,7 @@ public class RetrieveQRCodeExtension {
     @GraphQLField
     @GraphQLName("retrieveQRCode")
     @GraphQLDescription("Retrieve OTP QR Code")
-    public static String RetrieveQRCodeExtension(
+    public static String retrieveQRCodeExtension(
             @GraphQLName(MFAConstants.PARAM_PASSWORD) @GraphQLDescription("password") @GraphQLNonNull String password)
             throws RepositoryException, WriterException, IOException, JSONException {
         final JSONObject jsonObject = new JSONObject();

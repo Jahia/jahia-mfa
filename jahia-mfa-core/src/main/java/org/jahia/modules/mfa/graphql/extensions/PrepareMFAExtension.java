@@ -17,7 +17,7 @@ public class PrepareMFAExtension {
     @GraphQLField
     @GraphQLName("prepareMFA")
     @GraphQLDescription("Preparing MFA")
-    public static boolean PrepareMFAExtension(
+    public static boolean prepareMFAExtension(
             @GraphQLName(MFAConstants.PARAM_PASSWORD) @GraphQLDescription("password") @GraphQLNonNull String password,
             @GraphQLName(MFAConstants.PARAM_PROVIDER) @GraphQLDescription("provider") String provider
             ){
