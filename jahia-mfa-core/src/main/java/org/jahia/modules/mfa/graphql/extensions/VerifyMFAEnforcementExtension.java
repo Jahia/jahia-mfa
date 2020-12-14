@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 @GraphQLTypeExtension(DXGraphQLProvider.Query.class)
 public class VerifyMFAEnforcementExtension {
+
     private static final Logger logger = LoggerFactory.getLogger(VerifyMFAEnforcementExtension.class);
 
     // Suppress 8 param warning
@@ -25,8 +26,8 @@ public class VerifyMFAEnforcementExtension {
     @GraphQLDescription("verify MFA Enforcement")
     public static boolean verifyMFAEnforcementExtension(
             @GraphQLName(MFAConstants.PARAM_USERNAME) @GraphQLDescription("username of current user") @GraphQLNonNull String username,
-            @GraphQLName(MFAConstants.PARAM_SITEKEY) @GraphQLDescription("site key")  @GraphQLNonNull String siteKey
-    ){
+            @GraphQLName(MFAConstants.PARAM_SITEKEY) @GraphQLDescription("site key") @GraphQLNonNull String siteKey
+    ) {
         boolean siteEnforceMFA = false;
         boolean userHasMFA = false;
         if (logger.isInfoEnabled()) {
@@ -35,31 +36,30 @@ public class VerifyMFAEnforcementExtension {
 
         final JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean("jahiaMFAServiceImpl");
         if (jahiaMFAService != null) {
-                if (!StringUtils.isEmpty(siteKey)) {
-                    try {
-                        final JCRSessionWrapper session = JCRSessionFactory.getInstance().getCurrentSystemSession(null, null,null);
+            if (!StringUtils.isEmpty(siteKey)) {
+                try {
+                    final JCRSessionWrapper session = JCRSessionFactory.getInstance().getCurrentSystemSession(null, null, null);
 
-                        final JCRSiteNode sitenode = (JCRSiteNode) session.getNode("/sites/" + siteKey);
-                        if (sitenode.isNodeType(MFAConstants.MIXIN_MFA_SITE) && sitenode.hasProperty(MFAConstants.PROP_ENFORCEMFA) &&
-                                    sitenode.getPropertyAsString(MFAConstants.PROP_ENFORCEMFA).equals("true")){
-                                siteEnforceMFA = true;
-                            }
-
-                    } catch (RepositoryException ex) {
-                        logger.error(String.format("MFA Enforcement could not find site matching that servername"), ex);
-                    }
-                }
-
-                if (!StringUtils.isEmpty(username)) {
-                    logger.debug("VerifyMFAEnforcementAction for user "+username);
-                    JCRUserNode usernode = JahiaUserManagerService.getInstance().lookupUser(username);
-                    if(usernode!=null && jahiaMFAService.hasMFA(usernode)){
-                        userHasMFA = true;
+                    final JCRSiteNode sitenode = (JCRSiteNode) session.getNode("/sites/" + siteKey);
+                    if (sitenode.isNodeType(MFAConstants.MIXIN_MFA_SITE) && sitenode.hasProperty(MFAConstants.PROP_ENFORCEMFA)
+                            && sitenode.getPropertyAsString(MFAConstants.PROP_ENFORCEMFA).equals("true")) {
+                        siteEnforceMFA = true;
                     }
 
+                } catch (RepositoryException ex) {
+                    logger.error(String.format("MFA Enforcement could not find site matching that servername"), ex);
                 }
+            }
+
+            if (!StringUtils.isEmpty(username)) {
+                logger.debug("VerifyMFAEnforcementAction for user " + username);
+                JCRUserNode usernode = JahiaUserManagerService.getInstance().lookupUser(username);
+                if (usernode != null && jahiaMFAService.hasMFA(usernode)) {
+                    userHasMFA = true;
+                }
+
+            }
         }
         return siteEnforceMFA && userHasMFA;
     }
 }
-

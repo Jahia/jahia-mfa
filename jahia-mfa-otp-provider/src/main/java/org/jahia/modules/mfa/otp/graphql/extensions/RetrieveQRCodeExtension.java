@@ -25,6 +25,7 @@ import java.util.Base64;
 
 @GraphQLTypeExtension(DXGraphQLProvider.Query.class)
 public class RetrieveQRCodeExtension {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(RetrieveQRCodeExtension.class);
     private static final int QRCODE_SIZE = 200;
 
@@ -37,7 +38,7 @@ public class RetrieveQRCodeExtension {
         final JSONObject jsonObject = new JSONObject();
         LOGGER.info("retrieving OPT QR Code");
         final JCRUserNode userNode = Utils.getUserNode(JCRSessionFactory.getInstance().getCurrentUser());
-        if (JahiaMFAOtpProvider.isActivated(userNode) && password!=null) {
+        if (JahiaMFAOtpProvider.isActivated(userNode) && password != null) {
             final String oTPKey = JahiaMFAOtpProvider.decryptTotpSecretKey(userNode.getNode(MFAConstants.NODE_NAME_MFA).getPropertyAsString(Constants.PROP_SECRET_KEY),
                     password, userNode.getUUID());
             final QRCodeWriter qrCodeWriter = new QRCodeWriter();
@@ -49,7 +50,6 @@ public class RetrieveQRCodeExtension {
             jsonObject.put("QRCODE", base64Image);
             return base64Image;
         }
-     return "";
+        return "";
     }
 }
-

@@ -32,7 +32,6 @@ public final class Utils {
         return null;
     }
 
-    
     /**
      * Check if the user exists and is not guest
      *

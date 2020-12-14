@@ -19,7 +19,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** Action to decrypt the TOTP key of a user thanks to its password
+/**
+ * Action to decrypt the TOTP key of a user thanks to its password
  */
 public class DecryptOtpKeyAction extends Action {
 

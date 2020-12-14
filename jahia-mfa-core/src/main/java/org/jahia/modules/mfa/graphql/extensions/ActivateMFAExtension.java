@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
  */
 @GraphQLTypeExtension(DXGraphQLProvider.Query.class)
 public class ActivateMFAExtension {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ActivateMFAExtension.class);
 
     // Suppress 8 param warning
@@ -24,17 +25,17 @@ public class ActivateMFAExtension {
     public static boolean activateMFAExtension(
             @GraphQLName(MFAConstants.PARAM_PROVIDER) @GraphQLDescription("MFA Provider") @GraphQLNonNull String provider,
             @GraphQLName(MFAConstants.PARAM_ACTIVATE) @GraphQLDescription("Activate or Deactivate MFA") @GraphQLNonNull Boolean activation
-    ){
+    ) {
         JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean("jahiaMFAServiceImpl");
         final JCRUserNode userNode = Utils.getUserNode(JCRSessionFactory.getInstance().getCurrentUser());
         if (jahiaMFAService != null) {
             try {
                 if (provider != null && Utils.isCorrectUser(userNode)) {
-                    LOGGER.debug("ActivateMFAAction for user "+userNode.getName());
-                    if (Boolean.TRUE.equals(activation)){
+                    LOGGER.debug("ActivateMFAAction for user " + userNode.getName());
+                    if (Boolean.TRUE.equals(activation)) {
                         LOGGER.info("activating MFA");
                         jahiaMFAService.activateMFA(userNode, provider);
-                    }else{
+                    } else {
                         LOGGER.info("deactivating MFA");
                         jahiaMFAService.deactivateMFA(userNode, provider);
                     }
@@ -45,7 +46,6 @@ public class ActivateMFAExtension {
                 return false;
             }
         }
-    return false;
+        return false;
     }
 }
-
