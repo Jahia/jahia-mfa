@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 @GraphQLTypeExtension(DXGraphQLProvider.Query.class)
 public final class VerifyTokenExtension {
 
-    private static final Logger logger = LoggerFactory.getLogger(VerifyTokenExtension.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(VerifyTokenExtension.class);
 
     private VerifyTokenExtension() {
     }
@@ -26,7 +26,7 @@ public final class VerifyTokenExtension {
             @GraphQLName(MFAConstants.PARAM_PROVIDER) @GraphQLDescription("site key") @GraphQLNonNull String provider,
             @GraphQLName(MFAConstants.PARAM_TOKEN) @GraphQLDescription("MFA Token") @GraphQLNonNull String token
     ) {
-        logger.info("veriyfing token");
+        LOGGER.info("veriyfing token");
         JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean("jahiaMFAServiceImpl");
         if (jahiaMFAService != null) {
             final JCRUserNode userNode = Utils.getUserNode(JCRSessionFactory.getInstance().getCurrentUser());
@@ -35,7 +35,7 @@ public final class VerifyTokenExtension {
                     return jahiaMFAService.verifyToken(userNode, provider, token, password);
                 }
             } catch (Exception ex) {
-                logger.error(String.format("Impossible to verity token for user %s", userNode.getPath()), ex);
+                LOGGER.error(String.format("Impossible to verity token for user %s", userNode.getPath()), ex);
             }
         }
         return false;
