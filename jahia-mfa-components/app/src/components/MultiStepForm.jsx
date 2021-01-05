@@ -5,11 +5,12 @@ import MFAManagement from "./MFAManagement";
 import Review from "./Review";
 import Submit from "./Submit";
 import ActivateMFA from "./ActivateMFA";
+import PrepareMFA from "./PrepareMFA";
 import DeactivateMFA from "./DeactivateMFA";
 import ViewQRCode from "./ViewQRCode";
 import "./styles.css";
 import {useQuery} from "@apollo/client";
-import {verifyMFAEnforcementQuery} from "../graphQL/MFAmanagement.gql";
+import {verifyMFAStatusQuery} from "../graphQL/MFAmanagement.gql";
 
 
 const steps = [
@@ -44,9 +45,9 @@ const MultiStepForm = () => {
   }
 
   const props = { formData, setForm, navigation };
-  const verifyMFAEnforcementResponse = useQuery(verifyMFAEnforcementQuery, {
+  const verifyMFAStatusResponse = useQuery(verifyMFAStatusQuery, {
     variables: {
-      username: 'anne',
+      username: defaultData.username,
       sitekey: 'digitall'
     },
     context: {
@@ -58,10 +59,10 @@ const MultiStepForm = () => {
     case "login":
       return <LoginForm {...props} />;
     case "manageMFA":
-      if (verifyMFAEnforcementResponse.data.verifyMFAEnforcement)
+      if (verifyMFAStatusResponse.data.verifyMFAStatus)
         return <DeactivateMFA {...props} />;
       else
-        return <ActivateMFA {...props} />;
+        return <PrepareMFA {...props} />;
     case "activateMFA":
       return <ActivateMFA {...props} />;
     case "deactivateMFA":

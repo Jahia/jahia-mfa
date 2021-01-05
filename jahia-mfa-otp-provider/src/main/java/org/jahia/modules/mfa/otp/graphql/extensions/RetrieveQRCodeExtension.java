@@ -11,6 +11,9 @@ import org.jahia.modules.mfa.MFAConstants;
 import org.jahia.modules.mfa.graphql.extensions.Utils;
 import org.jahia.modules.mfa.otp.provider.Constants;
 import org.jahia.modules.mfa.otp.provider.JahiaMFAOtpProvider;
+import org.jahia.modules.mfa.provider.JahiaMFAProvider;
+import org.jahia.modules.mfa.service.JahiaMFAService;
+import org.jahia.services.SpringContextSingleton;
 import org.jahia.services.content.JCRSessionFactory;
 import org.jahia.services.content.decorator.JCRUserNode;
 import org.json.JSONException;
@@ -41,7 +44,9 @@ public final class RetrieveQRCodeExtension {
         final JSONObject jsonObject = new JSONObject();
         LOGGER.info("retrieving OPT QR Code");
         final JCRUserNode userNode = Utils.getUserNode(JCRSessionFactory.getInstance().getCurrentUser());
-        if (JahiaMFAOtpProvider.isActivated(userNode) && password != null) {
+        final JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean("jahiaMFAServiceImpl");
+
+        if (JahiaMFAOtpProvider.isActivated(userNode) && !jahiaMFAService.hasMFA(userNode) && password != null) {
             final String oTPKey = JahiaMFAOtpProvider.decryptTotpSecretKey(userNode.getNode(MFAConstants.NODE_NAME_MFA).getPropertyAsString(Constants.PROP_SECRET_KEY),
                     password, userNode.getUUID());
             final QRCodeWriter qrCodeWriter = new QRCodeWriter();
@@ -52,6 +57,8 @@ public final class RetrieveQRCodeExtension {
             final String base64Image = Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
             jsonObject.put("QRCODE", base64Image);
             return base64Image;
+        }else{
+            LOGGER.info("OTP not activated");
         }
         return "";
     }

@@ -4,10 +4,17 @@ import ItemForm from "./ItemForm";
 import StateDrop from "./StateDrop";
 import {useQuery, useLazyQuery } from '@apollo/client';
 
-import {activateMFAQuery, verifyMFAEnforcementQuery,verifyTokenQuery, retrieveQRCodeQuery} from '../graphQL/MFAmanagement.gql';
+import {
+    activateMFAQuery,
+    verifyMFAEnforcementQuery,
+    verifyTokenQuery,
+    retrieveQRCodeQuery,
+    prepareMFAQuery
+} from '../graphQL/MFAmanagement.gql';
 
 const ViewQRCode = ({ setForm, formData, navigation }) => {
     const Buffer = require('buffer').Buffer
+    const token = "";
     let logo = null;
     const { go } = navigation;
     const { username, password } = formData;
@@ -22,7 +29,21 @@ const ViewQRCode = ({ setForm, formData, navigation }) => {
         },
         context: {
             headers: headers
-        }
+        },
+        fetchPolicy: 'cache-and-network'
+    });
+
+
+    const [verifyToken, verifyTokenResponse  ] = useLazyQuery(verifyTokenQuery, {
+        variables:{
+            password: password,
+            provider: 'jahia-mfa-otp-provider',
+            token: token
+        },
+        context: {
+            headers: headers
+        },
+        fetchPolicy: 'cache-and-network'
     });
 
     if (retrieveQRCodeResponse.loading)
@@ -32,12 +53,22 @@ const ViewQRCode = ({ setForm, formData, navigation }) => {
         logo = "data:image/jpg;base64,"+retrieveQRCodeResponse.data.retrieveQRCode
 
     }
+    if (verifyTokenResponse){
+        console.log(verifyTokenResponse.data);
+    }
 
 return (
     <div className="form">
         <h3>QR Code</h3>
         <img id="qrimage"  src={logo} width="200" height="200"/>
         <div>
+            <ItemForm
+                label="QR Token"
+                name="token"
+                value={token}
+                onChange={setForm}
+            />
+            <div><button onClick={verifyToken}>Verify Token</button></div>
             <button onClick={previous}>Previous</button>
             <button onClick={next}>Next</button>
         </div>

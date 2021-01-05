@@ -31,4 +31,12 @@ const verifyTokenQuery = gql`
     }
 `;
 
-export {verifyMFAEnforcementQuery,activateMFAQuery,verifyTokenQuery,retrieveQRCodeQuery,prepareMFAQuery};
+const verifyMFAStatusQuery = gql`
+    query verifyMFAStatus{
+        verifyMFAStatus
+    }
+`;
+
+
+
+export {verifyMFAEnforcementQuery,activateMFAQuery,verifyTokenQuery,retrieveQRCodeQuery,prepareMFAQuery,verifyMFAStatusQuery};
