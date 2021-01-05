@@ -13,3 +13,11 @@ target
 
 # Jahia DX Studio
 repository.xml.generated
+
+# NodeJS
+node
+node_modules
+app/node
+app/node_modules
+yarn-error.log
+yarn.lock

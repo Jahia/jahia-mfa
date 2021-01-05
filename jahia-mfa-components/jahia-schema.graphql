@@ -55,6 +55,8 @@ interface JCRNode {
         "The path of the topmost ancestor node to include in the result; null or empty string to include all the ancestor nodes"
         upToPath: String
     ): [JCRNode]!
+    "Give access to the experience fields for the current node"
+    asExperience: GqlExperience
     "GraphQL representations of the child nodes, according to parameters passed"
     children(
         "fetching only nodes after this node (exclusive)"
@@ -140,6 +142,12 @@ interface JCRNode {
     isDisplayableNode: Boolean
     "Reports if the current node matches the nodetype(s) passed in parameter"
     isNodeType(type: InputNodeTypesInput!): Boolean!
+    jExperience(
+        "Unomi profile id"
+        profileId: String,
+        "Unomi session id"
+        sessionId: String
+    ): PersonalizedResult
     "Check if the given locales need translation, by comparing last modifications dates with already existing translations"
     languagesToTranslate(
         "List of languages potentially to be translated"
@@ -381,6 +389,8 @@ type GenericJCRNode implements JCRNode {
         includeSubTypes: Boolean = true
     ): [JCRNodeType]
     ancestors(fieldFilter: InputFieldFiltersInput, upToPath: String): [JCRNode]!
+    "Give access to the experience fields for the current node"
+    asExperience: GqlExperience
     children(
         "fetching only nodes after this node (exclusive)"
         after: String,
@@ -438,6 +448,12 @@ type GenericJCRNode implements JCRNode {
     isDisplayableNode: Boolean
     "Reports if the current node matches the nodetype(s) passed in parameter"
     isNodeType(type: InputNodeTypesInput!): Boolean!
+    jExperience(
+        "Unomi profile id"
+        profileId: String,
+        "Unomi session id"
+        sessionId: String
+    ): PersonalizedResult
     languagesToTranslate(languagesToCheck: [String], languagesTranslated: [String]): [String]
     "Retrieve lock info of the current node"
     lockInfo: LockInfo
@@ -602,6 +618,24 @@ type GqlEditorForms {
 type GqlEditorLockHeartBeat {
     "The empty heartbeat signal"
     heartbeat: String
+}
+
+type GqlExperience {
+    "Check if this experience is active"
+    active: Boolean
+    "get Experience type"
+    experienceType: GqlExperienceType
+}
+
+type GqlExperienceType {
+    "Get the primary node type of the experience node"
+    primaryNodeType: JCRNodeType
+    "Get the primary node type name of the experience node"
+    primaryNodeTypeName: String
+    "Get the experience target"
+    target: Target
+    "Get the experience main type"
+    type: Type
 }
 
 type GqlJcrImageTransformMutation {
@@ -773,6 +807,11 @@ type GqlTreeFacetResult {
     field: String
     "rootPath passed as a parameter"
     rootPath: String
+}
+
+type GqljExperience {
+    "Get the list of all the jExperience experience types that exist in the current environment"
+    experienceTypes: [GqlExperienceType]
 }
 
 "Asset type for image"
@@ -1430,6 +1469,8 @@ type JCRSite implements JCRNode {
         includeSubTypes: Boolean = true
     ): [JCRNodeType]
     ancestors(fieldFilter: InputFieldFiltersInput, upToPath: String): [JCRNode]!
+    "Give access to the experience fields for the current node"
+    asExperience: GqlExperience
     children(
         "fetching only nodes after this node (exclusive)"
         after: String,
@@ -1493,6 +1534,12 @@ type JCRSite implements JCRNode {
     isDisplayableNode: Boolean
     "Reports if the current node matches the nodetype(s) passed in parameter"
     isNodeType(type: InputNodeTypesInput!): Boolean!
+    jExperience(
+        "Unomi profile id"
+        profileId: String,
+        "Unomi session id"
+        sessionId: String
+    ): PersonalizedResult
     languages: [JCRSiteLanguage]
     languagesToTranslate(languagesToCheck: [String], languagesTranslated: [String]): [String]
     "Retrieve lock info of the current node"
@@ -1682,6 +1729,14 @@ type PageInfo {
     totalCount: Int
 }
 
+type PersonalizedResult {
+    optimizationTestVariant: JCRNode
+    personalizedVariant: JCRNode
+    personalizedVariants: [JCRNode]
+    profileId: String
+    sessionId: String
+}
+
 "Root query type"
 type Query {
     "Activate MFA"
@@ -1715,6 +1770,7 @@ type Query {
     dashboard: GqlDashboard
     "Main access field to the DX GraphQL Form API"
     forms: GqlEditorForms
+    jExperience: GqljExperience
     "JCR Queries"
     jcr(
         "The name of the workspace to fetch the node from; either EDIT, LIVE, or null to use EDIT by default"
@@ -1727,6 +1783,11 @@ type Query {
         "provider"
         provider: String
     ): Boolean
+    "Retrieve OTP QR Code"
+    retrieveQRCode(
+        "password"
+        password: String!
+    ): String
     "Search in Jahia using Augmented Search"
     search(
         "Filtering specification"
@@ -1868,6 +1929,8 @@ type VanityUrl implements JCRNode {
         includeSubTypes: Boolean = true
     ): [JCRNodeType]
     ancestors(fieldFilter: InputFieldFiltersInput, upToPath: String): [JCRNode]!
+    "Give access to the experience fields for the current node"
+    asExperience: GqlExperience
     children(
         "fetching only nodes after this node (exclusive)"
         after: String,
@@ -1927,6 +1990,12 @@ type VanityUrl implements JCRNode {
     isDisplayableNode: Boolean
     "Reports if the current node matches the nodetype(s) passed in parameter"
     isNodeType(type: InputNodeTypesInput!): Boolean!
+    jExperience(
+        "Unomi profile id"
+        profileId: String,
+        "Unomi session id"
+        sessionId: String
+    ): PersonalizedResult
     "The language of the content object to which the vanity URL maps to"
     language: String
     languagesToTranslate(languagesToCheck: [String], languagesTranslated: [String]): [String]
@@ -2517,6 +2586,19 @@ enum SortType {
     DESC
 }
 
+enum Target {
+    "CONTENT"
+    CONTENT
+    "CONTENT_TEMPLATE"
+    CONTENT_TEMPLATE
+    "CUSTOM"
+    CUSTOM
+    "PAGE"
+    PAGE
+    "PAGE_TEMPLATE"
+    PAGE_TEMPLATE
+}
+
 "The target scheduler(s)"
 enum TargetScheduler {
     "Both persisted and RAM schedulers will be used"
@@ -2525,6 +2607,13 @@ enum TargetScheduler {
     RAM_SCHEDULER
     "Persisted scheduler will be used"
     SCHEDULER
+}
+
+enum Type {
+    "OPTIMIZATION"
+    OPTIMIZATION
+    "PERSONALIZATION"
+    PERSONALIZATION
 }
 
 enum WipStatus {
