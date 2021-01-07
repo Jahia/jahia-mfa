@@ -1,23 +1,18 @@
-import React, { useState,useEffect } from 'react';
 
 import ItemForm from "./ItemForm";
-import StateDrop from "./StateDrop";
 import {useQuery, useLazyQuery } from '@apollo/client';
 
 import {
-    activateMFAQuery,
-    verifyMFAEnforcementQuery,
     verifyTokenQuery,
     retrieveQRCodeQuery,
-    prepareMFAQuery
 } from '../graphQL/MFAmanagement.gql';
 
 const ViewQRCode = ({ setForm, formData, navigation }) => {
     const Buffer = require('buffer').Buffer
-    const token = "";
+
     let logo = null;
     const { go } = navigation;
-    const { username, password } = formData;
+    const {token, username, password } = formData;
     const { previous, next } = navigation;
     const headers = {   'Authorization': 'Basic ' + Buffer.from(username+":"+password).toString("base64"),
     'Content-Type': 'application/json'
@@ -30,7 +25,7 @@ const ViewQRCode = ({ setForm, formData, navigation }) => {
         context: {
             headers: headers
         },
-        fetchPolicy: 'cache-and-network'
+        fetchPolicy: 'no-cache'
     });
 
 
@@ -43,18 +38,19 @@ const ViewQRCode = ({ setForm, formData, navigation }) => {
         context: {
             headers: headers
         },
-        fetchPolicy: 'cache-and-network'
     });
 
     if (retrieveQRCodeResponse.loading)
         return <div>LOADING</div>;
-    if (retrieveQRCodeResponse.data.retrieveQRCode){
-        console.log(retrieveQRCodeResponse.data);
-        logo = "data:image/jpg;base64,"+retrieveQRCodeResponse.data.retrieveQRCode
 
+    if (retrieveQRCodeResponse.data.retrieveQRCode){
+        logo = "data:image/jpg;base64,"+retrieveQRCodeResponse.data.retrieveQRCode
     }
-    if (verifyTokenResponse){
-        console.log(verifyTokenResponse.data);
+
+    if (verifyTokenResponse.data){
+        if (verifyTokenResponse.data.verifyToken){
+            go('activateMFA');
+        }
     }
 
 return (
@@ -65,12 +61,11 @@ return (
             <ItemForm
                 label="QR Token"
                 name="token"
-                value={token}
                 onChange={setForm}
+                value={token}
             />
             <div><button onClick={verifyToken}>Verify Token</button></div>
             <button onClick={previous}>Previous</button>
-            <button onClick={next}>Next</button>
         </div>
     </div>
 );

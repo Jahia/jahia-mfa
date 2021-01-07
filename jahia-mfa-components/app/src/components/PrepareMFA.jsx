@@ -1,18 +1,12 @@
-import React, { useState,useEffect } from 'react';
+import React, {useEffect } from 'react';
 
-import ItemForm from "./ItemForm";
-import StateDrop from "./StateDrop";
-import {useQuery, useLazyQuery } from '@apollo/client';
+import {useLazyQuery } from '@apollo/client';
 
-import {activateMFAQuery, prepareMFAQuery,verifyMFAEnforcementQuery,verifyTokenQuery} from '../graphQL/MFAmanagement.gql';
+import {prepareMFAQuery} from '../graphQL/MFAmanagement.gql';
 
-const PrepareMFA = ({ setForm, formData, navigation }) => {
-    const Buffer = require('buffer').Buffer
-    const { go } = navigation;
-    const { username, password } = formData;
-    const headers = {   'Authorization': 'Basic ' + Buffer.from(username+":"+password).toString("base64"),
-    'Content-Type': 'application/json'
-    }
+const PrepareMFA = ({formData, navigation, headers }) => {
+    const {previous,  go } = navigation;
+    const {password } = formData;
 
     const [prepareMFA, prepareMFAResponse  ] = useLazyQuery(prepareMFAQuery, {
         variables:{
@@ -25,7 +19,6 @@ const PrepareMFA = ({ setForm, formData, navigation }) => {
         fetchPolicy: 'cache-and-network'
     });
 
-
     useEffect(() => {
         console.log(prepareMFAResponse.data);
         if (prepareMFAResponse.data && prepareMFAResponse.data.prepareMFA && !prepareMFAResponse.loading) {
@@ -34,16 +27,12 @@ const PrepareMFA = ({ setForm, formData, navigation }) => {
         }
     }, [prepareMFAResponse.data, prepareMFAResponse.loading]);
 
-
-    const { previous, next } = navigation;
-
 return (
     <div className="form">
         <h3>Prepare MFA</h3>
         <div><button onClick={prepareMFA}>Prepare MFA</button></div>
         <div>
             <button onClick={previous}>Previous</button>
-            <button onClick={next}>Next</button>
         </div>
     </div>
 );

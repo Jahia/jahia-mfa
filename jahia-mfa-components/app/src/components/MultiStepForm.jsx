@@ -1,78 +1,55 @@
 import React from "react";
 import { useForm, useStep } from "react-hooks-helper";
 import LoginForm from "./LoginForm";
-import MFAManagement from "./MFAManagement";
-import Review from "./Review";
-import Submit from "./Submit";
+import MFAmessage from "./MFAmessage";
 import ActivateMFA from "./ActivateMFA";
 import PrepareMFA from "./PrepareMFA";
 import DeactivateMFA from "./DeactivateMFA";
 import ViewQRCode from "./ViewQRCode";
 import "./styles.css";
-import {useQuery} from "@apollo/client";
-import {verifyMFAStatusQuery} from "../graphQL/MFAmanagement.gql";
-
 
 const steps = [
   { id: "login" },
-  { id: "manageMFA" },
+  {id: "prepareMFA"},
+  { id: "login" },
   {id: "activateMFA"},
+  { id: "login" },
   {id: "deactivateMFA"},
+  { id: "login" },
   {id: "viewQRCode"},
-  { id: "review" },
-  { id: "submit" }
+  { id: "login" },
+  { id: "success" }
 ];
 
 const defaultData = {
   username: "anne",
   password: "password",
-  nickName: "Jan",
-  address: "200 South Main St",
-  city: "Anytown",
-  state: "CA",
-  zip: "90505",
-  email: "email@domain.com",
-  phone: "+61 4252 454 332"
 };
-
-const MultiStepForm = () => {
-  var Buffer = require('buffer').Buffer
+const Buffer = require('buffer').Buffer;
+const headers = {   'Authorization': 'Basic ' + Buffer.from(defaultData.username+":"+defaultData.password).toString("base64"),
+  'Content-Type': 'application/json'
+}
+const MultiStepForm = (client) => {
   const [formData, setForm] = useForm(defaultData);
   const { step, navigation } = useStep({ initialStep: 0, steps });
   const { id } = step;
-  const headers = {   'Authorization': 'Basic ' + Buffer.from(defaultData.username+":"+defaultData.password).toString("base64"),
-    'Content-Type': 'application/json'
-  }
 
-  const props = { formData, setForm, navigation };
-  const verifyMFAStatusResponse = useQuery(verifyMFAStatusQuery, {
-    variables: {
-      username: defaultData.username,
-      sitekey: 'digitall'
-    },
-    context: {
-      headers: headers
-    }
-  });
+
+  const props = { client, formData, setForm, navigation, headers };
 
   switch (id) {
     case "login":
-      return <LoginForm {...props} />;
-    case "manageMFA":
-      if (verifyMFAStatusResponse.data.verifyMFAStatus)
-        return <DeactivateMFA {...props} />;
-      else
-        return <PrepareMFA {...props} />;
+      return <LoginForm   {...props} />;
+    case "prepareMFA":
+      return <PrepareMFA {...props} />;
     case "activateMFA":
       return <ActivateMFA {...props} />;
     case "deactivateMFA":
       return <DeactivateMFA {...props} />;
     case "viewQRCode":
       return <ViewQRCode {...props} />;
-    case "review":
-      return <Review {...props} />;
-    case "submit":
-      return <Submit {...props} />;
+    case "success":
+      return <MFAmessage {...props} />;
     default:
       return null;
   }
