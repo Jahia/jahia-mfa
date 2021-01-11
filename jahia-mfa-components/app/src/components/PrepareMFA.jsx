@@ -1,6 +1,6 @@
 import React, {useEffect } from 'react';
 
-import {useLazyQuery } from '@apollo/client';
+import {useMutation} from '@apollo/client';
 
 import {prepareMFAQuery} from '../graphQL/MFAmanagement.gql';
 
@@ -8,7 +8,7 @@ const PrepareMFA = ({formData, navigation, headers }) => {
     const {previous,  go } = navigation;
     const {password } = formData;
 
-    const [prepareMFA, prepareMFAResponse  ] = useLazyQuery(prepareMFAQuery, {
+    const [prepareMFA ] = useMutation(prepareMFAQuery, {
         variables:{
             password: password,
             provider: 'jahia-mfa-otp-provider'
@@ -16,16 +16,13 @@ const PrepareMFA = ({formData, navigation, headers }) => {
         context: {
             headers: headers
         },
-        fetchPolicy: 'cache-and-network'
-    });
-
-    useEffect(() => {
-        console.log(prepareMFAResponse.data);
-        if (prepareMFAResponse.data && prepareMFAResponse.data.prepareMFA && !prepareMFAResponse.loading) {
-            console.log("goooo MFA QR CODE");
-            go('viewQRCode')
+        onCompleted: data => {
+            if (data && data.mfa && data.mfa.prepareMFA ) {
+                console.log("goooo MFA QR CODE");
+                go('viewQRCode')
+            }
         }
-    }, [prepareMFAResponse.data, prepareMFAResponse.loading]);
+    });
 
 return (
     <div className="form">

@@ -22,10 +22,10 @@ const LoginForm = ({ setForm, formData, navigation, headers}) => {
 
     useEffect(() => {
         console.log(data);
-        if (data && data.verifyMFAStatus && !loading) {
+        if (data && data.mfaOTP.verifyMFAStatus && !loading) {
             go('deactivateMFA')
         }
-        if (data && !data.verifyMFAStatus && !loading) {
+        if (data && !data.mfaOTP.verifyMFAStatus && !loading) {
             go('prepareMFA')
         }
     }, [data, loading]);

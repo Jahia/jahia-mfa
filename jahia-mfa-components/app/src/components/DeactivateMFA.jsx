@@ -1,6 +1,6 @@
 import React, {useEffect } from 'react';
 
-import {useLazyQuery } from '@apollo/client';
+import {useMutation} from '@apollo/client';
 
 import {activateMFAQuery} from '../graphQL/MFAmanagement.gql';
 
@@ -12,7 +12,7 @@ const DeactivateMFA = ({ setForm, formData, navigation }) => {
     'Content-Type': 'application/json'
     }
 
-    const [deactivateMFA, { data, loading, error }  ] = useLazyQuery(activateMFAQuery, {
+    const [deactivateMFA ] = useMutation(activateMFAQuery, {
         variables:{
             activate: 'false',
             provider: 'jahia-mfa-otp-provider'
@@ -20,16 +20,14 @@ const DeactivateMFA = ({ setForm, formData, navigation }) => {
         context: {
             headers: headers
         },
-        fetchPolicy: 'cache-and-network'
-    });
-
-    useEffect(() => {
-        console.log(data);
-        if (data && data.activateMFA && !loading) {
-            console.log("goooo login");
-            go('login')
+        onCompleted: data => {
+            console.log(data);
+            if (data && data.mfa.activateMFA) {
+                console.log("goooo login");
+                go('login')
+            }
         }
-    }, [data, loading]);
+    });
 
 return (
     <div className="form">

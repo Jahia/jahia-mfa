@@ -14,34 +14,7 @@
         <property name="authPipeline" ref="authPipeline"/>
         <property name="jahiaMFAService" ref="jahiaMFAServiceImpl"/>
     </bean>
-    
-    <bean id="activateMFAAction" class="org.jahia.modules.mfa.actions.ActivateMFAAction">
-        <property name="name" value="activateMFAAction"/>
-        <property name="requireAuthenticatedUser" value="true"/> 
-    </bean>
-    
-    <bean id="deactivateMFAAction" class="org.jahia.modules.mfa.actions.DeactivateMFAAction">
-        <property name="name" value="deactivateMFAAction"/>
-        <property name="requireAuthenticatedUser" value="true"/> 
-    </bean>
-    
-    <bean id="prepareMFAAction" class="org.jahia.modules.mfa.actions.PrepareMFAAction">
-        <property name="name" value="prepareMFAAction"/>
-        <property name="requireAuthenticatedUser" value="true"/> 
-    </bean>
-    
-    <bean id="verifyTokenAction" class="org.jahia.modules.mfa.actions.VerifyTokenAction">
-        <property name="name" value="verifyTokenAction"/>
-        <property name="requireAuthenticatedUser" value="true"/> 
-    </bean>
 
-    <bean id="VerifyMFAEnforcementAction" class="org.jahia.modules.mfa.actions.VerifyMFAEnforcementAction">
-        <property name="name" value="verifyMFAEnforcementAction"/>
-        <property name="requireAuthenticatedUser" value="false"/>
-        <property name="jahiaUserManagerService" ref="JahiaUserManagerService"/>
-        <property name="jahiaMFAService" ref="jahiaMFAServiceImpl"/>
-        <property name="jahiaSitesService" ref="JahiaSitesService"/>
-    </bean>
 </beans>
 
 

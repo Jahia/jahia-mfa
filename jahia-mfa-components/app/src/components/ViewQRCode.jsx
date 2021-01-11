@@ -1,5 +1,6 @@
 
 import ItemForm from "./ItemForm";
+import React from 'react';
 import {useQuery, useLazyQuery } from '@apollo/client';
 
 import {
@@ -41,14 +42,14 @@ const ViewQRCode = ({ setForm, formData, navigation }) => {
     });
 
     if (retrieveQRCodeResponse.loading)
-        return <div>LOADING</div>;
+        return (<div>LOADING</div>);
 
-    if (retrieveQRCodeResponse.data.retrieveQRCode){
-        logo = "data:image/jpg;base64,"+retrieveQRCodeResponse.data.retrieveQRCode
+    if (retrieveQRCodeResponse.data.mfaOTP.retrieveQRCode){
+        logo = "data:image/jpg;base64,"+retrieveQRCodeResponse.data.mfaOTP.retrieveQRCode
     }
 
     if (verifyTokenResponse.data){
-        if (verifyTokenResponse.data.verifyToken){
+        if (verifyTokenResponse.data.mfa.verifyToken){
             go('activateMFA');
         }
     }
