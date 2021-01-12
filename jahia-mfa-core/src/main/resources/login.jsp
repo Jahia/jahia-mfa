@@ -74,7 +74,7 @@
 
                             <c:if test="${empty loginResult}">
                                 <div class="group">
-                                    <input type="text" name="username" verify="/${pageContext.request.locale.language}/sites/${functions:currentSiteKey(pageContext.request)}.verifyMFAEnforcementAction.do" maxlength="250" required />
+                                    <input type="text" name="username" sitekey="${functions:currentSiteKey(pageContext.request)}" maxlength="250" required />
                                     <span class="highlight"></span>
                                     <span class="bar"></span>
                                     <label class="inputlabel"><fmt:message key="label.username"/></label>

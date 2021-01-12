@@ -5,4 +5,3 @@
  extends = jnt:MFA
  - secretKey (string) indexed=no
 
-[jnt:mfaQRCode] > jnt:content, jmix:structuredContent

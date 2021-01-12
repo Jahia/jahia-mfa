@@ -18,6 +18,5 @@
 <%--@elvariable id="currentResource" type="org.jahia.services.render.Resource"--%>
 <%--@elvariable id="url" type="org.jahia.services.render.URLGenerator"--%>
 <template:addResources targetTag="js-app" type="javascript"  resources="apps/jahia.bundle.js"/>
-TESET
 <div id="root"></div>
 <js-app></js-app>
