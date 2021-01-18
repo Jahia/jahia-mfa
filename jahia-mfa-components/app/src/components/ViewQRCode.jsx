@@ -1,5 +1,4 @@
 
-import ItemForm from "./ItemForm";
 import React from 'react';
 import {useQuery, useLazyQuery } from '@apollo/client';
 
@@ -7,6 +6,8 @@ import {
     verifyTokenQuery,
     retrieveQRCodeQuery,
 } from '../graphQL/MFAmanagement.gql';
+import {Button, ImgWrapper, Input, Typography} from "@jahia/moonstone";
+
 
 const ViewQRCode = ({ setForm, formData, navigation }) => {
     const Buffer = require('buffer').Buffer
@@ -56,17 +57,18 @@ const ViewQRCode = ({ setForm, formData, navigation }) => {
 
 return (
     <div className="form">
-        <h3>QR Code</h3>
-        <img id="qrimage"  src={logo} width="200" height="200"/>
+        <Typography>QR Code</Typography>
+
+        <ImgWrapper id="qrimage"  src={logo} size="200"/>
         <div>
-            <ItemForm
-                label="QR Token"
+            <Input
+                placeholder="QR Token"
                 name="token"
                 onChange={setForm}
                 value={token}
             />
-            <div><button onClick={verifyToken}>Verify Token</button></div>
-            <button onClick={previous}>Previous</button>
+            <div><Button label="Verify Token" onClick={verifyToken}/></div>
+            <div><Button label="Previous" onClick={previous}/></div>
         </div>
     </div>
 );

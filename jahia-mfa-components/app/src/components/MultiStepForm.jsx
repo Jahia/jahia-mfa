@@ -21,16 +21,13 @@ const steps = [
   { id: "success" }
 ];
 
-const defaultData = {
-  username: "anne",
-  password: "password",
-};
 const Buffer = require('buffer').Buffer;
-const headers = {   'Authorization': 'Basic ' + Buffer.from(defaultData.username+":"+defaultData.password).toString("base64"),
-  'Content-Type': 'application/json'
-}
+
 const MultiStepForm = (client) => {
-  const [formData, setForm] = useForm(defaultData);
+  const [formData, setForm] = useForm({mode: 'onTouched',defaultValues: {}});
+  const headers = {   'Authorization': 'Basic ' + Buffer.from(formData.username+":"+formData.password).toString("base64"),
+    'Content-Type': 'application/json'
+  }
   const { step, navigation } = useStep({ initialStep: 0, steps });
   const { id } = step;
 

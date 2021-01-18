@@ -1,10 +1,12 @@
 import React from "react";
+import {Button, Typography} from "@jahia/moonstone";
 const MFAmessage = ({ navigation }) => {
   const { go } = navigation;
   return (
     <div>
-      <h3>Your MFA has been succesfully activated</h3>
-      <button onClick={() => go("login")}>Back</button>
+        <Typography>Your MFA has been succesfully activated</Typography>
+        <div><Button label="Back" onClick={() => go("login")}/></div>
+
     </div>
   );
 };

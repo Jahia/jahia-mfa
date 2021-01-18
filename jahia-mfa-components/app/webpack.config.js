@@ -47,8 +47,20 @@ module.exports = (env, argv) => {
                 },
                 {
                     test: /\.css$/,
-                    exclude:  /node_modules/,
-                    use: ["style-loader", "css-loader"],
+                     use: ["style-loader", "css-loader"],
+                },
+                {
+                    // ASSET LOADER
+                    // Reference: https://github.com/webpack/file-loader
+                    // Copy png, jpg, jpeg, gif, svg, woff, woff2, ttf, eot files to output
+                    // Rename the file using the asset hash
+                    // Pass along the updated reference to your code
+                    // You can add here any file extension you want to get copied to your output
+                    test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|otf)$/,
+                    use: [
+                        'file-loader'
+
+                    ]
                 }
             ]
         },

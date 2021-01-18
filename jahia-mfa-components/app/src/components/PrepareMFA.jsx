@@ -3,6 +3,7 @@ import React, {useEffect } from 'react';
 import {useMutation} from '@apollo/client';
 
 import {prepareMFAQuery} from '../graphQL/MFAmanagement.gql';
+import {Button, Typography} from "@jahia/moonstone";
 
 const PrepareMFA = ({formData, navigation, headers }) => {
     const {previous,  go } = navigation;
@@ -26,10 +27,10 @@ const PrepareMFA = ({formData, navigation, headers }) => {
 
 return (
     <div className="form">
-        <h3>Prepare MFA</h3>
-        <div><button onClick={prepareMFA}>Prepare MFA</button></div>
+        <Typography>Prepare MFA</Typography>
+        <div><Button label="Prepare MFA" onClick={prepareMFA}/></div>
         <div>
-            <button onClick={previous}>Previous</button>
+            <Button label="Previous" onClick={previous}></Button>
         </div>
     </div>
 );

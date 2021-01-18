@@ -4,6 +4,7 @@ import React, {useEffect } from 'react';
 import {useMutation } from '@apollo/client';
 
 import {activateMFAQuery} from '../graphQL/MFAmanagement.gql';
+import {Button, Typography} from "@jahia/moonstone";
 
 const ActivateMFA = ({ setForm, formData, navigation, headers }) => {
     const { previous,go} = navigation;
@@ -25,10 +26,11 @@ const ActivateMFA = ({ setForm, formData, navigation, headers }) => {
 
 return (
     <div className="form">
-        <h3>Activate MFA</h3>
-        <div><button onClick={activateMFA}>Activate MFA</button></div>
+        <Typography>Activate MFA</Typography>
+
+        <div><Button label="Activate MFA" onClick={activateMFA}/></div>
         <div>
-            <button onClick={previous}>Previous</button>
+            <Button label="Previous" onClick={previous}/>
         </div>
     </div>
 );

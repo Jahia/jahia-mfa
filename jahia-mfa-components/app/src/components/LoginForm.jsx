@@ -1,8 +1,8 @@
 import React, {useEffect} from "react";
 
-import ItemForm from "./ItemForm";
 import {useLazyQuery} from "@apollo/client";
 import {verifyMFAStatusQuery} from "../graphQL/MFAmanagement.gql";
+import {Typography, Input,Button,Separator} from '@jahia/moonstone';
 
 const LoginForm = ({ setForm, formData, navigation, headers}) => {
   const { username, password } = formData;
@@ -36,21 +36,21 @@ const LoginForm = ({ setForm, formData, navigation, headers}) => {
     return (
 
     <div className="form">
+        <Typography>Login Form</Typography>
         <div>
-      <ItemForm
-        label="Username"
+      <Input placeholder="Username"
         name="username"
         value={username}
         onChange={setForm}
-      />
-      <ItemForm
-        label="Password"
+      /></div>
+
+       <div> <Input placeholder="Password"
         name="password"
         value={password}
         onChange={setForm}
-      />
-        </div>
-        <button onClick={verifyMFAStatus}>Login</button>
+      /></div>
+
+        <Button label={'Login'} onClick={verifyMFAStatus}/>
     </div>
   );
 };

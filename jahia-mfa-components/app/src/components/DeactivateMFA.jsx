@@ -3,6 +3,7 @@ import React, {useEffect } from 'react';
 import {useMutation} from '@apollo/client';
 
 import {activateMFAQuery} from '../graphQL/MFAmanagement.gql';
+import {Typography,Button} from "@jahia/moonstone";
 
 const DeactivateMFA = ({ setForm, formData, navigation }) => {
     const Buffer = require('buffer').Buffer
@@ -31,10 +32,10 @@ const DeactivateMFA = ({ setForm, formData, navigation }) => {
 
 return (
     <div className="form">
-        <h3>Deactivate MFA</h3>
-        <div><button onClick={deactivateMFA}>Deactivate MFA</button></div>
+        <Typography>Deactivate MFA</Typography>
+        <div><Button label="Deactivate MFA" onClick={deactivateMFA}/></div>
         <div>
-            <button onClick={previous}>Previous</button>
+            <Button label="Previous" onClick={previous}></Button>
         </div>
     </div>
 );

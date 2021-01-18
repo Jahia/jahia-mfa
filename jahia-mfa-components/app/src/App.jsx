@@ -4,6 +4,8 @@ import './App.css';
 import MultiStepForm from "./components/MultiStepForm.jsx";
 import {ApolloProvider, ApolloClient, InMemoryCache,HttpLink} from '@apollo/client';
 import { config } from "./config";
+import {GlobalStyle} from '@jahia/moonstone';
+
 
 if (config.dxHost){
     var uriGraphQL = config.dxHost + "/modules/graphql"
@@ -25,10 +27,13 @@ const client = new ApolloClient({
 function App() {
   return (
       <ApolloProvider client={client}>
+          <GlobalStyle/>
     <div className="App">
-      <header className="App-header">
-        <MultiStepForm />
-      </header>
+          <header className="App-header">
+              <div className="container">
+                    <MultiStepForm />
+              </div>
+          </header>
     </div>
       </ApolloProvider>
   );
