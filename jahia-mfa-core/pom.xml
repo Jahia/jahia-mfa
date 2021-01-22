@@ -23,7 +23,7 @@
         <export-package>org.jahia.modules.mfa.provider,org.jahia.modules.mfa.service,org.jahia.modules.mfa.valve,org.jahia.modules.mfa.graphql.extensions</export-package>
         <import-package>org.jahia.taglibs.functions</import-package>
         <require-capability>osgi.extender;filter:="(osgi.extender=org.jahia.bundles.blueprint.extender.config)"</require-capability>
-        <jahia-depends>default,forms-core,jahia-registration</jahia-depends>
+        <jahia-depends>default</jahia-depends>
     </properties>
     <dependencies>
         <dependency>
