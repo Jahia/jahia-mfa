@@ -36,7 +36,7 @@ const LoginForm = ({ setForm, formData, navigation, headers}) => {
     return (
 
     <div className="form">
-        <Typography>Login Form</Typography>
+        <Typography component="h1">Login Form</Typography>
         <div>
       <Input placeholder="Username"
         name="username"
@@ -44,7 +44,7 @@ const LoginForm = ({ setForm, formData, navigation, headers}) => {
         onChange={setForm}
       /></div>
 
-       <div> <Input placeholder="Password"
+       <div> <Input  type="password" placeholder="Password"
         name="password"
         value={password}
         onChange={setForm}
