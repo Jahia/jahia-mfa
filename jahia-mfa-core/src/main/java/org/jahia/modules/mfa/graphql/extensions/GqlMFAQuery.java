@@ -85,7 +85,7 @@ public class GqlMFAQuery {
 
             }
         }
-        return siteEnforceMFA && userHasMFA;
+        return siteEnforceMFA || userHasMFA;
     }
 
     @GraphQLField
