@@ -61,7 +61,7 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
             });
         } catch (IllegalStateException ex) {
             LOGGER.error(String.format("Impossible to decrypt secret key for user %s, something has changed. Deactivating MFA for this user.", userNode.getUserKey()), ex);
-            deactivateMFA(userNode);
+            getJahiaMFAService().deactivateMFA(userNode, KEY);
             return false;
         } catch (RepositoryException ex) {
             LOGGER.error(String.format("Impossible to vertify OTP code for user %s", userNode.getUserKey()), ex);
