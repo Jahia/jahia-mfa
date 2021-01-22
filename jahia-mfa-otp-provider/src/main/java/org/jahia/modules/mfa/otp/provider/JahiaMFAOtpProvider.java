@@ -59,6 +59,10 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
                     return isValidLong(token) && totp.verify(token);
                 }
             });
+        } catch (IllegalStateException ex) {
+            LOGGER.error(String.format("Impossible to decrypt secret key for user %s, something has changed. Deactivating MFA for this user.", userNode.getUserKey()), ex);
+            getJahiaMFAService().deactivateMFA(userNode, KEY);
+            return false;
         } catch (RepositoryException ex) {
             LOGGER.error(String.format("Impossible to vertify OTP code for user %s", userNode.getUserKey()), ex);
             return false;
@@ -161,6 +165,7 @@ public class JahiaMFAOtpProvider extends JahiaMFAProvider {
             final byte[] decValue = cipher.doFinal(Base64.getDecoder().decode(encryptedSecretKey));
             return new String(decValue, Charsets.UTF_8);
         } catch (Exception ex) {
+            
             throw new IllegalStateException("Impossible to decrypt secret key", ex);
         }
     }

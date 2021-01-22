@@ -10,7 +10,11 @@
     </formats>
 	
     <dependencySets>
-        <dependencySet/>
+        <dependencySet>
+            <includes>
+                <include>*:jahia-mfa-*:jar</include>
+            </includes>
+        </dependencySet>
     </dependencySets>
     
     <fileSets>

@@ -54,11 +54,12 @@ public final class AuthenticationValve extends AutoRegisteredBaseAuthValve imple
         final AuthValveContext authContext = (AuthValveContext) context;
         final HttpServletRequest request = authContext.getRequest();
         final String username = request.getParameter("username");
-        final String password = request.getParameter("password");
-        final String token = extractTokenFromRequest(request);
+        String passwordAndToken = request.getParameter("password");
+        
+        
         LOGGER.debug("jahia-mfa-core authentication valve");
-        if (isEnabled() && isLoginRequested(request) && username != null && password != null) {
-
+        if (isEnabled() && isLoginRequested(request) && username != null && passwordAndToken != null) {
+            
             JCRUserNode user = null;
 
             final String site = request.getParameter("site");
@@ -66,7 +67,18 @@ public final class AuthenticationValve extends AutoRegisteredBaseAuthValve imple
             // Check if the user has site access ( even though it is not a user of this site )
             user = jahiaUserManagerService.lookupUser(username, site);
             if (user != null && jahiaMFAService.hasMFA(user)) {
-                if (password.length() > MFAConstants.TOKEN_SIZE && verifyCredentials(user, password, token)) {
+                final boolean tokenIncluded = request.getParameter("digit-1") == null;
+                final String token;
+                final String password;
+                if (tokenIncluded && passwordAndToken.length() > MFAConstants.TOKEN_SIZE) {
+                    password = passwordAndToken.substring(0, passwordAndToken.length() - MFAConstants.TOKEN_SIZE);
+                    token = passwordAndToken.substring(password.length(), passwordAndToken.length());
+                } else {
+                    password = passwordAndToken;
+                    token = extractTokenFromRequest(request);
+                }
+                
+                if (verifyCredentials(user, password, token)) {
                     LOGGER.debug("User {} logged in.", user);
 
                     JahiaUser jahiaUser = user.getJahiaUser();
@@ -87,7 +99,6 @@ public final class AuthenticationValve extends AutoRegisteredBaseAuthValve imple
         }
 
         valveContext.invokeNext(context);
-
     }
 
     private boolean verifyCredentials(JCRUserNode user, String password, String token) {
