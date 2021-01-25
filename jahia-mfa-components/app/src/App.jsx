@@ -30,7 +30,7 @@ function App() {
           <GlobalStyle/>
     <div className="App">
           <header className="App-header">
-              <div className="container">
+              <div>
                     <MultiStepForm />
               </div>
           </header>
