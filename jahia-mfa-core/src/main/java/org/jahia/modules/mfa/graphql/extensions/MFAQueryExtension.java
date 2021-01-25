@@ -24,7 +24,7 @@ public class MFAQueryExtension {
     @GraphQLField
     @GraphQLName("mfa")
     @GraphQLDescription("MFA queries")
-    public GqlMFAQuery mfa() {
+    public static GqlMFAQuery mfa() {
         return new GqlMFAQuery();
     }
 }

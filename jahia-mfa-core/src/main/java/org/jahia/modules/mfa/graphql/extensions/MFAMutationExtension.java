@@ -24,7 +24,7 @@ public class MFAMutationExtension {
     @GraphQLField
     @GraphQLName("mfa")
     @GraphQLDescription("MFA mutations")
-    public GqlMFAMutation mfa() {
+    public static GqlMFAMutation mfa() {
         return new GqlMFAMutation();
     }
 }
