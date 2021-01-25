@@ -8,7 +8,7 @@ public abstract class JahiaMFAProvider {
     private final String key;
     private JahiaMFAService jahiaMFAService;
 
-    public JahiaMFAProvider(String key) {
+    protected JahiaMFAProvider(String key) {
         this.key = key;
     }
 

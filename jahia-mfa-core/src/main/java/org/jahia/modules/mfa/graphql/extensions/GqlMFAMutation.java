@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2002-2020 Jahia Solutions Group SA. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.jahia.modules.mfa.graphql.extensions;
 
 import graphql.annotations.annotationTypes.GraphQLDescription;
@@ -36,16 +21,18 @@ public class GqlMFAMutation {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GqlMFAMutation.class);
 
+    protected GqlMFAMutation() {
+    }
 
     // Suppress 8 param warning
     @GraphQLField
     @GraphQLName("activateMFA")
     @GraphQLDescription("Activate MFA")
-    public static boolean activateMFA(
+    public boolean activateMFA(
             @GraphQLName(MFAConstants.PARAM_PROVIDER) @GraphQLDescription("MFA Provider") @GraphQLNonNull String provider,
             @GraphQLName(MFAConstants.PARAM_ACTIVATE) @GraphQLDescription("Activate or Deactivate MFA") @GraphQLNonNull Boolean activation
     ) {
-        JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean("jahiaMFAServiceImpl");
+        JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean(MFAConstants.BEAN_MFA_SERVICE);
         final JCRUserNode userNode = Utils.getUserNode(JCRSessionFactory.getInstance().getCurrentUser());
         if (jahiaMFAService != null) {
             try {
@@ -77,14 +64,14 @@ public class GqlMFAMutation {
     @GraphQLField
     @GraphQLName("prepareMFA")
     @GraphQLDescription("Preparing MFA")
-    public static boolean prepareMFA(
+    public boolean prepareMFA(
             @GraphQLName(MFAConstants.PARAM_PASSWORD) @GraphQLDescription("password") @GraphQLNonNull String password,
             @GraphQLName(MFAConstants.PARAM_PROVIDER) @GraphQLDescription("provider") String provider
     ) {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("preparing MFA Enforcement");
         }
-        JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean("jahiaMFAServiceImpl");
+        JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean(MFAConstants.BEAN_MFA_SERVICE);
         if (jahiaMFAService != null) {
             final JCRUserNode userNode = Utils.getUserNode(JCRSessionFactory.getInstance().getCurrentUser());
             try {

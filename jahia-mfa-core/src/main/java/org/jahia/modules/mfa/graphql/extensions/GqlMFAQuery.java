@@ -1,24 +1,10 @@
-/*
- * Copyright (C) 2002-2020 Jahia Solutions Group SA. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.jahia.modules.mfa.graphql.extensions;
 
 import graphql.annotations.annotationTypes.GraphQLDescription;
 import graphql.annotations.annotationTypes.GraphQLField;
 import graphql.annotations.annotationTypes.GraphQLName;
 import graphql.annotations.annotationTypes.GraphQLNonNull;
+import javax.jcr.RepositoryException;
 import org.apache.commons.lang.StringUtils;
 import org.jahia.modules.mfa.MFAConstants;
 import org.jahia.modules.mfa.service.JahiaMFAService;
@@ -31,8 +17,6 @@ import org.jahia.services.usermanager.JahiaUserManagerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.jcr.RepositoryException;
-
 /**
  * PersonalApiTokens mutation type
  */
@@ -42,12 +26,14 @@ public class GqlMFAQuery {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GqlMFAQuery.class);
 
+    protected GqlMFAQuery(){
+    }
 
     // Suppress 8 param warning
     @GraphQLField
     @GraphQLName("verifyMFAEnforcement")
     @GraphQLDescription("verify MFA Enforcement")
-    public static boolean verifyMFAEnforcementExtension(
+    public boolean verifyMFAEnforcementExtension(
             @GraphQLName(MFAConstants.PARAM_USERNAME) @GraphQLDescription("username of current user") @GraphQLNonNull String username,
             @GraphQLName(MFAConstants.PARAM_SITEKEY) @GraphQLDescription("site key") @GraphQLNonNull String siteKey
     ) {
@@ -57,7 +43,7 @@ public class GqlMFAQuery {
             LOGGER.info("verifying MFA Enforcement");
         }
 
-        final JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean("jahiaMFAServiceImpl");
+        final JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean(MFAConstants.BEAN_MFA_SERVICE);
         if (jahiaMFAService != null) {
             if (!StringUtils.isEmpty(siteKey)) {
                 try {
@@ -91,13 +77,13 @@ public class GqlMFAQuery {
     @GraphQLField
     @GraphQLName("verifyToken")
     @GraphQLDescription("verify Token")
-    public static boolean VerifyTokenExtension(
+    public boolean verifyTokenExtension(
             @GraphQLName(MFAConstants.PARAM_PASSWORD) @GraphQLDescription("password") @GraphQLNonNull String password,
             @GraphQLName(MFAConstants.PARAM_PROVIDER) @GraphQLDescription("provider") @GraphQLNonNull String provider,
             @GraphQLName(MFAConstants.PARAM_TOKEN) @GraphQLDescription("MFA Token") @GraphQLNonNull String token
     ){
         LOGGER.info("verifying token");
-        JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean("jahiaMFAServiceImpl");
+        JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean(MFAConstants.BEAN_MFA_SERVICE);
         if (jahiaMFAService != null) {
             final JCRUserNode userNode = Utils.getUserNode(JCRSessionFactory.getInstance().getCurrentUser());
             try {
