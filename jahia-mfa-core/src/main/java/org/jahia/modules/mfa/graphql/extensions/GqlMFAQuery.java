@@ -26,14 +26,11 @@ public class GqlMFAQuery {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GqlMFAQuery.class);
 
-    protected GqlMFAQuery(){
-    }
-
     // Suppress 8 param warning
     @GraphQLField
     @GraphQLName("verifyMFAEnforcement")
     @GraphQLDescription("verify MFA Enforcement")
-    public boolean verifyMFAEnforcementExtension(
+    public static boolean verifyMFAEnforcementExtension(
             @GraphQLName(MFAConstants.PARAM_USERNAME) @GraphQLDescription("username of current user") @GraphQLNonNull String username,
             @GraphQLName(MFAConstants.PARAM_SITEKEY) @GraphQLDescription("site key") @GraphQLNonNull String siteKey
     ) {
@@ -81,7 +78,7 @@ public class GqlMFAQuery {
             @GraphQLName(MFAConstants.PARAM_PASSWORD) @GraphQLDescription("password") @GraphQLNonNull String password,
             @GraphQLName(MFAConstants.PARAM_PROVIDER) @GraphQLDescription("provider") @GraphQLNonNull String provider,
             @GraphQLName(MFAConstants.PARAM_TOKEN) @GraphQLDescription("MFA Token") @GraphQLNonNull String token
-    ){
+    ) {
         LOGGER.info("verifying token");
         JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean(MFAConstants.BEAN_MFA_SERVICE);
         if (jahiaMFAService != null) {

@@ -12,7 +12,7 @@ import org.jahia.modules.graphql.provider.dxm.DXGraphQLProvider;
 @GraphQLTypeExtension(DXGraphQLProvider.Query.class)
 @GraphQLDescription("Queries for MFA")
 public class MFAQueryExtension {
-    
+
     private MFAQueryExtension(){
     }
 

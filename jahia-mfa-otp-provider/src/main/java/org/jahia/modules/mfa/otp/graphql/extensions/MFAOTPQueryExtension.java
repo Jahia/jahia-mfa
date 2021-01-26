@@ -12,9 +12,6 @@ import org.jahia.modules.graphql.provider.dxm.DXGraphQLProvider;
 @GraphQLTypeExtension(DXGraphQLProvider.Query.class)
 @GraphQLDescription("Queries for MFA OTP")
 public class MFAOTPQueryExtension {
-    
-    private  MFAOTPQueryExtension(){
-    }
 
     /**
      * mfa
@@ -24,7 +21,7 @@ public class MFAOTPQueryExtension {
     @GraphQLField
     @GraphQLName("mfaOTP")
     @GraphQLDescription("MFA queries")
-    public GqlMFAOTPQuery mfaOTP() {
+    public static GqlMFAOTPQuery mfaOTP() {
         return new GqlMFAOTPQuery();
     }
 }

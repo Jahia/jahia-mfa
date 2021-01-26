@@ -28,7 +28,7 @@ public class GqlMFAMutation {
     @GraphQLField
     @GraphQLName("activateMFA")
     @GraphQLDescription("Activate MFA")
-    public boolean activateMFA(
+    public static boolean activateMFA(
             @GraphQLName(MFAConstants.PARAM_PROVIDER) @GraphQLDescription("MFA Provider") @GraphQLNonNull String provider,
             @GraphQLName(MFAConstants.PARAM_ACTIVATE) @GraphQLDescription("Activate or Deactivate MFA") @GraphQLNonNull Boolean activation
     ) {
@@ -89,5 +89,4 @@ public class GqlMFAMutation {
         }
         return false;
     }
-
 }

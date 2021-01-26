@@ -37,13 +37,10 @@ public class GqlMFAOTPQuery {
     private static final Logger LOGGER = LoggerFactory.getLogger(GqlMFAOTPQuery.class);
     private static final int QRCODE_SIZE = 200;
 
-    protected GqlMFAOTPQuery(){
-    }
-    
     @GraphQLField
     @GraphQLName("verifyMFAStatus")
     @GraphQLDescription("verify the MFA status for the current user")
-    public boolean verifyMFAStatus() {
+    public static boolean verifyMFAStatus() {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("verifying MFA Status");
         }
