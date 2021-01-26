@@ -61,7 +61,12 @@ public class GqlMFAQuery {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug(String.format("VerifyMFAEnforcementAction for user %s", username));
                 }
-                JCRUserNode usernode = JahiaUserManagerService.getInstance().lookupUser(username);
+                JCRUserNode usernode;
+                // lookup for the user at the system level
+                usernode = JahiaUserManagerService.getInstance().lookupUser(username);
+                if (usernode == null)
+                    // if not found, lookup for the user at the site level
+                    usernode = JahiaUserManagerService.getInstance().lookupUser(username,siteKey);
                 if (usernode != null && jahiaMFAService.hasMFA(usernode)) {
                     userHasMFA = true;
                 }
