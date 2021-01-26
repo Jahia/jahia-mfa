@@ -38,8 +38,8 @@
         
     <modules>
         <module>jahia-mfa-core</module>
-        <module>jahia-mfa-components</module>
         <module>jahia-mfa-otp-provider</module>
+        <module>jahia-mfa-components</module>
     </modules>
     
     <dependencies>
