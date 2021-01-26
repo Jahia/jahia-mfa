@@ -19,7 +19,7 @@
 
     <properties>
         <jahia-module-signature>MCwCFEIojXghJ9m49/xseknVQun/LY1pAhQuknICu+EQwAxTRQmvBOh0dPihOg==</jahia-module-signature>
-        <jahia-depends>default</jahia-depends>
+        <jahia-depends>default, jahia-mfa-core, jahia-mfa-otp-provider</jahia-depends>
     </properties>
 
     <build>
