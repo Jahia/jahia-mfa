@@ -14,7 +14,7 @@
     <name>Jahia MFA OTP Provider</name>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
-    <description>This is the custom module (Jahia MFA OTP Provider) for running on a Jahia server.</description>
+    <description>OTP provider module for Jahia MFA: use of Google Authenticator for the additionnal factor of authentication.</description>
     <properties>
         <import-package>org.jahia.modules.mfa.impl,org.jahia.modules.mfa.provider,org.jahia.modules.mfa.service</import-package>
         <jahia-depends>default, graphql-dxm-provider, jahia-mfa-core</jahia-depends>

@@ -15,11 +15,11 @@
     <name>Jahia MFA components</name>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
-    <description>This is the custom module (Jahia MFA componenets) for running on a Jahia server.</description>
+    <description>Sample UI elements made with ReactJS in order to activate/deactivate Jahia MFA with the OTP provider.</description>
 
     <properties>
-        <jahia-module-signature>MCwCFEIojXghJ9m49/xseknVQun/LY1pAhQuknICu+EQwAxTRQmvBOh0dPihOg==</jahia-module-signature>
         <jahia-depends>default,jahia-mfa-core,jahia-mfa-otp-provider</jahia-depends>
+        <jahia-module-signature>MCwCFEIojXghJ9m49/xseknVQun/LY1pAhQuknICu+EQwAxTRQmvBOh0dPihOg==</jahia-module-signature>
     </properties>
     
     <dependencies>

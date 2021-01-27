@@ -12,7 +12,7 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>Jahia MFA Core</name>
-    <description>This is the custom module (Jahia 2FA) for running on a Jahia server.</description>
+    <description>2FA Core module in order to allow JAHIA 2FA authentication.</description>
 
     <properties>
         <export-package>org.jahia.modules.mfa.impl,org.jahia.modules.mfa.provider,org.jahia.modules.mfa.service,org.jahia.modules.mfa.valve,org.jahia.modules.mfa.graphql.extensions</export-package>
