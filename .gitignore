@@ -22,4 +22,4 @@ Thumbs.db
 *.DS_Store
 
 # NodeJS generated code
-jahia-mfa-components/src/main/resources/javascript/apps/
+jahia-mfa-otp-components/src/main/resources/javascript/apps/

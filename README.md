@@ -3,6 +3,8 @@ This document provides documentation on the Jahia Multi Factor Authentication (M
 
 Github Repository: https://github.com/Jahia/jahia-mfa
 
+---
+
 # MFA Core
 ## Description
 The module provides the core functionality of Multi Factor Authentication. It provides a MFA service that can register different type of MFA providers (OTP, SMS, Email, Phone...). It also implement the core authentication mechanism at the Jahia level to leverage MFA.
@@ -67,6 +69,9 @@ The MFA Core module expose the following GraphQL endpoints:
             verifyToken (password:$password,provider:$provider,token:$token)
         } 
     }
+
+---
+
 # MFA OTP Provider
 ## Description
 The module implements an MFA Provider that will be register by our MFA Service. This specific MFA Provider uses One Time Password (OTP).
@@ -86,6 +91,8 @@ The module implements an MFA Provider that will be register by our MFA Service. 
             verifyMFAStatus
         }
     }
+
+---
 
 # MFA OTP Component
 ## Description

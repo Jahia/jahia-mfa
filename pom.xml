@@ -26,7 +26,7 @@
         <jahia.final.package.name>Jahia MFA - EnterpriseDistribution</jahia.final.package.name>
         <jahia.manifest.package.id>org.jahia.mfa</jahia.manifest.package.id>
         <jahia-key>org.jahia.mfa</jahia-key>
-        <jahia.manifest.description>jahia-mfa-core, jahia-mfa-components, jahia-mfa-otp-provider</jahia.manifest.description>
+        <jahia.manifest.description>jahia-mfa-core, jahia-mfa-otp-components, jahia-mfa-otp-provider</jahia.manifest.description>
         <jahia-module-signature>MCwCFElxrxbny/rMX7y3PXSLOCiITNUBAhQeYlOrHWNy9xv46mXeWh1BfCYq2Q==</jahia-module-signature>
         <jahia.manifest.license>org.jahia.core</jahia.manifest.license>
     </properties>
@@ -54,7 +54,7 @@
     <modules>
         <module>jahia-mfa-core</module>
         <module>jahia-mfa-otp-provider</module>
-        <module>jahia-mfa-components</module>
+        <module>jahia-mfa-otp-components</module>
     </modules>
     
     <dependencies>
@@ -65,7 +65,7 @@
         </dependency>
         <dependency>
             <groupId>org.jahia.modules</groupId>
-            <artifactId>jahia-mfa-components</artifactId>
+            <artifactId>jahia-mfa-otp-components</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
