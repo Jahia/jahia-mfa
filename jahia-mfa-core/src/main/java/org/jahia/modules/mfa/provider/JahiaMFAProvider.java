@@ -18,14 +18,11 @@ public abstract class JahiaMFAProvider {
 
     public final void setJahiaMFAService(JahiaMFAService jahiaMFAService) {
         this.jahiaMFAService = jahiaMFAService;
+        this.jahiaMFAService.addProvider(this);
     }
 
     public final JahiaMFAService getJahiaMFAService() {
         return jahiaMFAService;
-    }
-
-    public final void register() {
-        jahiaMFAService.addProvider(this);
     }
 
     public final void unregister() {
