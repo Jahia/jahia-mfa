@@ -22,12 +22,6 @@
         <jahia-module-signature>MC0CFQCGEYFWVKocV4UXiBpabgo9VauJ/QIUSldapWlv0LLhoh38E/TjzoAa0+I=</jahia-module-signature>
     </properties>
 
-
-    <scm>
-        <connection>scm:dummy:uri</connection>
-        <developerConnection>scm:dummy:uri</developerConnection>
-    </scm>
-
     <repositories>
         <repository>
             <id>jahia-public</id>
