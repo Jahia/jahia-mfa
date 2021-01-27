@@ -19,8 +19,23 @@
 
     <properties>
         <jahia-module-signature>MCwCFEIojXghJ9m49/xseknVQun/LY1pAhQuknICu+EQwAxTRQmvBOh0dPihOg==</jahia-module-signature>
-        <jahia-depends>default, jahia-mfa-core, jahia-mfa-otp-provider</jahia-depends>
+        <jahia-depends>default,jahia-mfa-core,jahia-mfa-otp-provider</jahia-depends>
     </properties>
+    
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jahia-mfa-core</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jahia-mfa-otp-provider</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
     <build>
         <resources>
