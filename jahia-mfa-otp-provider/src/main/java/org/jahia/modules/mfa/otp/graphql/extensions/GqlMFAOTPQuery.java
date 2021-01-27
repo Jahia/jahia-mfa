@@ -15,10 +15,10 @@ import java.util.Base64;
 import javax.jcr.RepositoryException;
 import org.jahia.modules.mfa.MFAConstants;
 import org.jahia.modules.mfa.graphql.extensions.Utils;
+import org.jahia.modules.mfa.impl.JahiaMFAServiceImpl;
 import org.jahia.modules.mfa.otp.provider.Constants;
 import org.jahia.modules.mfa.otp.provider.JahiaMFAOtpProvider;
 import org.jahia.modules.mfa.service.JahiaMFAService;
-import org.jahia.services.SpringContextSingleton;
 import org.jahia.services.content.JCRSessionFactory;
 import org.jahia.services.content.decorator.JCRUserNode;
 import org.json.JSONException;
@@ -44,7 +44,7 @@ public class GqlMFAOTPQuery {
             LOGGER.info("verifying MFA Status");
         }
 
-        final JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean(MFAConstants.BEAN_MFA_SERVICE);
+        final JahiaMFAService jahiaMFAService = JahiaMFAServiceImpl.getInstance();
         final JCRUserNode userNode = Utils.getUserNode(JCRSessionFactory.getInstance().getCurrentUser());
 
         if (jahiaMFAService != null && userNode != null) {
@@ -62,7 +62,7 @@ public class GqlMFAOTPQuery {
         final JSONObject jsonObject = new JSONObject();
         LOGGER.info("retrieving OPT QR Code");
         final JCRUserNode userNode = Utils.getUserNode(JCRSessionFactory.getInstance().getCurrentUser());
-        final JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean(MFAConstants.BEAN_MFA_SERVICE);
+        final JahiaMFAService jahiaMFAService = JahiaMFAServiceImpl.getInstance();
 
         if (JahiaMFAOtpProvider.isActivated(userNode) && !jahiaMFAService.hasMFA(userNode) && password != null) {
             final String oTPKey = JahiaMFAOtpProvider.decryptTotpSecretKey(userNode.getNode(MFAConstants.NODE_NAME_MFA).getPropertyAsString(

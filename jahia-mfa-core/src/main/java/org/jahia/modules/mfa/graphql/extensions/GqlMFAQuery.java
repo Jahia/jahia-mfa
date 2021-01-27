@@ -7,8 +7,8 @@ import graphql.annotations.annotationTypes.GraphQLNonNull;
 import javax.jcr.RepositoryException;
 import org.apache.commons.lang.StringUtils;
 import org.jahia.modules.mfa.MFAConstants;
+import org.jahia.modules.mfa.impl.JahiaMFAServiceImpl;
 import org.jahia.modules.mfa.service.JahiaMFAService;
-import org.jahia.services.SpringContextSingleton;
 import org.jahia.services.content.JCRSessionFactory;
 import org.jahia.services.content.JCRSessionWrapper;
 import org.jahia.services.content.decorator.JCRSiteNode;
@@ -40,7 +40,7 @@ public class GqlMFAQuery {
             LOGGER.info("verifying MFA Enforcement");
         }
 
-        final JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean(MFAConstants.BEAN_MFA_SERVICE);
+        final JahiaMFAService jahiaMFAService = JahiaMFAServiceImpl.getInstance();
         if (jahiaMFAService != null) {
             if (!StringUtils.isEmpty(siteKey)) {
                 try {
@@ -86,7 +86,7 @@ public class GqlMFAQuery {
             @GraphQLName(MFAConstants.PARAM_TOKEN) @GraphQLDescription("MFA Token") @GraphQLNonNull String token
     ) {
         LOGGER.info("verifying token");
-        JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean(MFAConstants.BEAN_MFA_SERVICE);
+        final JahiaMFAService jahiaMFAService = JahiaMFAServiceImpl.getInstance();
         if (jahiaMFAService != null) {
             final JCRUserNode userNode = Utils.getUserNode(JCRSessionFactory.getInstance().getCurrentUser());
             try {

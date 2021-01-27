@@ -5,8 +5,8 @@ import graphql.annotations.annotationTypes.GraphQLField;
 import graphql.annotations.annotationTypes.GraphQLName;
 import graphql.annotations.annotationTypes.GraphQLNonNull;
 import org.jahia.modules.mfa.MFAConstants;
+import org.jahia.modules.mfa.impl.JahiaMFAServiceImpl;
 import org.jahia.modules.mfa.service.JahiaMFAService;
-import org.jahia.services.SpringContextSingleton;
 import org.jahia.services.content.JCRSessionFactory;
 import org.jahia.services.content.decorator.JCRUserNode;
 import org.slf4j.Logger;
@@ -32,31 +32,31 @@ public class GqlMFAMutation {
             @GraphQLName(MFAConstants.PARAM_PROVIDER) @GraphQLDescription("MFA Provider") @GraphQLNonNull String provider,
             @GraphQLName(MFAConstants.PARAM_ACTIVATE) @GraphQLDescription("Activate or Deactivate MFA") @GraphQLNonNull Boolean activation
     ) {
-        JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean(MFAConstants.BEAN_MFA_SERVICE);
+        final JahiaMFAService jahiaMFAService = JahiaMFAServiceImpl.getInstance();
         final JCRUserNode userNode = Utils.getUserNode(JCRSessionFactory.getInstance().getCurrentUser());
-        if (jahiaMFAService != null) {
-            try {
-                if (provider != null && Utils.isCorrectUser(userNode)) {
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug(String.format("ActivateMFAAction for user %s", userNode.getName()));
-                    }
-                    if (Boolean.TRUE.equals(activation)) {
-                        if (LOGGER.isInfoEnabled()) {
-                            LOGGER.info("activating MFA");
-                        }
-                        jahiaMFAService.activateMFA(userNode, provider);
-                    } else {
-                        if (LOGGER.isInfoEnabled()) {
-                            LOGGER.info("deactivating MFA");
-                        }
-                        jahiaMFAService.deactivateMFA(userNode, provider);
-                    }
-                    return true;
+        try {
+
+            if (jahiaMFAService != null && provider != null && Utils.isCorrectUser(userNode)) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug(String.format("ActivateMFAAction for user %s", userNode.getName()));
                 }
-            } catch (Exception ex) {
-                LOGGER.error(String.format("Impossible to prepare MFA for user %s", userNode.getPath()), ex);
-                return false;
+                if (Boolean.TRUE.equals(activation)) {
+                    if (LOGGER.isInfoEnabled()) {
+                        LOGGER.info("activating MFA");
+                    }
+                    jahiaMFAService.activateMFA(userNode, provider);
+                } else {
+                    if (LOGGER.isInfoEnabled()) {
+                        LOGGER.info("deactivating MFA");
+                    }
+                    jahiaMFAService.deactivateMFA(userNode, provider);
+                }
+                return true;
+
             }
+        } catch (Exception ex) {
+            LOGGER.error(String.format("Impossible to prepare MFA for user %s", userNode.getPath()), ex);
+            return false;
         }
         return false;
     }
@@ -71,7 +71,7 @@ public class GqlMFAMutation {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("preparing MFA Enforcement");
         }
-        JahiaMFAService jahiaMFAService = (JahiaMFAService) SpringContextSingleton.getBean(MFAConstants.BEAN_MFA_SERVICE);
+        final JahiaMFAService jahiaMFAService = JahiaMFAServiceImpl.getInstance();
         if (jahiaMFAService != null) {
             final JCRUserNode userNode = Utils.getUserNode(JCRSessionFactory.getInstance().getCurrentUser());
             try {

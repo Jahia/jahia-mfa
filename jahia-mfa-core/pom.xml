@@ -15,7 +15,7 @@
     <description>This is the custom module (Jahia 2FA) for running on a Jahia server.</description>
 
     <properties>
-        <export-package>org.jahia.modules.mfa.provider,org.jahia.modules.mfa.service,org.jahia.modules.mfa.valve,org.jahia.modules.mfa.graphql.extensions</export-package>
+        <export-package>org.jahia.modules.mfa.impl,org.jahia.modules.mfa.provider,org.jahia.modules.mfa.service,org.jahia.modules.mfa.valve,org.jahia.modules.mfa.graphql.extensions</export-package>
         <import-package>org.jahia.taglibs.functions</import-package>
         <jahia-depends>default, graphql-dxm-provider</jahia-depends>
         <jahia-deploy-on-site>system</jahia-deploy-on-site>
