@@ -9,6 +9,10 @@ import graphql.annotations.annotationTypes.GraphQLDescription;
 import graphql.annotations.annotationTypes.GraphQLField;
 import graphql.annotations.annotationTypes.GraphQLName;
 import graphql.annotations.annotationTypes.GraphQLNonNull;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Base64;
+import javax.jcr.RepositoryException;
 import org.jahia.modules.mfa.MFAConstants;
 import org.jahia.modules.mfa.graphql.extensions.Utils;
 import org.jahia.modules.mfa.otp.provider.Constants;
@@ -21,11 +25,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.jcr.RepositoryException;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.Base64;
 
 /**
  * PersonalApiTokens mutation type

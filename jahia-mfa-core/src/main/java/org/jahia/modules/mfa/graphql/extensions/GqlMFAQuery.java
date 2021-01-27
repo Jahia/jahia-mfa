@@ -64,9 +64,10 @@ public class GqlMFAQuery {
                 JCRUserNode usernode;
                 // lookup for the user at the system level
                 usernode = JahiaUserManagerService.getInstance().lookupUser(username);
-                if (usernode == null)
+                if (usernode == null) {
                     // if not found, lookup for the user at the site level
                     usernode = JahiaUserManagerService.getInstance().lookupUser(username,siteKey);
+                }
                 if (usernode != null && jahiaMFAService.hasMFA(usernode)) {
                     userHasMFA = true;
                 }

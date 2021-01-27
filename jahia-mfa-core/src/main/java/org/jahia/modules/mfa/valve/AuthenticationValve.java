@@ -2,8 +2,6 @@ package org.jahia.modules.mfa.valve;
 
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
-
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormatVisitor;
 import org.apache.commons.httpclient.HttpURL;
 import org.apache.commons.httpclient.HttpsURL;
 import org.apache.commons.lang3.StringUtils;
@@ -15,17 +13,17 @@ import org.jahia.modules.mfa.servlet.MFAServlet;
 import org.jahia.params.valves.*;
 import org.jahia.pipelines.Pipeline;
 import org.jahia.pipelines.PipelineException;
+import org.jahia.pipelines.valves.Valve;
 import org.jahia.pipelines.valves.ValveContext;
 import org.jahia.services.content.JCRNodeWrapper;
 import org.jahia.services.content.decorator.JCRUserNode;
 import org.jahia.services.usermanager.JahiaUser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.jahia.pipelines.valves.Valve;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component(service = {Valve.class, LoginUrlProvider.class, LogoutUrlProvider.class}, immediate = true)
 public final class AuthenticationValve extends BaseAuthValve implements LoginUrlProvider {
