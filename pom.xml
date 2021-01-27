@@ -35,7 +35,22 @@
         <connection>https://github.com/Jahia/jahia-mfa</connection>
         <developerConnection>https://github.com/Jahia/jahia-mfa</developerConnection>
     </scm>
-        
+
+    <repositories>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>jahia-public</id>
+            <name>Jahia Public Repository</name>
+            <url>https://devtools.jahia.com/nexus/content/groups/public</url>
+        </repository>
+    </repositories>
+
     <modules>
         <module>jahia-mfa-core</module>
         <module>jahia-mfa-otp-provider</module>
