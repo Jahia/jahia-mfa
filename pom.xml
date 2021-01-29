@@ -32,8 +32,9 @@
     </properties>
 
     <scm>
-        <connection>https://github.com/Jahia/jahia-mfa</connection>
-        <developerConnection>https://github.com/Jahia/jahia-mfa</developerConnection>
+        <connection>scm:git:git@github.com:Jahia/jahia-mfa.git</connection>
+        <developerConnection>scm:git:git@github.com:Jahia/jahia-mfa.git</developerConnection>
+        <url>https://github.com/Jahia/jahia-mfa</url>
     </scm>
 
     <repositories>
