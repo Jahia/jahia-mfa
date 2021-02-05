@@ -10,14 +10,21 @@
     <groupId>org.jahia.modules</groupId>
     <artifactId>jahia-mfa-otp-components</artifactId>
     <name>Jahia MFA OTP components</name>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <description>Sample UI elements made with ReactJS in order to activate/deactivate Jahia MFA with the OTP provider.</description>
 
     <properties>
         <jahia-depends>default,jahia-mfa-core,jahia-mfa-otp-provider</jahia-depends>
-        <jahia-module-signature>MCwCFEJoozJxOikQgZ3iwe/MkbYI0vy3AhQTb5HvkL16WbNqiYn++9qOUbEYqA==</jahia-module-signature>
+        <jahia-module-signature>MCwCFCLK3/nBxYGEDs0gjH2V3sP3CMX1AhQ7e+9czagL/kwGlgiDeTEkPUQ6bg==</jahia-module-signature>
     </properties>
+    
+    <scm>
+        <connection>scm:git:git@github.com:Jahia/jahia-mfa.git</connection>
+        <developerConnection>scm:git:git@github.com:Jahia/jahia-mfa.git</developerConnection>
+        <url>https://github.com/Jahia/jahia-mfa</url>
+        <tag>HEAD</tag>
+    </scm>
     
     <dependencies>
         <dependency>

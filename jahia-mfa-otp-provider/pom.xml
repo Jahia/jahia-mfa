@@ -9,7 +9,7 @@
     <groupId>org.jahia.modules</groupId>
     <artifactId>jahia-mfa-otp-provider</artifactId>
     <name>Jahia MFA OTP Provider</name>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <description>OTP provider module for Jahia MFA: use of Google Authenticator for the additionnal factor of authentication.</description>
     <properties>
@@ -18,6 +18,12 @@
         <jahia-deploy-on-site>system</jahia-deploy-on-site>
         <jahia-module-signature>MC0CFQCGEYFWVKocV4UXiBpabgo9VauJ/QIUSldapWlv0LLhoh38E/TjzoAa0+I=</jahia-module-signature>
     </properties>
+    <scm>
+        <connection>scm:git:git@github.com:Jahia/jahia-mfa.git</connection>
+        <developerConnection>scm:git:git@github.com:Jahia/jahia-mfa.git</developerConnection>
+        <url>https://github.com/Jahia/jahia-mfa</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <repositories>
         <repository>
@@ -46,16 +52,16 @@
             <artifactId>aerogear-otp-java</artifactId>
             <version>1.0.0</version>
         </dependency>
-            <dependency>
-                <groupId>com.google.zxing</groupId>
-                <artifactId>core</artifactId>
-                <version>3.3.0</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.zxing</groupId>
-                <artifactId>javase</artifactId>
-                <version>3.3.0</version>
-            </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>3.3.0</version>
+        </dependency>
         <dependency>
             <groupId>com.graphql-java</groupId>
             <artifactId>graphql-java</artifactId>
