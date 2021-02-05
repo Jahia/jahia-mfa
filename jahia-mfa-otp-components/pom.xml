@@ -10,7 +10,7 @@
     <groupId>org.jahia.modules</groupId>
     <artifactId>jahia-mfa-otp-components</artifactId>
     <name>Jahia MFA OTP components</name>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <packaging>bundle</packaging>
     <description>Sample UI elements made with ReactJS in order to activate/deactivate Jahia MFA with the OTP provider.</description>
 
@@ -108,4 +108,8 @@
             </plugin>
         </plugins>
     </build>
+
+  <scm>
+    <tag>1_0_1</tag>
+  </scm>
 </project>
