@@ -10,7 +10,7 @@
     
     <groupId>org.jahia.modules</groupId>
     <artifactId>jahia-mfa</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
     
     <name>Jahia MFA</name>
     
@@ -34,7 +34,7 @@
         <connection>scm:git:git@github.com:Jahia/jahia-mfa.git</connection>
         <developerConnection>scm:git:git@github.com:Jahia/jahia-mfa.git</developerConnection>
         <url>https://github.com/Jahia/jahia-mfa</url>
-        <tag>HEAD</tag>
+        <tag>1_0_2</tag>
     </scm>
 
     <repositories>
