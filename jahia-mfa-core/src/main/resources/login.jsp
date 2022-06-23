@@ -25,8 +25,7 @@
         <!-- Import font (Nunito Sans) -->
         <link href="/css/loginFont.css" rel="stylesheet">
         <link href="/modules/jahia-mfa-core/css/mfa.css" rel="stylesheet">
-        <!-- jQuery -->
-        <script src="/css/jquery.min.js"></script>
+
         <script src="/modules/jahia-mfa-core/javascript/mfa.js"></script>
         <!-- Main style -->
         <link rel="stylesheet" href="/css/loginMain_dark.css">
