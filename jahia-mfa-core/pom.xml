@@ -19,6 +19,8 @@
         <jahia-depends>default, graphql-dxm-provider</jahia-depends>
         <jahia-deploy-on-site>system</jahia-deploy-on-site>
         <jahia-module-signature>MCwCFAOgwc31R/4eu/5ldv+haSLaqgldAhRr7L3zyibsIpc3860gXlrvt4AxMg==</jahia-module-signature>
+        <import-package>graphql.annotations.annotationTypes;version="[6.1,9)"</import-package>
+        <jahia.plugin.version>5.17-SNAPSHOT</jahia.plugin.version>
     </properties>
     
     <scm>
@@ -38,18 +40,6 @@
             <groupId>org.jahia.server</groupId>
             <artifactId>jahia-taglib</artifactId>
             <version>8.0.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.graphql-java</groupId>
-            <artifactId>graphql-java</artifactId>
-            <version>${graphql-java.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.graphql-java</groupId>
-            <artifactId>graphql-java-servlet</artifactId>
-            <version>${graphql-java-servlet.version}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jahia.modules</groupId>
