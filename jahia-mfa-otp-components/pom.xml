@@ -17,6 +17,7 @@
     <properties>
         <jahia-depends>default,jahia-mfa-core,jahia-mfa-otp-provider</jahia-depends>
         <jahia-module-signature>MCwCFCLK3/nBxYGEDs0gjH2V3sP3CMX1AhQ7e+9czagL/kwGlgiDeTEkPUQ6bg==</jahia-module-signature>
+        <jahia.plugin.version>6.10</jahia.plugin.version>
     </properties>
     
     <scm>

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>jahia-packages-parent</artifactId>
         <groupId>org.jahia.packages</groupId>
-        <version>8.0.0.0</version>
+        <version>8.1.7.1</version>
     </parent>
     
     <groupId>org.jahia.modules</groupId>
@@ -27,7 +27,8 @@
         <jahia-key>org.jahia.mfa</jahia-key>
         <jahia.manifest.description>jahia-mfa-core, jahia-mfa-otp-components, jahia-mfa-otp-provider</jahia.manifest.description>
         <jahia-module-signature>MCwCFElxrxbny/rMX7y3PXSLOCiITNUBAhQeYlOrHWNy9xv46mXeWh1BfCYq2Q==</jahia-module-signature>
-        <jahia.manifest.license>org.jahia.core</jahia.manifest.license>
+	<jahia.manifest.license>org.jahia.core</jahia.manifest.license>
+        <jahia.plugin.version>6.10</jahia.plugin.version>
     </properties>
 
     <scm>
@@ -92,7 +93,7 @@
                             <attach>true</attach>
                             <archive>
                                 <manifestEntries>
-                                    <Jahia-Required-Version>8.0.0.0</Jahia-Required-Version>
+                                    <Jahia-Required-Version>8.1.7.1</Jahia-Required-Version>
                                 </manifestEntries>
                             </archive>
                         </configuration>
