@@ -20,4 +20,3 @@ node_modules
 /app/node/
 /app/node_modules/
 yarn-error.log
-yarn.lock
