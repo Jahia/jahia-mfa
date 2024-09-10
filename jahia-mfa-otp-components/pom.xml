@@ -4,7 +4,7 @@
     <parent>
         <artifactId>jahia-modules</artifactId>
         <groupId>org.jahia.modules</groupId>
-        <version>8.0.1.0</version>
+        <version>8.1.7.1</version>
     </parent>
     
     <groupId>org.jahia.modules</groupId>
@@ -76,8 +76,8 @@
                         </goals>
                         <configuration>
                             <workingDirectory>app</workingDirectory>
-                            <nodeVersion>v15.2.1</nodeVersion>
-                            <yarnVersion>v1.22.5</yarnVersion>
+                            <nodeVersion>v18.18.0</nodeVersion>
+                            <yarnVersion>v1.22.19</yarnVersion>
                         </configuration>
                     </execution>
                     <execution>
