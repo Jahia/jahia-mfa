@@ -4,9 +4,9 @@
     <parent>
         <artifactId>jahia-modules</artifactId>
         <groupId>org.jahia.modules</groupId>
-        <version>8.0.1.0</version>
+        <version>8.1.7.1</version>
     </parent>
-    
+
     <groupId>org.jahia.modules</groupId>
     <artifactId>jahia-mfa-otp-components</artifactId>
     <name>Jahia MFA OTP components</name>
@@ -19,14 +19,14 @@
         <jahia-module-signature>MCwCFCLK3/nBxYGEDs0gjH2V3sP3CMX1AhQ7e+9czagL/kwGlgiDeTEkPUQ6bg==</jahia-module-signature>
         <jahia.plugin.version>6.10</jahia.plugin.version>
     </properties>
-    
+
     <scm>
         <connection>scm:git:git@github.com:Jahia/jahia-mfa.git</connection>
         <developerConnection>scm:git:git@github.com:Jahia/jahia-mfa.git</developerConnection>
         <url>https://github.com/Jahia/jahia-mfa</url>
         <tag>HEAD</tag>
     </scm>
-    
+
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -66,7 +66,7 @@
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
-                <version>1.8.0</version>
+                <version>1.15.0</version>
                 <executions>
                     <execution>
                         <id>npm install node and yarn</id>
@@ -76,8 +76,8 @@
                         </goals>
                         <configuration>
                             <workingDirectory>app</workingDirectory>
-                            <nodeVersion>v15.2.1</nodeVersion>
-                            <yarnVersion>v1.22.5</yarnVersion>
+                            <nodeVersion>v18.16.1</nodeVersion>
+                            <yarnVersion>v1.22.22</yarnVersion>
                         </configuration>
                     </execution>
                     <execution>

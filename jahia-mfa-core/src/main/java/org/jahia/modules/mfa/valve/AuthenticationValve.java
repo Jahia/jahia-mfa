@@ -2,8 +2,6 @@ package org.jahia.modules.mfa.valve;
 
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.httpclient.HttpURL;
-import org.apache.commons.httpclient.HttpsURL;
 import org.apache.commons.lang3.StringUtils;
 import org.jahia.api.usermanager.JahiaUserManagerService;
 import org.jahia.bin.Login;
@@ -25,7 +23,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Component(service = {Valve.class, LoginUrlProvider.class, LogoutUrlProvider.class}, immediate = true)
+@Component(service = {Valve.class, LoginUrlProvider.class}, immediate = true)
 public final class AuthenticationValve extends BaseAuthValve implements LoginUrlProvider {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationValve.class);
@@ -65,12 +63,12 @@ public final class AuthenticationValve extends BaseAuthValve implements LoginUrl
         final HttpServletRequest request = authContext.getRequest();
         final String username = request.getParameter("username");
         String passwordAndToken = request.getParameter("password");
-        
-        
+
+
         LOGGER.debug("jahia-mfa-core authentication valve");
 
         if (isEnabled() && isLoginRequested(request) && username != null && passwordAndToken != null) {
-            
+
             JCRUserNode user = null;
 
             final String site = request.getParameter("site");
@@ -88,7 +86,7 @@ public final class AuthenticationValve extends BaseAuthValve implements LoginUrl
                     password = passwordAndToken;
                     token = extractTokenFromRequest(request);
                 }
-                
+
                 if (verifyCredentials(user, password, token)) {
                     LOGGER.debug("User {} logged in.", user);
 
@@ -173,8 +171,8 @@ public final class AuthenticationValve extends BaseAuthValve implements LoginUrl
     private static String getContextRequestURL(HttpServletRequest httpServletRequest) {
         String baseRequestURL;
         baseRequestURL = httpServletRequest.getScheme() + "://" + httpServletRequest.getServerName();
-        if (("http".equals(httpServletRequest.getScheme()) && (httpServletRequest.getServerPort() == HttpURL.DEFAULT_PORT))
-                || ("https".equals(httpServletRequest.getScheme()) && (httpServletRequest.getServerPort() == HttpsURL.DEFAULT_PORT))) {
+        if (("http".equals(httpServletRequest.getScheme()) && (httpServletRequest.getServerPort() == 80))
+                || ("https".equals(httpServletRequest.getScheme()) && (httpServletRequest.getServerPort() == 443))) {
             // normal case, don't add the port
         } else {
             baseRequestURL += ":" + httpServletRequest.getServerPort();

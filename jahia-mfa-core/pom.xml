@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.jahia.modules</groupId>
         <artifactId>jahia-modules</artifactId>
-        <version>8.0.1.0</version>
+        <version>8.1.7.1</version>
     </parent>
     <groupId>org.jahia.modules</groupId>
     <artifactId>jahia-mfa-core</artifactId>
@@ -22,14 +22,14 @@
         <import-package>graphql.annotations.annotationTypes;version="[6.1,9)"</import-package>
         <jahia.plugin.version>6.10</jahia.plugin.version>
     </properties>
-    
+
     <scm>
         <connection>scm:git:git@github.com:Jahia/jahia-mfa.git</connection>
         <developerConnection>scm:git:git@github.com:Jahia/jahia-mfa.git</developerConnection>
         <url>https://github.com/Jahia/jahia-mfa</url>
         <tag>HEAD</tag>
     </scm>
-    
+
     <dependencies>
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
